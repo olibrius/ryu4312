@@ -116,13 +116,13 @@ class Test_hub(unittest.TestCase):
             select.select([s2.fileno()], [], [])  # return immediately
 
     def test_select1(self):
-        with pytest.raises(MyException):
-            import select
-            import socket
+        import select
+        import socket
 
-        s1, s2 = socket.socketpair()
-        with hub.Timeout(1, MyException):
-            select.select([s2.fileno()], [], [])
+        with pytest.raises(MyException):
+            s1, s2 = socket.socketpair()
+            with hub.Timeout(1, MyException):
+                select.select([s2.fileno()], [], [])
 
     def test_select2(self):
         import select

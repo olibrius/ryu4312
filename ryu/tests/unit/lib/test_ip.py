@@ -133,7 +133,6 @@ class Test_ip(unittest.TestCase):
         res = ip.bin_to_text(ipv6_bin)
         assert val == res
     def test_bin_to_text_with_invalid_bin(self):
+        invalid_bin = b'invalid'
         with pytest.raises(struct.error):
-            invalid_bin = b'invalid'
-
-        ip.bin_to_text(invalid_bin)
+            ip.bin_to_text(invalid_bin)

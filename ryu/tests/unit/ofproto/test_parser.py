@@ -292,10 +292,7 @@ def _add_tests():
 
             def _run(self, name, wire_msg, json_str):
                 print('processing %s ...' % name)
-                if six.PY3:
-                    self._test_msg(self, name, wire_msg, json_str)
-                else:
-                    self._test_msg(name, wire_msg, json_str)
+                self._test_msg(name, wire_msg, json_str)
             print('adding %s ...' % method_name)
             f = functools.partial(_run, name=method_name, wire_msg=wire_msg,
                                   json_str=json_str)

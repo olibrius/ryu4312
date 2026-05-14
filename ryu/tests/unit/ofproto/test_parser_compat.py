@@ -141,10 +141,7 @@ def _add_tests():
 
         def _run(self, name, ofpp):
             print('processing %s ...' % name)
-            if six.PY3:
-                self._test(self, name, ofpp)
-            else:
-                self._test(name, ofpp)
+            self._test(name, ofpp)
         print('adding %s ...' % method_name)
         f = functools.partial(_run, name=method_name,
                               ofpp=ofpp)

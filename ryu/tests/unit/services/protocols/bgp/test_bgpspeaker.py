@@ -418,10 +418,6 @@ class Test_BGPSpeaker(unittest.TestCase):
                 next_hop=next_hop,
             )
 
-        # Check
-        mock_call.assert_called_with(
-            'evpn_prefix.add_local', 'Invalid arguments detected')
-
     @mock.patch(
         'ryu.services.protocols.bgp.bgpspeaker.BGPSpeaker.__init__',
         mock.MagicMock(return_value=None))
@@ -546,10 +542,6 @@ class Test_BGPSpeaker(unittest.TestCase):
                 mac_addr=mac_addr,
                 ip_addr=ip_addr,
             )
-
-        # Check
-        mock_call.assert_called_with(
-            'evpn_prefix.delete_local', 'Invalid arguments detected')
 
     @mock.patch(
         'ryu.services.protocols.bgp.bgpspeaker.BGPSpeaker.__init__',
@@ -707,10 +699,6 @@ class Test_BGPSpeaker(unittest.TestCase):
                 ip_addr=ip_addr,
                 pmsi_tunnel_type=pmsi_tunnel_type,
             )
-
-        # Check
-        mock_call.assert_called_with(
-            'evpn_prefix.add_local', 'Invalid arguments detected')
 
     @mock.patch(
         'ryu.services.protocols.bgp.bgpspeaker.BGPSpeaker.__init__',

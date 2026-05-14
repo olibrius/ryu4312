@@ -60,10 +60,9 @@ class Test_mac(unittest.TestCase):
 
         assert val == res
     def test_mac_haddr_to_str_assert(self):
+        val = b'\xaa\xaa\xaa\xaa\xaa'
         with pytest.raises(AssertionError):
-            val = b'\xaa\xaa\xaa\xaa\xaa'
-
-        res = mac.haddr_to_str(val)
+            mac.haddr_to_str(val)
 
     def test_mac_haddr_to_bin_false(self):
         """ len(hexes) = 6 (False)

@@ -859,7 +859,6 @@ class Test_igmpv3_report_group(unittest.TestCase):
     def test_len_with_srcs_and_aux(self):
         self.setUp_with_srcs_and_aux()
         assert len(self.g) == 28
-    @raises
     def test_num_larger_than_srcs(self):
         self.srcs = ['192.168.1.1', '192.168.1.2', '192.168.1.3']
         self.num = len(self.srcs) + 1
@@ -871,9 +870,9 @@ class Test_igmpv3_report_group(unittest.TestCase):
         self.g = igmpv3_report_group(
             self.type_, self.aux_len, self.num, self.address,
             self.srcs, self.aux)
-        self.test_parser()
+        with pytest.raises(Exception):
+            self.test_parser()
 
-    @raises
     def test_num_smaller_than_srcs(self):
         self.srcs = ['192.168.1.1', '192.168.1.2', '192.168.1.3']
         self.num = len(self.srcs) - 1
@@ -885,9 +884,9 @@ class Test_igmpv3_report_group(unittest.TestCase):
         self.g = igmpv3_report_group(
             self.type_, self.aux_len, self.num, self.address,
             self.srcs, self.aux)
-        self.test_parser()
+        with pytest.raises(Exception):
+            self.test_parser()
 
-    @raises
     def test_aux_len_larger_than_aux(self):
         self.aux = b'\x01\x02\x03\x04\x05\x00\x00\x00'
         self.aux_len = len(self.aux) // 4 + 1
@@ -898,9 +897,9 @@ class Test_igmpv3_report_group(unittest.TestCase):
         self.g = igmpv3_report_group(
             self.type_, self.aux_len, self.num, self.address,
             self.srcs, self.aux)
-        self.test_parser()
+        with pytest.raises(Exception):
+            self.test_parser()
 
-    @raises
     def test_aux_len_smaller_than_aux(self):
         self.aux = b'\x01\x02\x03\x04\x05\x00\x00\x00'
         self.aux_len = len(self.aux) // 4 - 1
@@ -911,7 +910,8 @@ class Test_igmpv3_report_group(unittest.TestCase):
         self.g = igmpv3_report_group(
             self.type_, self.aux_len, self.num, self.address,
             self.srcs, self.aux)
-        self.test_parser()
+        with pytest.raises(Exception):
+            self.test_parser()
 
     def test_default_args(self):
         rep = igmpv3_report_group()
