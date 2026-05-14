@@ -35,15 +35,15 @@ class Test_Manager(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @raises(SystemExit)
     @mock.patch('sys.argv', new=['ryu-manager', '--version'])
     def test_version(self):
-        main()
+        with self.assertRaises(SystemExit):
+            main()
 
-    @raises(SystemExit)
     @mock.patch('sys.argv', new=['ryu-manager', '--help'])
     def test_help(self):
-        main()
+        with self.assertRaises(SystemExit):
+            main()
 
     @staticmethod
     def _reset_globals():
