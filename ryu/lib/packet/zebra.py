@@ -23,7 +23,7 @@ import abc
 import socket
 import struct
 import logging
-from distutils.version import LooseVersion
+from packaging.version import Version as LooseVersion
 
 import netaddr
 import six
