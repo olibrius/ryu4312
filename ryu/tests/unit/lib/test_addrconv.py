@@ -15,7 +15,6 @@
 # limitations under the License.
 
 import unittest
-from nose.tools import eq_
 
 from ryu.lib import addrconv
 
@@ -32,9 +31,8 @@ class Test_addrconv(unittest.TestCase):
 
     @staticmethod
     def _test_conv(conv, text_value, bin_value):
-        eq_(conv.text_to_bin(text_value), bin_value)
-        eq_(conv.bin_to_text(bin_value), text_value)
-
+        assert conv.text_to_bin(text_value) == bin_value
+        assert conv.bin_to_text(bin_value) == text_value
     def test_ipv4(self):
         self._test_conv(addrconv.ipv4, '0.0.0.0', b'\x00\x00\x00\x00')
         self._test_conv(addrconv.ipv4, '127.0.0.1', b'\x7f\x00\x00\x01')

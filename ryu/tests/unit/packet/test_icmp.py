@@ -16,11 +16,9 @@
 
 import inspect
 import logging
-import six
 import struct
 import unittest
 
-from nose.tools import eq_
 from ryu.lib.packet import icmp
 from ryu.lib.packet import packet_utils
 
@@ -111,11 +109,10 @@ class Test_icmp(unittest.TestCase):
         struct.pack_into('!H', self.buf, 2, self.csum_calc)
 
     def test_init(self):
-        eq_(self.type_, self.ic.type)
-        eq_(self.code, self.ic.code)
-        eq_(self.csum, self.ic.csum)
-        eq_(str(self.data), str(self.ic.data))
-
+        assert self.type_ == self.ic.type
+        assert self.code == self.ic.code
+        assert self.csum == self.ic.csum
+        assert str(self.data) == str(self.ic.data)
     def test_init_with_echo(self):
         self.setUp_with_echo()
         self.test_init()
@@ -129,17 +126,16 @@ class Test_icmp(unittest.TestCase):
         self.test_init()
 
     def test_parser(self):
-        _res = icmp.icmp.parser(six.binary_type(self.buf))
+        _res = icmp.icmp.parser(bytes(self.buf))
         if type(_res) is tuple:
             res = _res[0]
         else:
             res = _res
 
-        eq_(self.type_, res.type)
-        eq_(self.code, res.code)
-        eq_(self.csum_calc, res.csum)
-        eq_(str(self.data), str(res.data))
-
+        assert self.type_ == res.type
+        assert self.code == res.code
+        assert self.csum_calc == res.csum
+        assert str(self.data) == str(res.data)
     def test_parser_with_echo(self):
         self.setUp_with_echo()
         self.test_parser()
@@ -157,12 +153,11 @@ class Test_icmp(unittest.TestCase):
         prev = None
         buf = self.ic.serialize(data, prev)
 
-        res = struct.unpack_from(icmp.icmp._PACK_STR, six.binary_type(buf))
+        res = struct.unpack_from(icmp.icmp._PACK_STR, bytes(buf))
 
-        eq_(self.type_, res[0])
-        eq_(self.code, res[1])
-        eq_(self.csum_calc, res[2])
-
+        assert self.type_ == res[0]
+        assert self.code == res[1]
+        assert self.csum_calc == res[2]
     def test_serialize_with_echo(self):
         self.setUp_with_echo()
         self.test_serialize()
@@ -170,9 +165,8 @@ class Test_icmp(unittest.TestCase):
         data = bytearray()
         prev = None
         buf = self.ic.serialize(data, prev)
-        echo = icmp.echo.parser(six.binary_type(buf), icmp.icmp._MIN_LEN)
-        eq_(repr(self.data), repr(echo))
-
+        echo = icmp.echo.parser(bytes(buf), icmp.icmp._MIN_LEN)
+        assert repr(self.data) == repr(echo)
     def test_serialize_with_dest_unreach(self):
         self.setUp_with_dest_unreach()
         self.test_serialize()
@@ -180,9 +174,8 @@ class Test_icmp(unittest.TestCase):
         data = bytearray()
         prev = None
         buf = self.ic.serialize(data, prev)
-        unreach = icmp.dest_unreach.parser(six.binary_type(buf), icmp.icmp._MIN_LEN)
-        eq_(repr(self.data), repr(unreach))
-
+        unreach = icmp.dest_unreach.parser(bytes(buf), icmp.icmp._MIN_LEN)
+        assert repr(self.data) == repr(unreach)
     def test_serialize_with_TimeExceeded(self):
         self.setUp_with_TimeExceeded()
         self.test_serialize()
@@ -190,9 +183,8 @@ class Test_icmp(unittest.TestCase):
         data = bytearray()
         prev = None
         buf = self.ic.serialize(data, prev)
-        te = icmp.TimeExceeded.parser(six.binary_type(buf), icmp.icmp._MIN_LEN)
-        eq_(repr(self.data), repr(te))
-
+        te = icmp.TimeExceeded.parser(bytes(buf), icmp.icmp._MIN_LEN)
+        assert repr(self.data) == repr(te)
     def test_to_string(self):
         icmp_values = {'type': repr(self.type_),
                        'code': repr(self.code),
@@ -203,9 +195,8 @@ class Test_icmp(unittest.TestCase):
                             if k in icmp_values])
         ic_str = '%s(%s)' % (icmp.icmp.__name__, _ic_str)
 
-        eq_(str(self.ic), ic_str)
-        eq_(repr(self.ic), ic_str)
-
+        assert str(self.ic) == ic_str
+        assert repr(self.ic) == ic_str
     def test_to_string_with_echo(self):
         self.setUp_with_echo()
         self.test_to_string()
@@ -221,26 +212,23 @@ class Test_icmp(unittest.TestCase):
     def test_default_args(self):
         ic = icmp.icmp()
         buf = ic.serialize(bytearray(), None)
-        res = struct.unpack(icmp.icmp._PACK_STR, six.binary_type(buf[:4]))
+        res = struct.unpack(icmp.icmp._PACK_STR, bytes(buf[:4]))
 
-        eq_(res[0], 8)
-        eq_(res[1], 0)
-        eq_(buf[4:], b'\x00\x00\x00\x00')
-
+        assert res[0] == 8
+        assert res[1] == 0
+        assert buf[4:] == b'\x00\x00\x00\x00'
         # with data
         ic = icmp.icmp(type_=icmp.ICMP_DEST_UNREACH, data=icmp.dest_unreach())
         buf = ic.serialize(bytearray(), None)
-        res = struct.unpack(icmp.icmp._PACK_STR, six.binary_type(buf[:4]))
+        res = struct.unpack(icmp.icmp._PACK_STR, bytes(buf[:4]))
 
-        eq_(res[0], 3)
-        eq_(res[1], 0)
-        eq_(buf[4:], b'\x00\x00\x00\x00')
-
+        assert res[0] == 3
+        assert res[1] == 0
+        assert buf[4:] == b'\x00\x00\x00\x00'
     def test_json(self):
         jsondict = self.ic.to_jsondict()
         ic = icmp.icmp.from_jsondict(jsondict['icmp'])
-        eq_(str(self.ic), str(ic))
-
+        assert str(self.ic) == str(ic)
     def test_json_with_echo(self):
         self.setUp_with_echo()
         self.test_json()
@@ -271,36 +259,31 @@ class Test_echo(unittest.TestCase):
         self.buf += self.data
 
     def test_init(self):
-        eq_(self.id_, self.echo.id)
-        eq_(self.seq, self.echo.seq)
-        eq_(self.data, self.echo.data)
-
+        assert self.id_ == self.echo.id
+        assert self.seq == self.echo.seq
+        assert self.data == self.echo.data
     def test_parser(self):
         _res = icmp.echo.parser(self.buf, 0)
         if type(_res) is tuple:
             res = _res[0]
         else:
             res = _res
-        eq_(self.id_, res.id)
-        eq_(self.seq, res.seq)
-        eq_(self.data, res.data)
-
+        assert self.id_ == res.id
+        assert self.seq == res.seq
+        assert self.data == res.data
     def test_serialize(self):
         buf = self.echo.serialize()
-        res = struct.unpack_from('!HH', six.binary_type(buf))
-        eq_(self.id_, res[0])
-        eq_(self.seq, res[1])
-        eq_(self.data, buf[struct.calcsize('!HH'):])
-
+        res = struct.unpack_from('!HH', bytes(buf))
+        assert self.id_ == res[0]
+        assert self.seq == res[1]
+        assert self.data == buf[struct.calcsize('!HH'):]
     def test_default_args(self):
         ec = icmp.echo()
         buf = ec.serialize()
-        res = struct.unpack(icmp.echo._PACK_STR, six.binary_type(buf))
+        res = struct.unpack(icmp.echo._PACK_STR, bytes(buf))
 
-        eq_(res[0], 0)
-        eq_(res[1], 0)
-
-
+        assert res[0] == 0
+        assert res[1] == 0
 class Test_dest_unreach(unittest.TestCase):
 
     def setUp(self):
@@ -313,36 +296,31 @@ class Test_dest_unreach(unittest.TestCase):
         self.buf += self.data
 
     def test_init(self):
-        eq_(self.data_len, self.dest_unreach.data_len)
-        eq_(self.mtu, self.dest_unreach.mtu)
-        eq_(self.data, self.dest_unreach.data)
-
+        assert self.data_len == self.dest_unreach.data_len
+        assert self.mtu == self.dest_unreach.mtu
+        assert self.data == self.dest_unreach.data
     def test_parser(self):
         _res = icmp.dest_unreach.parser(self.buf, 0)
         if type(_res) is tuple:
             res = _res[0]
         else:
             res = _res
-        eq_(self.data_len, res.data_len)
-        eq_(self.mtu, res.mtu)
-        eq_(self.data, res.data)
-
+        assert self.data_len == res.data_len
+        assert self.mtu == res.mtu
+        assert self.data == res.data
     def test_serialize(self):
         buf = self.dest_unreach.serialize()
-        res = struct.unpack_from('!xBH', six.binary_type(buf))
-        eq_(self.data_len, res[0])
-        eq_(self.mtu, res[1])
-        eq_(self.data, buf[struct.calcsize('!xBH'):])
-
+        res = struct.unpack_from('!xBH', bytes(buf))
+        assert self.data_len == res[0]
+        assert self.mtu == res[1]
+        assert self.data == buf[struct.calcsize('!xBH'):]
     def test_default_args(self):
         du = icmp.dest_unreach()
         buf = du.serialize()
-        res = struct.unpack(icmp.dest_unreach._PACK_STR, six.binary_type(buf))
+        res = struct.unpack(icmp.dest_unreach._PACK_STR, bytes(buf))
 
-        eq_(res[0], 0)
-        eq_(res[1], 0)
-
-
+        assert res[0] == 0
+        assert res[1] == 0
 class Test_TimeExceeded(unittest.TestCase):
 
     def setUp(self):
@@ -354,27 +332,24 @@ class Test_TimeExceeded(unittest.TestCase):
         self.buf += self.data
 
     def test_init(self):
-        eq_(self.data_len, self.te.data_len)
-        eq_(self.data, self.te.data)
-
+        assert self.data_len == self.te.data_len
+        assert self.data == self.te.data
     def test_parser(self):
         _res = icmp.TimeExceeded.parser(self.buf, 0)
         if type(_res) is tuple:
             res = _res[0]
         else:
             res = _res
-        eq_(self.data_len, res.data_len)
-        eq_(self.data, res.data)
-
+        assert self.data_len == res.data_len
+        assert self.data == res.data
     def test_serialize(self):
         buf = self.te.serialize()
-        res = struct.unpack_from('!xBxx', six.binary_type(buf))
-        eq_(self.data_len, res[0])
-        eq_(self.data, buf[struct.calcsize('!xBxx'):])
-
+        res = struct.unpack_from('!xBxx', bytes(buf))
+        assert self.data_len == res[0]
+        assert self.data == buf[struct.calcsize('!xBxx'):]
     def test_default_args(self):
         te = icmp.TimeExceeded()
         buf = te.serialize()
-        res = struct.unpack(icmp.TimeExceeded._PACK_STR, six.binary_type(buf))
+        res = struct.unpack(icmp.TimeExceeded._PACK_STR, bytes(buf))
 
-        eq_(res[0], 0)
+        assert res[0] == 0

@@ -20,11 +20,8 @@ except ImportError:
     # Python 2
     pass
 
-import six
 import sys
 import unittest
-from nose.tools import eq_
-from nose.tools import ok_
 
 from ryu.ofproto import ofproto_v1_5
 from ryu.ofproto import ofproto_v1_5_parser
@@ -48,20 +45,18 @@ class Test_Parser_OFPStats(unittest.TestCase):
         stats = ofpp.OFPStats(**d)
         b = bytearray()
         stats.serialize(b, 0)
-        stats2 = stats.parser(six.binary_type(b), 0)
+        stats2 = stats.parser(bytes(b), 0)
         for k, v in d.items():
-            ok_(k in stats)
-            ok_(k in stats2)
-            eq_(stats[k], v)
-            eq_(stats2[k], v)
+            assert k in stats
+            assert k in stats2
+            assert stats[k] == v
+            assert stats2[k] == v
         for k, v in stats.iteritems():
-            ok_(k in d)
-            eq_(d[k], v)
+            assert k in d
+            assert d[k] == v
         for k, v in stats2.iteritems():
-            ok_(k in d)
-            eq_(d[k], v)
-
-
+            assert k in d
+            assert d[k] == v
 def _add_tests():
     import functools
     import itertools
@@ -194,10 +189,7 @@ def _add_tests():
 
                     def _run(self, name, ofpp, d):
                         print('processing %s ...' % name)
-                        if six.PY3:
-                            self._test(self, name, ofpp, d)
-                        else:
-                            self._test(name, ofpp, d)
+                        self._test(name, ofpp, d)
                     print('adding %s ...' % method_name)
                     f = functools.partial(_run, name=method_name,
                                           ofpp=ofpp, d=d)

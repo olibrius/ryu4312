@@ -14,10 +14,8 @@
 # limitations under the License.
 
 import unittest
-import six
 import struct
 
-from nose.tools import ok_, eq_
 
 from ryu.lib import pack_utils
 
@@ -42,18 +40,15 @@ class TestMsgPackInto(unittest.TestCase):
         pack_utils.msg_pack_into(fmt, buf, offset, arg1, arg2)
 
         check_offset = len(buf) - len_
-        res = struct.unpack_from(fmt, six.binary_type(buf), check_offset)
+        res = struct.unpack_from(fmt, bytes(buf), check_offset)
 
-        eq_(arg1, res[0])
-        eq_(arg2, res[1])
-
+        assert arg1 == res[0]
+        assert arg2 == res[1]
         return True
 
     def test_msg_pack_into(self):
-        ok_(self._test_msg_pack_into())
-
+        assert self._test_msg_pack_into()
     def test_msg_pack_into_less(self):
-        ok_(self._test_msg_pack_into('l'))
-
+        assert self._test_msg_pack_into('l')
     def test_msg_pack_into_greater(self):
-        ok_(self._test_msg_pack_into('g'))
+        assert self._test_msg_pack_into('g')

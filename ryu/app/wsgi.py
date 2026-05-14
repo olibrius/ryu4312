@@ -19,7 +19,6 @@ from types import MethodType
 
 from routes import Mapper
 from routes.util import URLGenerator
-import six
 from tinyrpc.server import RPCServer
 from tinyrpc.dispatch import RPCDispatcher
 from tinyrpc.dispatch import public as rpc_public
@@ -183,7 +182,7 @@ class WebSocketServerTransport(ServerTransport):
         return context, message
 
     def send_reply(self, context, reply):
-        self.ws.send(six.text_type(reply))
+        self.ws.send(str(reply))
 
 
 class WebSocketRPCServer(RPCServer):
@@ -213,7 +212,7 @@ class WebSocketClientTransport(ClientTransport):
         self.queue = queue
 
     def send_message(self, message, expect_reply=True):
-        self.ws.send(six.text_type(message))
+        self.ws.send(str(message))
 
         if expect_reply:
             return self.queue.get()

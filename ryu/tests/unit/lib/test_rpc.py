@@ -19,11 +19,11 @@ import socket
 import struct
 import unittest
 
-from nose.tools import raises
-import six
+import pytest
 
 from ryu.lib import hub
 from ryu.lib import rpc
+import sys
 
 
 class MyException(BaseException):
@@ -107,7 +107,7 @@ class Test_rpc(unittest.TestCase):
 
     def test_0_call_int2(self):
         c = rpc.Client(self._client_sock)
-        obj = six.MAXSIZE
+        obj = sys.maxsize
         assert isinstance(obj, int)
         result = c.call('resp', [obj])
         assert result == obj
@@ -115,7 +115,7 @@ class Test_rpc(unittest.TestCase):
 
     def test_0_call_int3(self):
         c = rpc.Client(self._client_sock)
-        obj = - six.MAXSIZE - 1
+        obj = - sys.maxsize - 1
         assert isinstance(obj, int)
         result = c.call('resp', [obj])
         assert result == obj
@@ -149,17 +149,17 @@ class Test_rpc(unittest.TestCase):
             # Case with msgpack-python version 0.4.x or earlier.
             return
         self.assertEqual(obj, result)
-        self.assertIsInstance(result, six.binary_type)
+        self.assertIsInstance(result, bytes)
 
     def test_1_shutdown_wr(self):
         # test if the server shutdown on disconnect
         self._client_sock.shutdown(socket.SHUT_WR)
         hub.joinall([self._server_thread])
 
-    @raises(EOFError)
     def test_1_client_shutdown_wr(self):
-        c = rpc.Client(self._client_sock)
-        c.call('shutdown', ['SHUT_WR'])
+        with pytest.raises(EOFError):
+            c = rpc.Client(self._client_sock)
+            c.call('shutdown', ['SHUT_WR'])
 
     def test_1_call_True(self):
         c = rpc.Client(self._client_sock)
@@ -211,14 +211,14 @@ class Test_rpc(unittest.TestCase):
         obj = u"hoge"
         result = c.call('resp', [obj])
         assert result == obj
-        assert isinstance(result, six.text_type)
+        assert isinstance(result, str)
 
     def test_2_call_small_binary(self):
         c = rpc.Client(self._client_sock)
         obj = struct.pack("100x")
         result = c.call('resp', [obj])
         assert result == obj
-        assert isinstance(result, six.binary_type)
+        assert isinstance(result, bytes)
 
     def test_3_call_complex(self):
         c = rpc.Client(self._client_sock)
@@ -231,7 +231,7 @@ class Test_rpc(unittest.TestCase):
         obj = struct.pack("10000000x")
         result = c.call('resp', [obj])
         assert result == obj
-        assert isinstance(result, six.binary_type)
+        assert isinstance(result, bytes)
 
     def test_0_notification1(self):
         l = []

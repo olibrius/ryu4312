@@ -16,10 +16,8 @@
 
 from __future__ import print_function
 
-import six
 import sys
 import unittest
-from nose.tools import eq_
 
 from ryu.ofproto import ofproto_parser
 from ryu.ofproto import ofproto_protocol
@@ -182,8 +180,8 @@ class Test_Parser(unittest.TestCase):
             if buf1 != buf2:
                 msg = 'EOF in either data'
                 for i in range(0, min(len(buf1), len(buf2))):
-                    c1 = six.indexbytes(six.binary_type(buf1), i)
-                    c2 = six.indexbytes(six.binary_type(buf2), i)
+                    c1 = bytes(buf1)[i]
+                    c2 = bytes(buf2)[i]
                     if c1 != c2:
                         msg = 'differs at chr %d, %d != %d' % (i, c1, c2)
                         break
@@ -209,7 +207,7 @@ class Test_Parser(unittest.TestCase):
                               self._msg_to_jsondict(e.ofpmsg)}
             # XXXdebug code
             open(('/tmp/%s.json' % name), 'w').write(json.dumps(json_dict2))
-            eq_(json_dict, json_dict2)
+            assert json_dict == json_dict2
             if 'OFPTruncatedMessage' in json_dict2:
                 return
 
@@ -219,7 +217,7 @@ class Test_Parser(unittest.TestCase):
         msg2.set_xid(xid)
         if has_serializer:
             msg2.serialize()
-            eq_(self._msg_to_jsondict(msg2), json_dict)
+            assert self._msg_to_jsondict(msg2) == json_dict
             bytes_eq(wire_msg, msg2.buf)
 
             # check if "len" "length" fields can be omitted
@@ -293,10 +291,7 @@ def _add_tests():
 
             def _run(self, name, wire_msg, json_str):
                 print('processing %s ...' % name)
-                if six.PY3:
-                    self._test_msg(self, name, wire_msg, json_str)
-                else:
-                    self._test_msg(name, wire_msg, json_str)
+                self._test_msg(name, wire_msg, json_str)
             print('adding %s ...' % method_name)
             f = functools.partial(_run, name=method_name, wire_msg=wire_msg,
                                   json_str=json_str)

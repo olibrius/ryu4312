@@ -1,8 +1,6 @@
-autopep8
+pytest
+pytest-cov
 coverage
-mock
-nose
 pycodestyle
-pylint
-pytype
+autopep8
 formencode

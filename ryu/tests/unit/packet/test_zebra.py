@@ -15,20 +15,14 @@
 
 from __future__ import print_function
 
-try:
-    import mock  # Python 2
-except ImportError:
-    from unittest import mock  # Python 3
+from unittest import mock
 
 import os
 import socket
 import sys
 import unittest
 
-from nose.tools import eq_
-from nose.tools import ok_
-from nose.tools import raises
-import six
+import pytest
 
 from ryu.lib import pcaplib
 from ryu.lib.packet import packet
@@ -61,15 +55,13 @@ class Test_zebra(unittest.TestCase):
             pkt = packet.Packet(buf)
             zebra_pkts = pkt.get_protocols(zebra.ZebraMessage)
             for zebra_pkt in zebra_pkts:
-                ok_(isinstance(zebra_pkt, zebra.ZebraMessage),
-                    'Failed to parse Zebra message: %s' % pkt)
-            ok_(not isinstance(pkt.protocols[-1],
-                               (six.binary_type, bytearray)),
-                'Some messages could not be parsed in %s: %s' % (f, pkt))
+                assert isinstance(zebra_pkt, zebra.ZebraMessage), 'Failed to parse Zebra message: %s' % pkt
+            assert (not isinstance(pkt.protocols[-1],
+                               (bytes, bytearray))), 'Some messages could not be parsed in %s: %s' % (f, pkt)
 
             # Checks if Zebra message can be serialized as expected.
             pkt.serialize()
-            eq_(binary_str(buf), binary_str(pkt.data))
+            assert binary_str(buf) == binary_str(pkt.data)
 
     def test_pcap_quagga(self):
         files = [
@@ -93,19 +85,14 @@ class Test_zebra(unittest.TestCase):
 class TestZebraMessage(unittest.TestCase):
 
     def test_get_header_size(self):
-        eq_(zebra.ZebraMessage.V0_HEADER_SIZE,
-            zebra.ZebraMessage.get_header_size(0))
-        eq_(zebra.ZebraMessage.V1_HEADER_SIZE,
-            zebra.ZebraMessage.get_header_size(2))
-        eq_(zebra.ZebraMessage.V3_HEADER_SIZE,
-            zebra.ZebraMessage.get_header_size(3))
-        eq_(zebra.ZebraMessage.V3_HEADER_SIZE,
-            zebra.ZebraMessage.get_header_size(4))
+        assert zebra.ZebraMessage.V0_HEADER_SIZE == zebra.ZebraMessage.get_header_size(0)
+        assert zebra.ZebraMessage.V1_HEADER_SIZE == zebra.ZebraMessage.get_header_size(2)
+        assert zebra.ZebraMessage.V3_HEADER_SIZE == zebra.ZebraMessage.get_header_size(3)
+        assert zebra.ZebraMessage.V3_HEADER_SIZE == zebra.ZebraMessage.get_header_size(4)
 
-    @raises(ValueError)
     def test_get_header_size_invalid_version(self):
-        eq_(zebra.ZebraMessage.V0_HEADER_SIZE,
-            zebra.ZebraMessage.get_header_size(0xff))
+        with pytest.raises(ValueError):
+            assert zebra.ZebraMessage.V0_HEADER_SIZE == zebra.ZebraMessage.get_header_size(0xff)
 
 
 class TestZebraRedistributeAdd(unittest.TestCase):
@@ -117,11 +104,11 @@ class TestZebraRedistributeAdd(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraRedistributeAdd.parse(self.buf, version=3)
 
-        eq_(self.route_type, body.route_type)
+        assert self.route_type == body.route_type
 
         buf = body.serialize(version=3)
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraIPv4ImportLookup(unittest.TestCase):
@@ -137,14 +124,14 @@ class TestZebraIPv4ImportLookup(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraIPv4ImportLookup.parse(self.buf)
 
-        eq_(self.prefix, body.prefix)
-        eq_(self.metric, body.metric)
-        eq_(self.nexthop_num, len(body.nexthops))
-        eq_(self.from_zebra, body.from_zebra)
+        assert self.prefix == body.prefix
+        assert self.metric == body.metric
+        assert self.nexthop_num == len(body.nexthops)
+        assert self.from_zebra == body.from_zebra
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraIPv4ImportLookupFromZebra(unittest.TestCase):
@@ -165,16 +152,16 @@ class TestZebraIPv4ImportLookupFromZebra(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraIPv4ImportLookup.parse_from_zebra(self.buf)
 
-        eq_(self.prefix, body.prefix)
-        eq_(self.metric, body.metric)
-        eq_(self.nexthop_num, len(body.nexthops))
-        eq_(self.nexthop_type, body.nexthops[0].type)
-        eq_(self.ifindex, body.nexthops[0].ifindex)
-        eq_(self.from_zebra, body.from_zebra)
+        assert self.prefix == body.prefix
+        assert self.metric == body.metric
+        assert self.nexthop_num == len(body.nexthops)
+        assert self.nexthop_type == body.nexthops[0].type
+        assert self.ifindex == body.nexthops[0].ifindex
+        assert self.from_zebra == body.from_zebra
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraIPv4NexthopLookupMRib(unittest.TestCase):
@@ -189,14 +176,14 @@ class TestZebraIPv4NexthopLookupMRib(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraIPv4NexthopLookupMRib.parse(self.buf)
 
-        eq_(self.addr, body.addr)
-        eq_(self.distance, body.distance)
-        eq_(self.metric, body.metric)
-        eq_(self.nexthop_num, len(body.nexthops))
+        assert self.addr == body.addr
+        assert self.distance == body.distance
+        assert self.metric == body.metric
+        assert self.nexthop_num == len(body.nexthops)
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraIPv4NexthopLookupMRibFromZebra(unittest.TestCase):
@@ -218,16 +205,16 @@ class TestZebraIPv4NexthopLookupMRibFromZebra(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraIPv4NexthopLookupMRib.parse(self.buf)
 
-        eq_(self.addr, body.addr)
-        eq_(self.distance, body.distance)
-        eq_(self.metric, body.metric)
-        eq_(self.nexthop_num, len(body.nexthops))
-        eq_(self.nexthop_type, body.nexthops[0].type)
-        eq_(self.ifindex, body.nexthops[0].ifindex)
+        assert self.addr == body.addr
+        assert self.distance == body.distance
+        assert self.metric == body.metric
+        assert self.nexthop_num == len(body.nexthops)
+        assert self.nexthop_type == body.nexthops[0].type
+        assert self.ifindex == body.nexthops[0].ifindex
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraNexthopUpdateIPv6(unittest.TestCase):
@@ -252,16 +239,16 @@ class TestZebraNexthopUpdateIPv6(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraNexthopUpdate.parse(self.buf)
 
-        eq_(self.family, body.family)
-        eq_(self.prefix, body.prefix)
-        eq_(self.metric, body.metric)
-        eq_(self.nexthop_num, len(body.nexthops))
-        eq_(self.nexthop_type, body.nexthops[0].type)
-        eq_(self.ifindex, body.nexthops[0].ifindex)
+        assert self.family == body.family
+        assert self.prefix == body.prefix
+        assert self.metric == body.metric
+        assert self.nexthop_num == len(body.nexthops)
+        assert self.nexthop_type == body.nexthops[0].type
+        assert self.ifindex == body.nexthops[0].ifindex
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraInterfaceNbrAddressAdd(unittest.TestCase):
@@ -279,13 +266,13 @@ class TestZebraInterfaceNbrAddressAdd(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraInterfaceNbrAddressAdd.parse(self.buf)
 
-        eq_(self.ifindex, body.ifindex)
-        eq_(self.family, body.family)
-        eq_(self.prefix, body.prefix)
+        assert self.ifindex == body.ifindex
+        assert self.family == body.family
+        assert self.prefix == body.prefix
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraInterfaceBfdDestinationUpdate(unittest.TestCase):
@@ -310,16 +297,16 @@ class TestZebraInterfaceBfdDestinationUpdate(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraInterfaceBfdDestinationUpdate.parse(self.buf)
 
-        eq_(self.ifindex, body.ifindex)
-        eq_(self.dst_family, body.dst_family)
-        eq_(self.dst_prefix, body.dst_prefix)
-        eq_(self.status, body.status)
-        eq_(self.src_family, body.src_family)
-        eq_(self.src_prefix, body.src_prefix)
+        assert self.ifindex == body.ifindex
+        assert self.dst_family == body.dst_family
+        assert self.dst_prefix == body.dst_prefix
+        assert self.status == body.status
+        assert self.src_family == body.src_family
+        assert self.src_prefix == body.src_prefix
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraBfdDestinationRegisterMultiHopEnabled(unittest.TestCase):
@@ -351,21 +338,21 @@ class TestZebraBfdDestinationRegisterMultiHopEnabled(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraBfdDestinationRegister.parse(self.buf)
 
-        eq_(self.pid, body.pid)
-        eq_(self.dst_family, body.dst_family)
-        eq_(self.dst_prefix, body.dst_prefix)
-        eq_(self.min_rx_timer, body.min_rx_timer)
-        eq_(self.min_tx_timer, body.min_tx_timer)
-        eq_(self.detect_mult, body.detect_mult)
-        eq_(self.multi_hop, body.multi_hop)
-        eq_(self.src_family, body.src_family)
-        eq_(self.src_prefix, body.src_prefix)
-        eq_(self.multi_hop_count, body.multi_hop_count)
-        eq_(self.ifname, body.ifname)
+        assert self.pid == body.pid
+        assert self.dst_family == body.dst_family
+        assert self.dst_prefix == body.dst_prefix
+        assert self.min_rx_timer == body.min_rx_timer
+        assert self.min_tx_timer == body.min_tx_timer
+        assert self.detect_mult == body.detect_mult
+        assert self.multi_hop == body.multi_hop
+        assert self.src_family == body.src_family
+        assert self.src_prefix == body.src_prefix
+        assert self.multi_hop_count == body.multi_hop_count
+        assert self.ifname == body.ifname
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraBfdDestinationRegisterMultiHopDisabled(unittest.TestCase):
@@ -398,21 +385,21 @@ class TestZebraBfdDestinationRegisterMultiHopDisabled(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraBfdDestinationRegister.parse(self.buf)
 
-        eq_(self.pid, body.pid)
-        eq_(self.dst_family, body.dst_family)
-        eq_(self.dst_prefix, body.dst_prefix)
-        eq_(self.min_rx_timer, body.min_rx_timer)
-        eq_(self.min_tx_timer, body.min_tx_timer)
-        eq_(self.detect_mult, body.detect_mult)
-        eq_(self.multi_hop, body.multi_hop)
-        eq_(self.src_family, body.src_family)
-        eq_(self.src_prefix, body.src_prefix)
-        eq_(self.multi_hop_count, body.multi_hop_count)
-        eq_(self.ifname, body.ifname)
+        assert self.pid == body.pid
+        assert self.dst_family == body.dst_family
+        assert self.dst_prefix == body.dst_prefix
+        assert self.min_rx_timer == body.min_rx_timer
+        assert self.min_tx_timer == body.min_tx_timer
+        assert self.detect_mult == body.detect_mult
+        assert self.multi_hop == body.multi_hop
+        assert self.src_family == body.src_family
+        assert self.src_prefix == body.src_prefix
+        assert self.multi_hop_count == body.multi_hop_count
+        assert self.ifname == body.ifname
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraBfdDestinationRegisterMultiHopEnabledIPv6(unittest.TestCase):
@@ -450,21 +437,21 @@ class TestZebraBfdDestinationRegisterMultiHopEnabledIPv6(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraBfdDestinationRegister.parse(self.buf)
 
-        eq_(self.pid, body.pid)
-        eq_(self.dst_family, body.dst_family)
-        eq_(self.dst_prefix, body.dst_prefix)
-        eq_(self.min_rx_timer, body.min_rx_timer)
-        eq_(self.min_tx_timer, body.min_tx_timer)
-        eq_(self.detect_mult, body.detect_mult)
-        eq_(self.multi_hop, body.multi_hop)
-        eq_(self.src_family, body.src_family)
-        eq_(self.src_prefix, body.src_prefix)
-        eq_(self.multi_hop_count, body.multi_hop_count)
-        eq_(self.ifname, body.ifname)
+        assert self.pid == body.pid
+        assert self.dst_family == body.dst_family
+        assert self.dst_prefix == body.dst_prefix
+        assert self.min_rx_timer == body.min_rx_timer
+        assert self.min_tx_timer == body.min_tx_timer
+        assert self.detect_mult == body.detect_mult
+        assert self.multi_hop == body.multi_hop
+        assert self.src_family == body.src_family
+        assert self.src_prefix == body.src_prefix
+        assert self.multi_hop_count == body.multi_hop_count
+        assert self.ifname == body.ifname
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraBfdDestinationDeregisterMultiHopEnabled(unittest.TestCase):
@@ -490,18 +477,18 @@ class TestZebraBfdDestinationDeregisterMultiHopEnabled(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraBfdDestinationDeregister.parse(self.buf)
 
-        eq_(self.pid, body.pid)
-        eq_(self.dst_family, body.dst_family)
-        eq_(self.dst_prefix, body.dst_prefix)
-        eq_(self.multi_hop, body.multi_hop)
-        eq_(self.src_family, body.src_family)
-        eq_(self.src_prefix, body.src_prefix)
-        eq_(self.multi_hop_count, body.multi_hop_count)
-        eq_(self.ifname, body.ifname)
+        assert self.pid == body.pid
+        assert self.dst_family == body.dst_family
+        assert self.dst_prefix == body.dst_prefix
+        assert self.multi_hop == body.multi_hop
+        assert self.src_family == body.src_family
+        assert self.src_prefix == body.src_prefix
+        assert self.multi_hop_count == body.multi_hop_count
+        assert self.ifname == body.ifname
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraBfdDestinationDeregisterMultiHopDisabled(unittest.TestCase):
@@ -528,18 +515,18 @@ class TestZebraBfdDestinationDeregisterMultiHopDisabled(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraBfdDestinationDeregister.parse(self.buf)
 
-        eq_(self.pid, body.pid)
-        eq_(self.dst_family, body.dst_family)
-        eq_(self.dst_prefix, body.dst_prefix)
-        eq_(self.multi_hop, body.multi_hop)
-        eq_(self.src_family, body.src_family)
-        eq_(self.src_prefix, body.src_prefix)
-        eq_(self.multi_hop_count, body.multi_hop_count)
-        eq_(self.ifname, body.ifname)
+        assert self.pid == body.pid
+        assert self.dst_family == body.dst_family
+        assert self.dst_prefix == body.dst_prefix
+        assert self.multi_hop == body.multi_hop
+        assert self.src_family == body.src_family
+        assert self.src_prefix == body.src_prefix
+        assert self.multi_hop_count == body.multi_hop_count
+        assert self.ifname == body.ifname
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraBfdDestinationDeregisterMultiHopEnabledIPv6(unittest.TestCase):
@@ -571,18 +558,18 @@ class TestZebraBfdDestinationDeregisterMultiHopEnabledIPv6(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraBfdDestinationDeregister.parse(self.buf)
 
-        eq_(self.pid, body.pid)
-        eq_(self.dst_family, body.dst_family)
-        eq_(self.dst_prefix, body.dst_prefix)
-        eq_(self.multi_hop, body.multi_hop)
-        eq_(self.src_family, body.src_family)
-        eq_(self.src_prefix, body.src_prefix)
-        eq_(self.multi_hop_count, body.multi_hop_count)
-        eq_(self.ifname, body.ifname)
+        assert self.pid == body.pid
+        assert self.dst_family == body.dst_family
+        assert self.dst_prefix == body.dst_prefix
+        assert self.multi_hop == body.multi_hop
+        assert self.src_family == body.src_family
+        assert self.src_prefix == body.src_prefix
+        assert self.multi_hop_count == body.multi_hop_count
+        assert self.ifname == body.ifname
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraVrfAdd(unittest.TestCase):
@@ -603,11 +590,11 @@ class TestZebraVrfAdd(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraVrfAdd.parse(self.buf)
 
-        eq_(self.vrf_name, body.vrf_name)
+        assert self.vrf_name == body.vrf_name
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraInterfaceVrfUpdate(unittest.TestCase):
@@ -622,12 +609,12 @@ class TestZebraInterfaceVrfUpdate(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraInterfaceVrfUpdate.parse(self.buf)
 
-        eq_(self.ifindex, body.ifindex)
-        eq_(self.vrf_id, body.vrf_id)
+        assert self.ifindex == body.ifindex
+        assert self.vrf_id == body.vrf_id
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraInterfaceEnableRadv(unittest.TestCase):
@@ -642,12 +629,12 @@ class TestZebraInterfaceEnableRadv(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraInterfaceEnableRadv.parse(self.buf)
 
-        eq_(self.ifindex, body.ifindex)
-        eq_(self.interval, body.interval)
+        assert self.ifindex == body.ifindex
+        assert self.interval == body.interval
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraMplsLabelsAddIPv4(unittest.TestCase):
@@ -673,17 +660,17 @@ class TestZebraMplsLabelsAddIPv4(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraMplsLabelsAdd.parse(self.buf)
 
-        eq_(self.route_type, body.route_type)
-        eq_(self.family, body.family)
-        eq_(self.prefix, body.prefix)
-        eq_(self.gate_addr, body.gate_addr)
-        eq_(self.distance, body.distance)
-        eq_(self.in_label, body.in_label)
-        eq_(self.out_label, body.out_label)
+        assert self.route_type == body.route_type
+        assert self.family == body.family
+        assert self.prefix == body.prefix
+        assert self.gate_addr == body.gate_addr
+        assert self.distance == body.distance
+        assert self.in_label == body.in_label
+        assert self.out_label == body.out_label
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)
 
 
 class TestZebraMplsLabelsAddIPv6(unittest.TestCase):
@@ -715,14 +702,14 @@ class TestZebraMplsLabelsAddIPv6(unittest.TestCase):
     def test_parser(self):
         body = zebra.ZebraMplsLabelsAdd.parse(self.buf)
 
-        eq_(self.route_type, body.route_type)
-        eq_(self.family, body.family)
-        eq_(self.prefix, body.prefix)
-        eq_(self.gate_addr, body.gate_addr)
-        eq_(self.distance, body.distance)
-        eq_(self.in_label, body.in_label)
-        eq_(self.out_label, body.out_label)
+        assert self.route_type == body.route_type
+        assert self.family == body.family
+        assert self.prefix == body.prefix
+        assert self.gate_addr == body.gate_addr
+        assert self.distance == body.distance
+        assert self.in_label == body.in_label
+        assert self.out_label == body.out_label
 
         buf = body.serialize()
 
-        eq_(binary_str(self.buf), binary_str(buf))
+        assert binary_str(self.buf) == binary_str(buf)

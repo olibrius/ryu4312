@@ -16,7 +16,7 @@
 
 import time
 import unittest
-from nose.tools import raises
+import pytest
 
 from ryu.lib import hub
 hub.patch()
@@ -39,15 +39,15 @@ class Test_hub(unittest.TestCase):
     # we want to test timeout first because the rest of tests rely on it.
     # thus test_0_ prefix.
 
-    @raises(hub.Timeout)
     def test_0_timeout1(self):
-        with hub.Timeout(0.1):
-            hub.sleep(1)
+        with pytest.raises(hub.Timeout):
+            with hub.Timeout(0.1):
+                hub.sleep(1)
 
-    @raises(MyException)
     def test_0_timeout2(self):
-        with hub.Timeout(0.1, MyException):
-            hub.sleep(1)
+        with pytest.raises(MyException):
+            with hub.Timeout(0.1, MyException):
+                hub.sleep(1)
 
     def test_0_timeout3(self):
         with hub.Timeout(1):
@@ -115,14 +115,14 @@ class Test_hub(unittest.TestCase):
             select.select([s2.fileno()], [], [])
             select.select([s2.fileno()], [], [])  # return immediately
 
-    @raises(MyException)
     def test_select1(self):
         import select
         import socket
 
-        s1, s2 = socket.socketpair()
-        with hub.Timeout(1, MyException):
-            select.select([s2.fileno()], [], [])
+        with pytest.raises(MyException):
+            s1, s2 = socket.socketpair()
+            with hub.Timeout(1, MyException):
+                select.select([s2.fileno()], [], [])
 
     def test_select2(self):
         import select

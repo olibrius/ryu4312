@@ -16,7 +16,6 @@
 import functools
 import json
 import logging
-from nose.tools import eq_
 import os
 import sys
 import unittest
@@ -76,8 +75,7 @@ class Test_ofctl(unittest.TestCase):
         # expected message <--> sent message
         request.serialize()
         try:
-            eq_(json.dumps(request.to_jsondict(), sort_keys=True),
-                json.dumps(dp.request_msg.to_jsondict(), sort_keys=True))
+            assert json.dumps(request.to_jsondict(), sort_keys=True) == json.dumps(dp.request_msg.to_jsondict(), sort_keys=True)
         except AssertionError as e:
             # For debugging
             json.dump(dp.request_msg.to_jsondict(),
@@ -104,8 +102,7 @@ class Test_ofctl(unittest.TestCase):
         expected = _remove(expected, ['len', 'length'])
         output = _remove(output, ['len', 'length'])
         try:
-            eq_(json.dumps(expected, sort_keys=True),
-                json.dumps(output, sort_keys=True))
+            assert json.dumps(expected, sort_keys=True) == json.dumps(output, sort_keys=True)
         except AssertionError as e:
             # For debugging
             json.dump(output, open('/tmp/' + name + '_reply.json', 'w'),

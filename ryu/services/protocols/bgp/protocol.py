@@ -19,11 +19,9 @@
 
 from abc import ABCMeta
 from abc import abstractmethod
-import six
 
 
-@six.add_metaclass(ABCMeta)
-class Protocol(object):
+class Protocol(object, metaclass=ABCMeta):
     """Interface for various protocols.
 
     Protocol usually encloses a transport/connection/socket to
@@ -63,8 +61,7 @@ class Protocol(object):
         pass
 
 
-@six.add_metaclass(ABCMeta)
-class Factory(object):
+class Factory(object, metaclass=ABCMeta):
     """This is a factory which produces protocols.
 
     Can also act as context for protocols.

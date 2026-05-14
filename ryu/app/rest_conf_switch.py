@@ -23,7 +23,6 @@ Used by OpenStack Ryu agent.
 
 import json
 
-from six.moves import http_client
 
 from ryu.app.wsgi import ControllerBase
 from ryu.app.wsgi import Response

@@ -16,12 +16,12 @@
  BGP peer related classes and utils.
 """
 from collections import namedtuple
+from itertools import zip_longest
 import logging
 import socket
 import time
 import traceback
 
-from six.moves import zip_longest
 
 from ryu.services.protocols.bgp.base import Activity
 from ryu.services.protocols.bgp.base import Sink
