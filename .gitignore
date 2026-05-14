@@ -4,6 +4,13 @@
 build/
 dist/
 
+# pbr-generated
+AUTHORS
+ChangeLog
+
+# local IDE/agent settings
+.claude/
+
 GTAGS
 GRTAGS
 GPATH
