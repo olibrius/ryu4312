@@ -111,14 +111,13 @@ class TestOfproto_Parser(unittest.TestCase):
              msg_type,
              msg_len,
              xid) = ofproto_parser.header(self.bufPacketIn)
-
-        msg_len = len(self.bufPacketIn) + 1
-        ofproto_parser.msg(self,
-                           version,
-                           msg_type,
-                           msg_len,
-                           xid,
-                           self.bufPacketIn)
+            msg_len = len(self.bufPacketIn) + 1
+            ofproto_parser.msg(self,
+                               version,
+                               msg_type,
+                               msg_len,
+                               xid,
+                               self.bufPacketIn)
 
     def test_check_msg_parser(self):
         with pytest.raises(exception.OFPUnknownVersion):
@@ -126,14 +125,13 @@ class TestOfproto_Parser(unittest.TestCase):
              msg_type,
              msg_len,
              xid) = ofproto_parser.header(self.bufPacketIn)
-
-        version = 0xff
-        ofproto_parser.msg(self,
-                           version,
-                           msg_type,
-                           msg_len,
-                           xid,
-                           self.bufPacketIn)
+            version = 0xff
+            ofproto_parser.msg(self,
+                               version,
+                               msg_type,
+                               msg_len,
+                               xid,
+                               self.bufPacketIn)
 
 
 class TestMsgBase(unittest.TestCase):
@@ -160,7 +158,6 @@ class TestMsgBase(unittest.TestCase):
             c = ofproto_parser.MsgBase(object)
             c.xid = xid
             c.set_xid(xid)
-
     def _test_parser(self, msg_type=ofproto_v1_0.OFPT_HELLO):
         version = ofproto_v1_0.OFP_VERSION
         msg_len = ofproto_v1_0.OFP_HEADER_SIZE
@@ -199,7 +196,6 @@ class TestMsgBase(unittest.TestCase):
     def test_parser_check_msg_type(self):
         with pytest.raises(AssertionError):
             self._test_parser(ofproto_v1_0.OFPT_ERROR)
-
     def _test_serialize(self):
 
         class Datapath(object):

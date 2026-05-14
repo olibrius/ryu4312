@@ -39,9 +39,9 @@ class Test_Utils_Validation(unittest.TestCase):
     def test_is_valid_ip_prefix_str(self):
         assert validation.is_valid_ip_prefix('24', 32)
     def test_is_valid_ip_prefix_not_digit(self):
-        assert False, validation.is_valid_ip_prefix('foo' == 32)
+        assert not validation.is_valid_ip_prefix('foo', 32)
     def test_is_valid_ip_prefix_over(self):
-        assert False, validation.is_valid_ip_prefix(100 == 32)
+        assert not validation.is_valid_ip_prefix(100, 32)
     def test_is_valid_ipv4(self):
         assert validation.is_valid_ipv4('10.0.0.1')
     def test_is_valid_ipv4_not_dot(self):
@@ -120,7 +120,7 @@ class Test_Utils_Validation(unittest.TestCase):
     def test_is_valid_mpls_labels_not_list(self):
         assert False == validation.is_valid_mpls_labels(100)
     def test_is_valid_mpls_labels_with_invalid_label(self):
-        assert False, validation.is_valid_mpls_labels(['foo' == 200])
+        assert not validation.is_valid_mpls_labels(['foo', 200])
     def test_is_valid_route_dist(self):
         assert validation.is_valid_route_dist('65000:222')
     def test_is_valid_route_dist_ipv4_based(self):
