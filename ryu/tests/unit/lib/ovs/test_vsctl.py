@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from distutils.spawn import find_executable
+from shutil import which as find_executable
 import logging
 import subprocess
 import unittest
