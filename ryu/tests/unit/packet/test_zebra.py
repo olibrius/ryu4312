@@ -15,10 +15,7 @@
 
 from __future__ import print_function
 
-try:
-    import mock  # Python 2
-except ImportError:
-    from unittest import mock  # Python 3
+from unittest import mock
 
 import os
 import socket

@@ -22,10 +22,7 @@ import unittest
 from ryu.lib.hub import sleep
 from ryu.lib.ovs import vsctl
 
-try:
-    import mock  # Python 2
-except ImportError:
-    from unittest import mock  # Python 3
+from unittest import mock
 
 
 LOG = logging.getLogger(__name__)

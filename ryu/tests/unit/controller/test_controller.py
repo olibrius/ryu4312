@@ -15,10 +15,7 @@
 # limitations under the License.
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 
-try:
-    import mock  # Python 2
-except ImportError:
-    from unittest import mock  # Python 3
+from unittest import mock
 
 import json
 import os

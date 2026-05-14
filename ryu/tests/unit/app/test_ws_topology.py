@@ -18,7 +18,7 @@
 import unittest
 from socket import error as SocketError
 
-import mock
+from unittest import mock
 
 from ryu.app.ws_topology import WebSocketTopology
 
