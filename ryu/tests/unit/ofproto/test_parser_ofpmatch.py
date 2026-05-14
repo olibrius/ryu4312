@@ -23,7 +23,6 @@ except ImportError:
     # Python 2
     pass
 
-import six
 import unittest
 
 from ryu.ofproto import ofproto_v1_2
@@ -61,7 +60,7 @@ class Test_Parser_OFPMatch(unittest.TestCase):
         match = ofpp.OFPMatch(**d)
         b = bytearray()
         match.serialize(b, 0)
-        match2 = match.parser(six.binary_type(b), 0)
+        match2 = match.parser(bytes(b), 0)
         for k, v in d.items():
             assert k in match
             assert k in match2

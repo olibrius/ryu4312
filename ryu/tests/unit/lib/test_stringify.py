@@ -17,7 +17,6 @@
 from __future__ import print_function
 
 import base64
-import six
 import unittest
 
 from ryu.lib import stringify
@@ -42,11 +41,8 @@ class Test_stringify(unittest.TestCase):
         pass
 
     def test_jsondict(self):
-        if six.PY3:
-            def b64encode(s):
-                return base64.b64encode(s).decode('ascii')
-        else:
-            b64encode = base64.b64encode
+        def b64encode(s):
+            return base64.b64encode(s).decode('ascii')
         j = {'C1': {'a': 'QUFB', 'c': 'Q0ND'}}
         assert j['C1']['a'] == b64encode(b'AAA')
         assert j['C1']['c'] == b64encode(b'CCC')

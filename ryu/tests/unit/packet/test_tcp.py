@@ -17,7 +17,6 @@
 
 import unittest
 import logging
-import six
 import struct
 from struct import *
 import pytest
@@ -95,7 +94,7 @@ class Test_tcp(unittest.TestCase):
         t = tcp.tcp(self.src_port, self.dst_port, self.seq, self.ack,
                     offset, self.bits, self.window_size, csum, self.urgent)
         buf = t.serialize(bytearray(), prev)
-        res = struct.unpack(tcp.tcp._PACK_STR, six.binary_type(buf))
+        res = struct.unpack(tcp.tcp._PACK_STR, bytes(buf))
 
         assert res[0] == self.src_port
         assert res[1] == self.dst_port

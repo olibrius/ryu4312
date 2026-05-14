@@ -17,7 +17,6 @@
 
 import unittest
 import logging
-import six
 import pytest
 from ryu.ofproto.ofproto_v1_0_parser import *
 from ryu.ofproto.nx_actions import *
@@ -203,7 +202,7 @@ class TestOFPMatch(unittest.TestCase):
         c.serialize(buf, 0)
 
         fmt = ofproto.OFP_MATCH_PACK_STR
-        res = struct.unpack_from(fmt, six.binary_type(buf))
+        res = struct.unpack_from(fmt, bytes(buf))
 
         assert self.wildcards['val'] == res[0]
         assert self.in_port['val'] == res[1]
@@ -264,7 +263,7 @@ class TestOFPActionHeader(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.OFP_ACTION_HEADER_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type['val'] == res[0]
         assert self.len['val'] == res[1]
@@ -321,7 +320,7 @@ class TestOFPActionOutput(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.OFP_ACTION_OUTPUT_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -378,7 +377,7 @@ class TestOFPActionVlanVid(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.OFP_ACTION_VLAN_VID_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -433,7 +432,7 @@ class TestOFPActionVlanPcp(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.OFP_ACTION_VLAN_PCP_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -539,7 +538,7 @@ class TestOFPActionSetDlSrc(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.OFP_ACTION_DL_ADDR_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -604,7 +603,7 @@ class TestOFPActionSetDlDst(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.OFP_ACTION_DL_ADDR_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -664,7 +663,7 @@ class TestOFPActionSetNwSrc(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.OFP_ACTION_NW_ADDR_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -724,7 +723,7 @@ class TestOFPActionSetNwDst(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.OFP_ACTION_NW_ADDR_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -779,7 +778,7 @@ class TestOFPActionSetNwTos(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.OFP_ACTION_NW_TOS_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -844,7 +843,7 @@ class TestOFPActionSetTpSrc(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.OFP_ACTION_TP_PORT_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -909,7 +908,7 @@ class TestOFPActionSetTpDst(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.OFP_ACTION_TP_PORT_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -971,7 +970,7 @@ class TestOFPActionEnqueue(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.OFP_ACTION_ENQUEUE_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -1020,7 +1019,7 @@ class TestNXActionResubmit(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.NX_ACTION_RESUBMIT_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -1072,7 +1071,7 @@ class TestNXActionResubmitTable(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.NX_ACTION_RESUBMIT_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -1121,7 +1120,7 @@ class TestNXActionSetTunnel(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.NX_ACTION_SET_TUNNEL_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -1170,7 +1169,7 @@ class TestNXActionSetQueue(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.NX_ACTION_SET_QUEUE_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -1216,7 +1215,7 @@ class TestNXActionPopQueue(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.NX_ACTION_POP_QUEUE_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -1284,7 +1283,7 @@ class TestNXActionRegMove(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.NX_ACTION_REG_MOVE_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -1349,7 +1348,7 @@ class TestNXActionRegLoad(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.NX_ACTION_REG_LOAD_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -1402,7 +1401,7 @@ class TestNXActionSetTunnel64(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.NX_ACTION_SET_TUNNEL64_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -1487,7 +1486,7 @@ class TestNXActionMultipath(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.NX_ACTION_MULTIPATH_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -1595,7 +1594,7 @@ class TestNXActionBundle(unittest.TestCase):
             + ofproto.NX_ACTION_BUNDLE_PACK_STR.replace('!', '') \
             + 'HH4x'
 
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -1703,7 +1702,7 @@ class TestNXActionBundleLoad(unittest.TestCase):
             + ofproto.NX_ACTION_BUNDLE_PACK_STR.replace('!', '') \
             + 'HH4x'
 
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -1770,7 +1769,7 @@ class TestNXActionOutputReg(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.NX_ACTION_OUTPUT_REG_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -1818,7 +1817,7 @@ class TestNXActionExit(unittest.TestCase):
         self.c.serialize(buf, 0)
 
         fmt = ofproto.NX_ACTION_HEADER_PACK_STR
-        res = struct.unpack(fmt, six.binary_type(buf))
+        res = struct.unpack(fmt, bytes(buf))
 
         assert self.type_['val'] == res[0]
         assert self.len_['val'] == res[1]
@@ -2403,7 +2402,7 @@ class TestOFPHello(unittest.TestCase):
         assert msg_type == res.msg_type
         assert msg_len == res.msg_len
         assert xid == res.xid
-        assert six.binary_type(buf) == six.binary_type(res.buf)
+        assert bytes(buf) == bytes(res.buf)
     def test_serialize(self):
 
         class Datapath(object):
@@ -2484,7 +2483,7 @@ class TestOFPErrorMsg(unittest.TestCase):
             + ofproto.OFP_ERROR_MSG_PACK_STR.replace('!', '') \
             + str(len(data)) + 's'
 
-        res = struct.unpack(fmt, six.binary_type(c.buf))
+        res = struct.unpack(fmt, bytes(c.buf))
         assert ofproto.OFP_VERSION == res[0]
         assert ofproto.OFPT_ERROR == res[1]
         assert len(c.buf) == res[2]
@@ -2550,7 +2549,7 @@ class TestOFPEchoRequest(unittest.TestCase):
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + str(len(data)) + 's'
 
-        res = struct.unpack(fmt, six.binary_type(c.buf))
+        res = struct.unpack(fmt, bytes(c.buf))
         assert ofproto.OFP_VERSION == res[0]
         assert ofproto.OFPT_ECHO_REQUEST == res[1]
         assert len(c.buf) == res[2]
@@ -2614,7 +2613,7 @@ class TestOFPEchoReply(unittest.TestCase):
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + str(len(data)) + 's'
 
-        res = struct.unpack(fmt, six.binary_type(c.buf))
+        res = struct.unpack(fmt, bytes(c.buf))
         assert ofproto.OFP_VERSION == res[0]
         assert ofproto.OFPT_ECHO_REPLY == res[1]
         assert len(c.buf) == res[2]
@@ -2685,7 +2684,7 @@ class TestOFPVendor(unittest.TestCase):
             + ofproto.OFP_VENDOR_HEADER_PACK_STR.replace('!', '') \
             + str(len(data)) + 's'
 
-        res = struct.unpack(fmt, six.binary_type(c.buf))
+        res = struct.unpack(fmt, bytes(c.buf))
         assert ofproto.OFP_VERSION == res[0]
         assert ofproto.OFPT_VENDOR == res[1]
         assert len(c.buf) == res[2]
@@ -2734,7 +2733,7 @@ class TestNiciraHeader(unittest.TestCase):
             + ofproto.NICIRA_HEADER_PACK_STR.replace('!', '') \
             + str(len(data)) + 's'
 
-        res = struct.unpack(fmt, six.binary_type(c.buf))
+        res = struct.unpack(fmt, bytes(c.buf))
         assert ofproto.OFP_VERSION == res[0]
         assert ofproto.OFPT_VENDOR == res[1]
         assert len(c.buf) == res[2]
@@ -2780,7 +2779,7 @@ class TestNXTSetFlowFormat(unittest.TestCase):
             + ofproto.NICIRA_HEADER_PACK_STR.replace('!', '') \
             + ofproto.NX_SET_FLOW_FORMAT_PACK_STR.replace('!', '')
 
-        res = struct.unpack(fmt, six.binary_type(c.buf))
+        res = struct.unpack(fmt, bytes(c.buf))
         assert ofproto.OFP_VERSION == res[0]
         assert ofproto.OFPT_VENDOR == res[1]
         assert len(c.buf) == res[2]
@@ -2875,7 +2874,7 @@ class TestNXTFlowMod(unittest.TestCase):
             + ofproto.NICIRA_HEADER_PACK_STR.replace('!', '') \
             + ofproto.NX_FLOW_MOD_PACK_STR.replace('!', '')
 
-        res = struct.unpack(fmt, six.binary_type(c.buf))
+        res = struct.unpack(fmt, bytes(c.buf))
         assert ofproto.OFP_VERSION == res[0]
         assert ofproto.OFPT_VENDOR == res[1]
         assert len(c.buf) == res[2]
@@ -2904,7 +2903,7 @@ class TestNXTFlowMod(unittest.TestCase):
             + ofproto.NX_FLOW_MOD_PACK_STR.replace('!', '') \
             + ofproto.OFP_ACTION_OUTPUT_PACK_STR.replace('!', '')
 
-        res = struct.unpack(fmt, six.binary_type(c.buf))
+        res = struct.unpack(fmt, bytes(c.buf))
         assert ofproto.OFP_VERSION == res[0]
         assert ofproto.OFPT_VENDOR == res[1]
         assert len(c.buf) == res[2]
@@ -2963,7 +2962,7 @@ class TestNXTRoleRequest(unittest.TestCase):
             + ofproto.NICIRA_HEADER_PACK_STR.replace('!', '') \
             + ofproto.NX_ROLE_PACK_STR.replace('!', '')
 
-        res = struct.unpack(fmt, six.binary_type(self.c.buf))
+        res = struct.unpack(fmt, bytes(self.c.buf))
 
         assert ofproto.OFP_VERSION == res[0]
         assert ofproto.OFPT_VENDOR == res[1]
@@ -3011,7 +3010,7 @@ class TestNXTFlowModTableId(unittest.TestCase):
             + ofproto.NICIRA_HEADER_PACK_STR.replace('!', '') \
             + ofproto.NX_FLOW_MOD_TABLE_ID_PACK_STR.replace('!', '')
 
-        res = struct.unpack(fmt, six.binary_type(self.c.buf))
+        res = struct.unpack(fmt, bytes(self.c.buf))
         assert ofproto.OFP_VERSION == res[0]
         assert ofproto.OFPT_VENDOR == res[1]
         assert len(self.c.buf) == res[2]
@@ -4296,7 +4295,7 @@ class TestOFPFeaturesRequest(unittest.TestCase):
         assert 0 == self.c.xid
         fmt = ofproto.OFP_HEADER_PACK_STR
 
-        res = struct.unpack(fmt, six.binary_type(self.c.buf))
+        res = struct.unpack(fmt, bytes(self.c.buf))
         assert ofproto.OFP_VERSION == res[0]
         assert ofproto.OFPT_FEATURES_REQUEST == res[1]
         assert len(self.c.buf) == res[2]
@@ -4332,7 +4331,7 @@ class TestOFPGetConfigRequest(unittest.TestCase):
         assert 0 == self.c.xid
         fmt = ofproto.OFP_HEADER_PACK_STR
 
-        res = struct.unpack(fmt, six.binary_type(self.c.buf))
+        res = struct.unpack(fmt, bytes(self.c.buf))
         assert ofproto.OFP_VERSION == res[0]
         assert ofproto.OFPT_GET_CONFIG_REQUEST == res[1]
         assert len(self.c.buf) == res[2]
@@ -4377,7 +4376,7 @@ class TestOFPSetConfig(unittest.TestCase):
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.OFP_SWITCH_CONFIG_PACK_STR.replace('!', '')
 
-        res = struct.unpack(fmt, six.binary_type(self.c.buf))
+        res = struct.unpack(fmt, bytes(self.c.buf))
         assert ofproto.OFP_VERSION == res[0]
         assert ofproto.OFPT_SET_CONFIG == res[1]
         assert len(self.c.buf) == res[2]
@@ -4440,7 +4439,7 @@ class TestOFPPacketOut(unittest.TestCase):
             + ofproto.OFP_ACTION_OUTPUT_PACK_STR.replace('!', '') \
             + str(len(data)) + 's'
 
-        res = struct.unpack(fmt, six.binary_type(c.buf))
+        res = struct.unpack(fmt, bytes(c.buf))
 
         # OFP_HEADER_PACK_STR
         assert ofproto.OFP_VERSION == res[0]
@@ -4579,7 +4578,7 @@ class TestOFPFlowMod(unittest.TestCase):
             + ofproto.OFP_FLOW_MOD_PACK_STR0.replace('!', '') \
             + ofproto.OFP_ACTION_OUTPUT_PACK_STR.replace('!', '')
 
-        res = struct.unpack(fmt, six.binary_type(c.buf))
+        res = struct.unpack(fmt, bytes(c.buf))
 
         # OFP_HEADER_PACK_STR
         assert ofproto.OFP_VERSION == res[0]
@@ -4645,7 +4644,7 @@ class TestOFPBarrierRequest(unittest.TestCase):
         assert 0 == self.c.xid
         fmt = ofproto.OFP_HEADER_PACK_STR
 
-        res = struct.unpack(fmt, six.binary_type(self.c.buf))
+        res = struct.unpack(fmt, bytes(self.c.buf))
         assert ofproto.OFP_VERSION == res[0]
         assert ofproto.OFPT_BARRIER_REQUEST == res[1]
         assert len(self.c.buf) == res[2]
@@ -4688,7 +4687,7 @@ class TestOFPQueueGetConfigRequest(unittest.TestCase):
         b = ofproto.OFP_QUEUE_GET_CONFIG_REQUEST_PACK_STR.replace('!', '')
         fmt = '!' + a + b
 
-        res = struct.unpack(fmt, six.binary_type(self.c.buf))
+        res = struct.unpack(fmt, bytes(self.c.buf))
         assert ofproto.OFP_VERSION == res[0]
         assert ofproto.OFPT_QUEUE_GET_CONFIG_REQUEST == res[1]
         assert len(self.c.buf) == res[2]
@@ -4729,7 +4728,7 @@ class TestOFPDescStatsRequest(unittest.TestCase):
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.OFP_STATS_MSG_PACK_STR.replace('!', '')
 
-        res = struct.unpack(fmt, six.binary_type(self.c.buf))
+        res = struct.unpack(fmt, bytes(self.c.buf))
 
         # OFP_HEADER_PACK_STR
         assert ofproto.OFP_VERSION == res[0]
@@ -4825,7 +4824,7 @@ class TestOFPFlowStatsRequest(unittest.TestCase):
             + ofproto.OFP_MATCH_PACK_STR.replace('!', '') \
             + ofproto.OFP_FLOW_STATS_REQUEST_ID_PORT_STR.replace('!', '')
 
-        res = struct.unpack(fmt, six.binary_type(self.c.buf))
+        res = struct.unpack(fmt, bytes(self.c.buf))
 
         # OFP_HEADER_PACK_STR
         assert ofproto.OFP_VERSION == res[0]
@@ -4938,7 +4937,7 @@ class TestOFPAggregateStatsRequest(unittest.TestCase):
             + ofproto.OFP_MATCH_PACK_STR.replace('!', '') \
             + ofproto.OFP_FLOW_STATS_REQUEST_ID_PORT_STR.replace('!', '')
 
-        res = struct.unpack(fmt, six.binary_type(self.c.buf))
+        res = struct.unpack(fmt, bytes(self.c.buf))
 
         # OFP_HEADER_PACK_STR
         assert ofproto.OFP_VERSION == res[0]
@@ -5000,7 +4999,7 @@ class TestOFPTableStatsRequest(unittest.TestCase):
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.OFP_STATS_MSG_PACK_STR.replace('!', '')
 
-        res = struct.unpack(fmt, six.binary_type(self.c.buf))
+        res = struct.unpack(fmt, bytes(self.c.buf))
 
         # OFP_HEADER_PACK_STR
         assert ofproto.OFP_VERSION == res[0]
@@ -5053,7 +5052,7 @@ class TestOFPPortStatsRequest(unittest.TestCase):
             + ofproto.OFP_STATS_MSG_PACK_STR.replace('!', '') \
             + ofproto.OFP_PORT_STATS_REQUEST_PACK_STR.replace('!', '')
 
-        res = struct.unpack(fmt, six.binary_type(self.c.buf))
+        res = struct.unpack(fmt, bytes(self.c.buf))
 
         # OFP_HEADER_PACK_STR
         assert ofproto.OFP_VERSION == res[0]
@@ -5111,7 +5110,7 @@ class TestOFPQueueStatsRequest(unittest.TestCase):
             + ofproto.OFP_STATS_MSG_PACK_STR.replace('!', '') \
             + ofproto.OFP_QUEUE_STATS_REQUEST_PACK_STR.replace('!', '')
 
-        res = struct.unpack(fmt, six.binary_type(self.c.buf))
+        res = struct.unpack(fmt, bytes(self.c.buf))
 
         # OFP_HEADER_PACK_STR
         assert ofproto.OFP_VERSION == res[0]
@@ -5172,7 +5171,7 @@ class TestOFPVendorStatsRequest(unittest.TestCase):
             + ofproto.OFP_VENDOR_STATS_MSG_PACK_STR.replace('!', '') \
             + str(len(self.specific_data)) + 's'
 
-        res = struct.unpack(fmt, six.binary_type(self.c.buf))
+        res = struct.unpack(fmt, bytes(self.c.buf))
 
         # OFP_HEADER_PACK_STR
         assert ofproto.OFP_VERSION == res[0]

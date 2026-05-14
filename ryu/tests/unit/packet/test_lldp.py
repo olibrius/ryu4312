@@ -17,7 +17,6 @@
 
 import unittest
 import logging
-import six
 import struct
 import inspect
 import pytest
@@ -337,7 +336,7 @@ class TestLLDPOptionalTLV(unittest.TestCase):
         pkt.serialize()
 
         # self.data has many organizationally specific TLVs
-        data = six.binary_type(pkt.data[:-2])
+        data = bytes(pkt.data[:-2])
         assert data == self.data[:len(data)]
 
     def test_to_string(self):

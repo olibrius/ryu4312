@@ -15,7 +15,6 @@
 
 import unittest
 import logging
-import six
 
 from ryu import utils
 
@@ -48,8 +47,6 @@ class Test_utils(unittest.TestCase):
         """
         Test hex_array() with bytes type. (Python3 only)
         """
-        if six.PY2:
-            return
         expected_result = '0x01 0x02 0x03 0x04'
         data = bytes(b'\x01\x02\x03\x04')
         assert expected_result == utils.hex_array(data)
@@ -71,8 +68,6 @@ class Test_utils(unittest.TestCase):
         """
         Test binary_str() with bytes type. (Python3 only)
         """
-        if six.PY2:
-            return
         expected_result = '\\x01\\x02\\x03\\x04'
         data = bytes(b'\x01\x02\x03\x04')
         assert expected_result == utils.binary_str(data)

@@ -18,7 +18,6 @@
 import unittest
 import inspect
 import logging
-import six
 
 from struct import pack, unpack_from, pack_into
 import pytest
@@ -86,7 +85,7 @@ class Test_igmp(unittest.TestCase):
         prev = None
         buf = self.g.serialize(data, prev)
 
-        res = unpack_from(igmp._PACK_STR, six.binary_type(buf))
+        res = unpack_from(igmp._PACK_STR, bytes(buf))
 
         assert res[0] == self.msgtype
         assert res[1] == self.maxresp
@@ -148,7 +147,7 @@ class Test_igmp(unittest.TestCase):
     def test_default_args(self):
         ig = igmp()
         buf = ig.serialize(bytearray(), None)
-        res = unpack_from(igmp._PACK_STR, six.binary_type(buf))
+        res = unpack_from(igmp._PACK_STR, bytes(buf))
 
         assert res[0] == 0x11
         assert res[1] == 0
@@ -243,7 +242,7 @@ class Test_igmpv3_query(unittest.TestCase):
         prev = None
         buf = self.g.serialize(data, prev)
 
-        res = unpack_from(igmpv3_query._PACK_STR, six.binary_type(buf))
+        res = unpack_from(igmpv3_query._PACK_STR, bytes(buf))
 
         assert res[0] == self.msgtype
         assert res[1] == self.maxresp
@@ -258,8 +257,8 @@ class Test_igmpv3_query(unittest.TestCase):
         prev = None
         buf = self.g.serialize(data, prev)
 
-        res = unpack_from(igmpv3_query._PACK_STR, six.binary_type(buf))
-        (src1, src2, src3) = unpack_from('4s4s4s', six.binary_type(buf),
+        res = unpack_from(igmpv3_query._PACK_STR, bytes(buf))
+        (src1, src2, src3) = unpack_from('4s4s4s', bytes(buf),
                                          igmpv3_query._MIN_LEN)
 
         assert res[0] == self.msgtype
@@ -373,7 +372,7 @@ class Test_igmpv3_query(unittest.TestCase):
         g = igmpv3_query()
         prev.serialize(g, None)
         buf = g.serialize(bytearray(), prev)
-        res = unpack_from(igmpv3_query._PACK_STR, six.binary_type(buf))
+        res = unpack_from(igmpv3_query._PACK_STR, bytes(buf))
         buf = bytearray(buf)
         pack_into('!H', buf, 2, 0)
 
@@ -390,7 +389,7 @@ class Test_igmpv3_query(unittest.TestCase):
         g = igmpv3_query(srcs=srcs)
         prev.serialize(g, None)
         buf = g.serialize(bytearray(), prev)
-        res = unpack_from(igmpv3_query._PACK_STR, six.binary_type(buf))
+        res = unpack_from(igmpv3_query._PACK_STR, bytes(buf))
         buf = bytearray(buf)
         pack_into('!H', buf, 2, 0)
 
@@ -401,7 +400,7 @@ class Test_igmpv3_query(unittest.TestCase):
         assert res[4] == 2
         assert res[5] == 0
         assert res[6] == len(srcs)
-        res = unpack_from('4s4s4s', six.binary_type(buf), igmpv3_query._MIN_LEN)
+        res = unpack_from('4s4s4s', bytes(buf), igmpv3_query._MIN_LEN)
 
         assert res[0] == addrconv.ipv4.text_to_bin(srcs[0])
         assert res[1] == addrconv.ipv4.text_to_bin(srcs[1])
@@ -472,7 +471,7 @@ class Test_igmpv3_report(unittest.TestCase):
         self.test_init()
 
     def test_parser(self):
-        _res = self.g.parser(six.binary_type(self.buf))
+        _res = self.g.parser(bytes(self.buf))
         if type(_res) is tuple:
             res = _res[0]
         else:
@@ -491,7 +490,7 @@ class Test_igmpv3_report(unittest.TestCase):
         prev = None
         buf = self.g.serialize(data, prev)
 
-        res = unpack_from(igmpv3_report._PACK_STR, six.binary_type(buf))
+        res = unpack_from(igmpv3_report._PACK_STR, bytes(buf))
 
         assert res[0] == self.msgtype
         assert res[1] == checksum(self.buf)
@@ -500,7 +499,7 @@ class Test_igmpv3_report(unittest.TestCase):
         self.setUp_with_records()
         data = bytearray()
         prev = None
-        buf = six.binary_type(self.g.serialize(data, prev))
+        buf = bytes(self.g.serialize(data, prev))
 
         res = unpack_from(igmpv3_report._PACK_STR, buf)
         offset = igmpv3_report._MIN_LEN
@@ -630,7 +629,7 @@ class Test_igmpv3_report(unittest.TestCase):
         g = igmpv3_report()
         prev.serialize(g, None)
         buf = g.serialize(bytearray(), prev)
-        res = unpack_from(igmpv3_report._PACK_STR, six.binary_type(buf))
+        res = unpack_from(igmpv3_report._PACK_STR, bytes(buf))
         buf = bytearray(buf)
         pack_into('!H', buf, 2, 0)
 
@@ -653,7 +652,7 @@ class Test_igmpv3_report(unittest.TestCase):
         g = igmpv3_report(records=records)
         prev.serialize(g, None)
         buf = g.serialize(bytearray(), prev)
-        res = unpack_from(igmpv3_report._PACK_STR, six.binary_type(buf))
+        res = unpack_from(igmpv3_report._PACK_STR, bytes(buf))
         buf = bytearray(buf)
         pack_into('!H', buf, 2, 0)
 
@@ -776,7 +775,7 @@ class Test_igmpv3_report_group(unittest.TestCase):
 
     def test_serialize(self):
         buf = self.g.serialize()
-        res = unpack_from(igmpv3_report_group._PACK_STR, six.binary_type(buf))
+        res = unpack_from(igmpv3_report_group._PACK_STR, bytes(buf))
 
         assert res[0] == self.type_
         assert res[1] == self.aux_len
@@ -785,8 +784,8 @@ class Test_igmpv3_report_group(unittest.TestCase):
     def test_serialize_with_srcs(self):
         self.setUp_with_srcs()
         buf = self.g.serialize()
-        res = unpack_from(igmpv3_report_group._PACK_STR, six.binary_type(buf))
-        (src1, src2, src3) = unpack_from('4s4s4s', six.binary_type(buf),
+        res = unpack_from(igmpv3_report_group._PACK_STR, bytes(buf))
+        (src1, src2, src3) = unpack_from('4s4s4s', bytes(buf),
                                          igmpv3_report_group._MIN_LEN)
         assert res[0] == self.type_
         assert res[1] == self.aux_len
@@ -798,8 +797,8 @@ class Test_igmpv3_report_group(unittest.TestCase):
     def test_serialize_with_aux(self):
         self.setUp_with_aux()
         buf = self.g.serialize()
-        res = unpack_from(igmpv3_report_group._PACK_STR, six.binary_type(buf))
-        (aux, ) = unpack_from('%ds' % (self.aux_len * 4), six.binary_type(buf),
+        res = unpack_from(igmpv3_report_group._PACK_STR, bytes(buf))
+        (aux, ) = unpack_from('%ds' % (self.aux_len * 4), bytes(buf),
                               igmpv3_report_group._MIN_LEN)
         assert res[0] == self.type_
         assert res[1] == self.aux_len
@@ -809,10 +808,10 @@ class Test_igmpv3_report_group(unittest.TestCase):
     def test_serialize_with_srcs_and_aux(self):
         self.setUp_with_srcs_and_aux()
         buf = self.g.serialize()
-        res = unpack_from(igmpv3_report_group._PACK_STR, six.binary_type(buf))
-        (src1, src2, src3) = unpack_from('4s4s4s', six.binary_type(buf),
+        res = unpack_from(igmpv3_report_group._PACK_STR, bytes(buf))
+        (src1, src2, src3) = unpack_from('4s4s4s', bytes(buf),
                                          igmpv3_report_group._MIN_LEN)
-        (aux, ) = unpack_from('%ds' % (self.aux_len * 4), six.binary_type(buf),
+        (aux, ) = unpack_from('%ds' % (self.aux_len * 4), bytes(buf),
                               igmpv3_report_group._MIN_LEN + 12)
         assert res[0] == self.type_
         assert res[1] == self.aux_len
@@ -916,7 +915,7 @@ class Test_igmpv3_report_group(unittest.TestCase):
     def test_default_args(self):
         rep = igmpv3_report_group()
         buf = rep.serialize()
-        res = unpack_from(igmpv3_report_group._PACK_STR, six.binary_type(buf))
+        res = unpack_from(igmpv3_report_group._PACK_STR, bytes(buf))
 
         assert res[0] == 0
         assert res[1] == 0
@@ -926,13 +925,13 @@ class Test_igmpv3_report_group(unittest.TestCase):
         srcs = ['192.168.1.1', '192.168.1.2', '192.168.1.3']
         rep = igmpv3_report_group(srcs=srcs)
         buf = rep.serialize()
-        res = unpack_from(igmpv3_report_group._PACK_STR, six.binary_type(buf))
+        res = unpack_from(igmpv3_report_group._PACK_STR, bytes(buf))
 
         assert res[0] == 0
         assert res[1] == 0
         assert res[2] == len(srcs)
         assert res[3] == addrconv.ipv4.text_to_bin('0.0.0.0')
-        res = unpack_from('4s4s4s', six.binary_type(buf),
+        res = unpack_from('4s4s4s', bytes(buf),
                           igmpv3_report_group._MIN_LEN)
 
         assert res[0] == addrconv.ipv4.text_to_bin(srcs[0])
@@ -942,7 +941,7 @@ class Test_igmpv3_report_group(unittest.TestCase):
         aux = b'abcde'
         rep = igmpv3_report_group(aux=aux)
         buf = rep.serialize()
-        res = unpack_from(igmpv3_report_group._PACK_STR, six.binary_type(buf))
+        res = unpack_from(igmpv3_report_group._PACK_STR, bytes(buf))
 
         assert res[0] == 0
         assert res[1] == 2

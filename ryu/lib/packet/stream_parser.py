@@ -16,11 +16,9 @@
 
 
 from abc import ABCMeta, abstractmethod
-import six
 
 
-@six.add_metaclass(ABCMeta)
-class StreamParser(object):
+class StreamParser(object, metaclass=ABCMeta):
     """Streaming parser base class.
 
     An instance of a subclass of this class is used to extract messages

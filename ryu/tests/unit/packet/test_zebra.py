@@ -23,7 +23,6 @@ import sys
 import unittest
 
 import pytest
-import six
 
 from ryu.lib import pcaplib
 from ryu.lib.packet import packet
@@ -58,7 +57,7 @@ class Test_zebra(unittest.TestCase):
             for zebra_pkt in zebra_pkts:
                 assert isinstance(zebra_pkt, zebra.ZebraMessage), 'Failed to parse Zebra message: %s' % pkt
             assert (not isinstance(pkt.protocols[-1],
-                               (six.binary_type, bytearray))), 'Some messages could not be parsed in %s: %s' % (f, pkt)
+                               (bytes, bytearray))), 'Some messages could not be parsed in %s: %s' % (f, pkt)
 
             # Checks if Zebra message can be serialized as expected.
             pkt.serialize()

@@ -23,17 +23,13 @@
 #   value and mask are on-wire bytes.
 #   mask is None if no mask.
 
-import six
 import struct
 
 from ryu.ofproto import ofproto_common
 from ryu.lib.pack_utils import msg_pack_into
 from ryu.lib import type_desc
 
-if six.PY3:
-    _ord = int
-else:
-    _ord = ord
+_ord = int
 
 # 'OFPXXC_EXPERIMENTER' has not corresponding field in the specification.
 # This is transparently value for Experimenter class ID for OXM/OXS.
@@ -85,7 +81,7 @@ def _get_field_info_by_number(oxx, num_to_field, n):
         name = f.name
     except KeyError:
         t = type_desc.UnknownType
-        if isinstance(n, six.integer_types):
+        if isinstance(n, int):
             name = 'field_%d' % (n,)
         else:
             raise KeyError('unknown %s field number: %s' % (oxx.upper(), n))
@@ -130,7 +126,7 @@ def _normalize_user(oxx, mod, k, uv):
         return (k, uv)
     # apply mask
     if m is not None:
-        v = b''.join(six.int2byte(_ord(x) & _ord(y)) for (x, y) in zip(v, m))
+        v = b''.join(bytes([_ord(x) & _ord(y)]) for (x, y) in zip(v, m))
     try:
         to_user = getattr(mod, oxx + '_to_user')
         (k2, uv2) = to_user(n, v, m)

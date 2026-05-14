@@ -19,7 +19,6 @@ import logging
 import struct
 import unittest
 
-import six
 
 from ryu.lib import addrconv
 from ryu.lib.packet import dhcp
@@ -134,7 +133,7 @@ class Test_dhcp_offer(unittest.TestCase):
         assert isinstance(pkt.options, dhcp.options)
         for opt in pkt.options.option_list[:-1]:
             assert isinstance(opt, dhcp.option)
-        assert isinstance(pkt.options.option_list[-1], six.binary_type)
+        assert isinstance(pkt.options.option_list[-1], bytes)
         buf = pkt.serialize()
         assert str(buf) == str(corrupt_buf)
         assert b'' == rest
@@ -142,7 +141,7 @@ class Test_dhcp_offer(unittest.TestCase):
         buf = self.dh.serialize()
 
         res = struct.unpack_from(dhcp.dhcp._DHCP_PACK_STR,
-                                 six.binary_type(buf))
+                                 bytes(buf))
 
         assert self.op == res[0]
         assert self.htype == res[1]

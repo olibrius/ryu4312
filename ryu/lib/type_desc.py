@@ -16,7 +16,6 @@
 
 import base64
 
-import six
 
 from ryu.lib import addrconv
 
@@ -40,7 +39,7 @@ class IntDescr(TypeDescr):
     def from_user(self, i):
         binary = b''
         for _ in range(self.size):
-            binary = six.int2byte(i & 255) + binary
+            binary = bytes([i & 255]) + binary
             i //= 256
         return binary
 
@@ -87,7 +86,7 @@ class IntDescrMlt(TypeDescr):
         for i in li:
             b = b''
             for _ in range(self.length):
-                b = six.int2byte(i & 255) + b
+                b = bytes([i & 255]) + b
                 i //= 256
             binary += b
         return binary
@@ -118,10 +117,7 @@ class UnknownType(TypeDescr):
 
     @staticmethod
     def to_user(data):
-        if six.PY3:
-            return base64.b64encode(data).decode('ascii')
-        else:
-            return base64.b64encode(data)
+        return base64.b64encode(data).decode('ascii')
 
     from_user = staticmethod(base64.b64decode)
 

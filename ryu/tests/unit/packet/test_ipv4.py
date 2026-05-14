@@ -17,7 +17,6 @@
 
 import unittest
 import logging
-import six
 import struct
 from struct import *
 import pytest
@@ -106,7 +105,7 @@ class Test_ipv4(unittest.TestCase):
         assert ptype == tcp
     def test_serialize(self):
         buf = self.ip.serialize(bytearray(), None)
-        res = struct.unpack_from(ipv4._PACK_STR, six.binary_type(buf))
+        res = struct.unpack_from(ipv4._PACK_STR, bytes(buf))
         option = buf[ipv4._MIN_LEN:ipv4._MIN_LEN + len(self.option)]
 
         assert res[0] == self.ver_hlen

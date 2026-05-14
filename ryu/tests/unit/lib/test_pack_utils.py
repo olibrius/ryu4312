@@ -14,7 +14,6 @@
 # limitations under the License.
 
 import unittest
-import six
 import struct
 
 
@@ -41,7 +40,7 @@ class TestMsgPackInto(unittest.TestCase):
         pack_utils.msg_pack_into(fmt, buf, offset, arg1, arg2)
 
         check_offset = len(buf) - len_
-        res = struct.unpack_from(fmt, six.binary_type(buf), check_offset)
+        res = struct.unpack_from(fmt, bytes(buf), check_offset)
 
         assert arg1 == res[0]
         assert arg2 == res[1]

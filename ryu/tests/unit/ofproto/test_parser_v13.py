@@ -17,7 +17,6 @@
 
 import unittest
 import logging
-import six
 import socket
 from struct import *
 import pytest
@@ -60,7 +59,7 @@ class TestOFPMatch(unittest.TestCase):
         if mask and len(buf) > calcsize(fmt):
             fmt += pack_str
 
-        res = list(unpack_from(fmt, six.binary_type(buf), 0)[3:])
+        res = list(unpack_from(fmt, bytes(buf), 0)[3:])
         if type(value) is list:
             res_value = res[:calcsize(pack_str) // 2]
             assert res_value == value
@@ -77,7 +76,7 @@ class TestOFPMatch(unittest.TestCase):
                 res_mask = res[0]
                 assert res_mask == mask
         # parser
-        res = match.parser(six.binary_type(buf), 0)
+        res = match.parser(bytes(buf), 0)
         assert res.type == ofproto.OFPMT_OXM
         assert res.fields[0].header == header
         assert res.fields[0].value == value
@@ -116,11 +115,11 @@ class TestOFPMatch(unittest.TestCase):
         buf = bytearray()
         length = match.serialize(buf, 0)
         assert length == len(buf)
-        res = list(unpack_from(fmt, six.binary_type(buf), 0)[3:])
+        res = list(unpack_from(fmt, bytes(buf), 0)[3:])
         res_value = res.pop(0)
         assert res_value == value
         # parser
-        res = match.parser(six.binary_type(buf), 0)
+        res = match.parser(bytes(buf), 0)
         assert res.type == ofproto.OFPMT_OXM
         assert res.fields[0].header == header
         assert res.fields[0].value == value

@@ -17,7 +17,6 @@
 
 import unittest
 import logging
-import six
 import struct
 import netaddr
 from struct import *
@@ -88,7 +87,7 @@ class Test_ethernet(unittest.TestCase):
     def test_default_args(self):
         e = ethernet()
         buf = e.serialize(bytearray(), None)
-        res = struct.unpack(e._PACK_STR, six.binary_type(buf))
+        res = struct.unpack(e._PACK_STR, bytes(buf))
 
         assert res[0] == addrconv.mac.text_to_bin('ff:ff:ff:ff:ff:ff')
         assert res[1] == addrconv.mac.text_to_bin('00:00:00:00:00:00')

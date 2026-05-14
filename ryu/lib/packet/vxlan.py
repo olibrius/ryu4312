@@ -16,7 +16,6 @@
 import struct
 import logging
 
-import six
 
 from . import packet_base
 from ryu.lib import type_desc
@@ -80,7 +79,7 @@ def vni_from_bin(buf):
     :param buf: binary representation of VNI.
     :return: VNI integer.
     """
-    return type_desc.Int3.to_user(six.binary_type(buf))
+    return type_desc.Int3.to_user(bytes(buf))
 
 
 def vni_to_bin(vni):

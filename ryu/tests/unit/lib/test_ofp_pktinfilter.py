@@ -17,7 +17,6 @@
 
 import unittest
 import logging
-import six
 
 import pytest
 
@@ -66,7 +65,7 @@ class Test_packet_in_filter(unittest.TestCase):
         pkt = (e / v / i)
         pkt.serialize()
         pkt_in = ofproto_v1_3_parser.OFPPacketIn(datapath,
-                                                 data=six.binary_type(pkt.data))
+                                                 data=bytes(pkt.data))
         ev = ofp_event.EventOFPPacketIn(pkt_in)
         assert self.app.packet_in_handler(ev)
     def test_pkt_in_filter_discard(self):
@@ -78,7 +77,7 @@ class Test_packet_in_filter(unittest.TestCase):
         pkt = (e / i)
         pkt.serialize()
         pkt_in = ofproto_v1_3_parser.OFPPacketIn(datapath,
-                                                 data=six.binary_type(pkt.data))
+                                                 data=bytes(pkt.data))
         ev = ofp_event.EventOFPPacketIn(pkt_in)
         assert not self.app.packet_in_handler(ev)
     def test_pkt_in_filter_truncated(self):

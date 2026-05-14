@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import six
 
 import struct
 
@@ -397,7 +396,7 @@ def generate(ofp_name, ofpp_name):
             hdr_data = bytearray()
             n = ofp.oxm_from_user_header(self.dst)
             ofp.oxm_serialize_header(n, hdr_data, 0)
-            (dst_num,) = struct.unpack_from('!I', six.binary_type(hdr_data), 0)
+            (dst_num,) = struct.unpack_from('!I', bytes(hdr_data), 0)
 
             data = bytearray()
             msg_pack_into(self._fmt_str, data, 0,
@@ -520,7 +519,7 @@ def generate(ofp_name, ofpp_name):
         def serialize_body(self):
             assert isinstance(self.note, (tuple, list))
             for n in self.note:
-                assert isinstance(n, six.integer_types)
+                assert isinstance(n, int)
 
             pad = (len(self.note) + nicira_ext.NX_ACTION_HEADER_0_SIZE) % 8
             if pad:
@@ -887,7 +886,7 @@ def generate(ofp_name, ofpp_name):
             ofp.oxm_serialize_header(oxm, src, 0),
             msg_pack_into(self._fmt_str, data, 0,
                           self.ofs_nbits,
-                          six.binary_type(src),
+                          bytes(src),
                           self.max_len)
             return data
 
@@ -968,7 +967,7 @@ def generate(ofp_name, ofpp_name):
             msg_pack_into(self._fmt_str, data, 0,
                           self.ofs_nbits,
                           self.max_len,
-                          six.binary_type(oxm_data))
+                          bytes(oxm_data))
             offset = len(data)
             msg_pack_into("!%dx" % (14 - offset), data, offset)
             return data
@@ -1614,7 +1613,7 @@ def generate(ofp_name, ofpp_name):
         def serialize_body(self):
             assert isinstance(self.cnt_ids, (tuple, list))
             for i in self.cnt_ids:
-                assert isinstance(i, six.integer_types)
+                assert isinstance(i, int)
 
             controllers = len(self.cnt_ids)
 
@@ -1971,7 +1970,7 @@ def generate(ofp_name, ofpp_name):
             ofp.oxm_serialize_header(oxm, oxm_data, 0)
             msg_pack_into(self._fmt_str, data, 0,
                           self.start,
-                          six.binary_type(oxm_data),
+                          bytes(oxm_data),
                           self.end)
             offset = len(data)
             msg_pack_into("!%dx" % (12 - offset), data, offset)
@@ -2422,7 +2421,7 @@ def generate(ofp_name, ofpp_name):
                           self.max_link,
                           self.arg,
                           self.ofs_nbits,
-                          six.binary_type(dst))
+                          bytes(dst))
 
             return data
 
@@ -2447,7 +2446,7 @@ def generate(ofp_name, ofpp_name):
 
             assert isinstance(slaves, (list, tuple))
             for s in slaves:
-                assert isinstance(s, six.integer_types)
+                assert isinstance(s, int)
 
             self.slaves = slaves
 
@@ -2727,7 +2726,7 @@ def generate(ofp_name, ofpp_name):
             # If zone_src is zero, zone_ofs_nbits is zone_imm
             if not self.zone_src:
                 zone_src = b'\x00' * 4
-            elif isinstance(self.zone_src, six.integer_types):
+            elif isinstance(self.zone_src, int):
                 zone_src = struct.pack("!I", self.zone_src)
             else:
                 zone_src = bytearray()
@@ -2736,7 +2735,7 @@ def generate(ofp_name, ofpp_name):
 
             msg_pack_into(self._fmt_str, data, 0,
                           self.flags,
-                          six.binary_type(zone_src),
+                          bytes(zone_src),
                           self.zone_ofs_nbits,
                           self.recirc_table,
                           self.alg)

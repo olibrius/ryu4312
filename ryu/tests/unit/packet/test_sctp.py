@@ -16,7 +16,6 @@
 
 import inspect
 import logging
-import six
 import struct
 import unittest
 
@@ -587,7 +586,7 @@ class Test_sctp(unittest.TestCase):
         self.test_init()
 
     def test_parser(self):
-        _res = self.sc.parser(six.binary_type(self.buf))
+        _res = self.sc.parser(bytes(self.buf))
         if type(_res) is tuple:
             res = _res[0]
         else:
