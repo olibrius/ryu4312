@@ -300,9 +300,9 @@ class TestOFPActionOutput(unittest.TestCase):
 
         assert self.port['val'] == res.port
         assert self.max_len['val'] == res.max_len
-    @raises(AssertionError)
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x01', 'val': 1}
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x01', 'val': 1}
 
         buf = type_['buf'] \
             + self.len_['buf'] \
@@ -311,9 +311,9 @@ class TestOFPActionOutput(unittest.TestCase):
 
         self.c.parser(buf, 0)
 
-    @raises(AssertionError)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
 
         buf = self.type_['buf'] \
             + len_['buf'] \
@@ -363,9 +363,9 @@ class TestOFPActionVlanVid(unittest.TestCase):
         res = self.c.parser(self.buf, 0)
 
         assert self.vlan_vid['val'] == res.vlan_vid
-    @raises(AssertionError)
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x02', 'val': 2}
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x02', 'val': 2}
 
         buf = type_['buf'] \
             + self.len_['buf'] \
@@ -374,9 +374,9 @@ class TestOFPActionVlanVid(unittest.TestCase):
 
         self.c.parser(buf, 0)
 
-    @raises(AssertionError)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
 
         buf = self.type_['buf'] \
             + len_['buf'] \
@@ -424,9 +424,9 @@ class TestOFPActionVlanPcp(unittest.TestCase):
     def test_parser(self):
         res = self.c.parser(self.buf, 0)
         assert self.vlan_pcp['val'] == res.vlan_pcp
-    @raises(AssertionError)
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x01', 'val': 1}
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x01', 'val': 1}
 
         buf = type_['buf'] \
             + self.len_['buf'] \
@@ -435,9 +435,9 @@ class TestOFPActionVlanPcp(unittest.TestCase):
 
         self.c.parser(buf, 0)
 
-    @raises(AssertionError)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
 
         buf = self.type_['buf'] \
             + len_['buf'] \
@@ -483,9 +483,9 @@ class TestOFPActionStripVlan(unittest.TestCase):
 
     def test_parser(self):
         assert self.c.parser(self.buf, 0)
-    @raises(AssertionError)
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x01', 'val': 1}
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x01', 'val': 1}
 
         buf = type_['buf'] \
             + self.len_['buf'] \
@@ -493,9 +493,9 @@ class TestOFPActionStripVlan(unittest.TestCase):
 
         self.c.parser(buf, 0)
 
-    @raises(AssertionError)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
 
         buf = self.type_['buf'] \
             + len_['buf'] \
@@ -543,23 +543,23 @@ class TestOFPActionSetDlSrc(unittest.TestCase):
         res = self.c.parser(buf, 0)
 
         assert self.dl_addr == res.dl_addr
-    @raises(AssertionError)
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x06', 'val': 6}
-        buf = type_['buf'] \
-            + self.len_['buf'] \
-            + self.dl_addr \
-            + self.zfill
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x06', 'val': 6}
+            buf = type_['buf'] \
+                + self.len_['buf'] \
+                + self.dl_addr \
+                + self.zfill
 
         res = self.c.parser(buf, 0)
 
-    @raises(AssertionError)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
-        buf = self.type_['buf'] \
-            + len_['buf'] \
-            + self.dl_addr \
-            + self.zfill
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
+            buf = self.type_['buf'] \
+                + len_['buf'] \
+                + self.dl_addr \
+                + self.zfill
 
         res = self.c.parser(buf, 0)
 
@@ -612,23 +612,23 @@ class TestOFPActionSetDlDst(unittest.TestCase):
         res = self.c.parser(buf, 0)
 
         assert self.dl_addr == res.dl_addr
-    @raises(AssertionError)
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x06', 'val': 6}
-        buf = type_['buf'] \
-            + self.len_['buf'] \
-            + self.dl_addr \
-            + self.zfill
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x06', 'val': 6}
+            buf = type_['buf'] \
+                + self.len_['buf'] \
+                + self.dl_addr \
+                + self.zfill
 
         res = self.c.parser(buf, 0)
 
-    @raises(AssertionError)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
-        buf = self.type_['buf'] \
-            + len_['buf'] \
-            + self.dl_addr \
-            + self.zfill
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
+            buf = self.type_['buf'] \
+                + len_['buf'] \
+                + self.dl_addr \
+                + self.zfill
 
         res = self.c.parser(buf, 0)
 
@@ -678,9 +678,9 @@ class TestOFPActionSetNwSrc(unittest.TestCase):
 
         res = self.c.parser(buf, 0)
         assert self.nw_addr['val'] == res.nw_addr
-    @raises(AssertionError)
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x05', 'val': 5}
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x05', 'val': 5}
 
         buf = type_['buf'] \
             + self.len_['buf'] \
@@ -688,9 +688,9 @@ class TestOFPActionSetNwSrc(unittest.TestCase):
 
         self.c.parser(buf, 0)
 
-    @raises(AssertionError)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x10', 'val': 16}
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x10', 'val': 16}
 
         buf = self.type_['buf'] \
             + len_['buf'] \
@@ -744,9 +744,9 @@ class TestOFPActionSetNwDst(unittest.TestCase):
 
         res = self.c.parser(buf, 0)
         assert self.nw_addr['val'] == res.nw_addr
-    @raises(AssertionError)
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x05', 'val': 5}
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x05', 'val': 5}
 
         buf = type_['buf'] \
             + self.len_['buf'] \
@@ -754,9 +754,9 @@ class TestOFPActionSetNwDst(unittest.TestCase):
 
         self.c.parser(buf, 0)
 
-    @raises(AssertionError)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x10', 'val': 16}
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x10', 'val': 16}
 
         buf = self.type_['buf'] \
             + len_['buf'] \
@@ -803,9 +803,9 @@ class TestOFPActionSetNwTos(unittest.TestCase):
     def test_parser(self):
         res = self.c.parser(self.buf, 0)
         assert self.tos['val'] == res.tos
-    @raises(AssertionError)
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x05', 'val': 5}
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x05', 'val': 5}
 
         buf = type_['buf'] \
             + self.len_['buf'] \
@@ -814,9 +814,9 @@ class TestOFPActionSetNwTos(unittest.TestCase):
 
         self.c.parser(buf, 0)
 
-    @raises(AssertionError)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
 
         buf = self.type_['buf'] \
             + len_['buf'] \
@@ -874,9 +874,9 @@ class TestOFPActionSetTpSrc(unittest.TestCase):
 
         res = self.c.parser(self.buf, 0)
         assert self.tp['val'] == res.tp
-    @raises(AssertionError)
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x07', 'val': 7}
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x07', 'val': 7}
 
         buf = type_['buf'] \
             + self.len_['buf'] \
@@ -885,9 +885,9 @@ class TestOFPActionSetTpSrc(unittest.TestCase):
 
         self.c.parser(buf, 0)
 
-    @raises(AssertionError)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
 
         buf = self.type_['buf'] \
             + len_['buf'] \
@@ -945,9 +945,9 @@ class TestOFPActionSetTpDst(unittest.TestCase):
 
         res = self.c.parser(buf, 0)
         assert self.tp['val'] == res.tp
-    @raises(AssertionError)
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x10', 'val': 16}
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x10', 'val': 16}
 
         buf = type_['buf'] \
             + self.len_['buf'] \
@@ -956,9 +956,9 @@ class TestOFPActionSetTpDst(unittest.TestCase):
 
         self.c.parser(buf, 0)
 
-    @raises(AssertionError)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
 
         buf = self.type_['buf'] \
             + len_['buf'] \
@@ -1011,9 +1011,9 @@ class TestOFPActionEnqueue(unittest.TestCase):
 
         assert self.port['val'] == res.port
         assert self.queue_id['val'] == res.queue_id
-    @raises(AssertionError)
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x0a', 'val': 10}
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x0a', 'val': 10}
 
         buf = type_['buf'] \
             + self.len_['buf'] \
@@ -1023,9 +1023,9 @@ class TestOFPActionEnqueue(unittest.TestCase):
 
         self.c.parser(buf, 0)
 
-    @raises(AssertionError)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x05', 'val': 5}
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x05', 'val': 5}
 
         buf = self.type_['buf'] \
             + len_['buf'] \
@@ -4527,11 +4527,11 @@ class TestOFPPacketOut(unittest.TestCase):
         assert 0 == res[10]
         # data
         assert data == res[11]
-    @raises(AssertionError)
     def test_serialize_check_buffer_id(self):
-        buffer_id = 0xffffff00
-        in_port = 0xaa92
-        data = 'Message'
+        with pytest.raises(AssertionError):
+            buffer_id = 0xffffff00
+            in_port = 0xaa92
+            data = 'Message'
 
         c = self._get_obj(buffer_id, in_port, data)
         c.serialize()

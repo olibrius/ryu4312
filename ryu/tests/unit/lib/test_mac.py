@@ -59,9 +59,9 @@ class Test_mac(unittest.TestCase):
         res = mac.haddr_to_str(addr)
 
         assert val == res
-    @raises(AssertionError)
     def test_mac_haddr_to_str_assert(self):
-        val = b'\xaa\xaa\xaa\xaa\xaa'
+        with pytest.raises(AssertionError):
+            val = b'\xaa\xaa\xaa\xaa\xaa'
 
         res = mac.haddr_to_str(val)
 
@@ -74,12 +74,12 @@ class Test_mac(unittest.TestCase):
         res = mac.haddr_to_bin(addr)
 
         assert val == res
-    @raises(ValueError)
     def test_mac_haddr_to_bin_true(self):
-        """ len(hexes) != 6 (True)
-        """
-        addr = 'aa:aa:aa:aa:aa'
-        res = mac.haddr_to_bin(addr)
+        with pytest.raises(ValueError):
+            """ len(hexes) != 6 (True)
+            """
+            addr = 'aa:aa:aa:aa:aa'
+            res = mac.haddr_to_bin(addr)
 
     def test_mac_haddr_bitand(self):
         addr = b'\xaa\xaa\xaa\xaa\xaa\xaa'

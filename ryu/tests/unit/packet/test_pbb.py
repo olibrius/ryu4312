@@ -150,10 +150,10 @@ class Test_itag(unittest.TestCase):
         assert it.dei == self.dei
         assert it.uca == self.uca
         assert it.sid == self.sid
-    @raises(Exception)
     def test_malformed_itag(self):
-        m_short_buf = self.buf[1:pbb.itag._MIN_LEN]
-        pbb.itag.parser(m_short_buf)
+        with pytest.raises(Exception):
+            m_short_buf = self.buf[1:pbb.itag._MIN_LEN]
+            pbb.itag.parser(m_short_buf)
 
     def test_json(self):
         jsondict = self.it.to_jsondict()

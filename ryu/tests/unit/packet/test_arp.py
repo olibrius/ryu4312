@@ -162,10 +162,10 @@ class Test_arp(unittest.TestCase):
         assert a.src_ip == self.src_ip
         assert a.dst_mac == self.dst_mac
         assert a.dst_ip == self.dst_ip
-    @raises(Exception)
     def test_malformed_arp(self):
-        m_short_buf = self.buf[1:arp._MIN_LEN]
-        arp.parser(m_short_buf)
+        with pytest.raises(Exception):
+            m_short_buf = self.buf[1:arp._MIN_LEN]
+            arp.parser(m_short_buf)
 
     def test_json(self):
         jsondict = self.a.to_jsondict()

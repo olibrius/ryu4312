@@ -124,10 +124,10 @@ class Test_vrrpv2(unittest.TestCase):
         # checksum
         s = packet_utils.checksum(buf)
         assert 0 == s
-    @raises(Exception)
     def test_malformed_vrrpv2(self):
-        m_short_buf = self.buf[1:vrrp.vrrpv2._MIN_LEN]
-        vrrp.vrrp.parser(m_short_buf)
+        with pytest.raises(Exception):
+            m_short_buf = self.buf[1:vrrp.vrrpv2._MIN_LEN]
+            vrrp.vrrp.parser(m_short_buf)
 
     def test_create_packet(self):
         primary_ip = '192.168.0.2'
@@ -275,10 +275,10 @@ class Test_vrrpv3_ipv4(unittest.TestCase):
                          inet.IPPROTO_VRRP, pack_len)
         s = packet_utils.checksum(ph + buf)
         assert 0 == s
-    @raises(Exception)
     def test_malformed_vrrpv3(self):
-        m_short_buf = self.buf[1:vrrp.vrrpv3._MIN_LEN]
-        vrrp.vrrp.parser(m_short_buf)
+        with pytest.raises(Exception):
+            m_short_buf = self.buf[1:vrrp.vrrpv3._MIN_LEN]
+            vrrp.vrrp.parser(m_short_buf)
 
     def test_create_packet(self):
         primary_ip = '192.168.0.2'
@@ -426,10 +426,10 @@ class Test_vrrpv3_ipv6(unittest.TestCase):
                          pack_len, inet.IPPROTO_VRRP)
         s = packet_utils.checksum(ph + buf)
         assert 0 == s
-    @raises(Exception)
     def test_malformed_vrrpv3(self):
-        m_short_buf = self.buf[1:vrrp.vrrpv3._MIN_LEN]
-        vrrp.vrrp.parser(m_short_buf)
+        with pytest.raises(Exception):
+            m_short_buf = self.buf[1:vrrp.vrrpv3._MIN_LEN]
+            vrrp.vrrp.parser(m_short_buf)
 
     def test_create_packet(self):
         primary_ip = '2001:db8:2000::3'

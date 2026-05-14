@@ -148,10 +148,10 @@ class Test_tcp(unittest.TestCase):
         # test parser
         (r_tcp, _, _) = tcp.tcp.parser(buf)
         assert str(option) == str(r_tcp.option)
-    @raises(Exception)
     def test_malformed_tcp(self):
-        m_short_buf = self.buf[1:tcp.tcp._MIN_LEN]
-        tcp.tcp.parser(m_short_buf)
+        with pytest.raises(Exception):
+            m_short_buf = self.buf[1:tcp.tcp._MIN_LEN]
+            tcp.tcp.parser(m_short_buf)
 
     def test_default_args(self):
         prev = ipv4(proto=inet.IPPROTO_TCP)

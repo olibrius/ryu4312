@@ -140,10 +140,10 @@ class Test_igmp(unittest.TestCase):
 
         assert str(self.g) == g_str
         assert repr(self.g) == g_str
-    @raises(Exception)
     def test_malformed_igmp(self):
-        m_short_buf = self.buf[1:igmp._MIN_LEN]
-        igmp.parser(m_short_buf)
+        with pytest.raises(Exception):
+            m_short_buf = self.buf[1:igmp._MIN_LEN]
+            igmp.parser(m_short_buf)
 
     def test_default_args(self):
         ig = igmp()
@@ -338,35 +338,35 @@ class Test_igmpv3_query(unittest.TestCase):
         self.setUp_with_srcs()
         self.test_to_string()
 
-    @raises(Exception)
     def test_num_larger_than_srcs(self):
-        self.srcs = ['192.168.1.1', '192.168.1.2', '192.168.1.3']
-        self.num = len(self.srcs) + 1
-        self.buf = pack(igmpv3_query._PACK_STR, self.msgtype,
-                        self.maxresp, self.csum,
-                        addrconv.ipv4.text_to_bin(self.address),
-                        self.s_qrv, self.qqic, self.num)
-        for src in self.srcs:
-            self.buf += pack('4s', addrconv.ipv4.text_to_bin(src))
-        self.g = igmpv3_query(
-            self.msgtype, self.maxresp, self.csum, self.address,
-            self.s_flg, self.qrv, self.qqic, self.num, self.srcs)
-        self.test_parser()
+        with pytest.raises(Exception):
+            self.srcs = ['192.168.1.1', '192.168.1.2', '192.168.1.3']
+            self.num = len(self.srcs) + 1
+            self.buf = pack(igmpv3_query._PACK_STR, self.msgtype,
+                            self.maxresp, self.csum,
+                            addrconv.ipv4.text_to_bin(self.address),
+                            self.s_qrv, self.qqic, self.num)
+            for src in self.srcs:
+                self.buf += pack('4s', addrconv.ipv4.text_to_bin(src))
+            self.g = igmpv3_query(
+                self.msgtype, self.maxresp, self.csum, self.address,
+                self.s_flg, self.qrv, self.qqic, self.num, self.srcs)
+            self.test_parser()
 
-    @raises(Exception)
     def test_num_smaller_than_srcs(self):
-        self.srcs = ['192.168.1.1', '192.168.1.2', '192.168.1.3']
-        self.num = len(self.srcs) - 1
-        self.buf = pack(igmpv3_query._PACK_STR, self.msgtype,
-                        self.maxresp, self.csum,
-                        addrconv.ipv4.text_to_bin(self.address),
-                        self.s_qrv, self.qqic, self.num)
-        for src in self.srcs:
-            self.buf += pack('4s', addrconv.ipv4.text_to_bin(src))
-        self.g = igmpv3_query(
-            self.msgtype, self.maxresp, self.csum, self.address,
-            self.s_flg, self.qrv, self.qqic, self.num, self.srcs)
-        self.test_parser()
+        with pytest.raises(Exception):
+            self.srcs = ['192.168.1.1', '192.168.1.2', '192.168.1.3']
+            self.num = len(self.srcs) - 1
+            self.buf = pack(igmpv3_query._PACK_STR, self.msgtype,
+                            self.maxresp, self.csum,
+                            addrconv.ipv4.text_to_bin(self.address),
+                            self.s_qrv, self.qqic, self.num)
+            for src in self.srcs:
+                self.buf += pack('4s', addrconv.ipv4.text_to_bin(src))
+            self.g = igmpv3_query(
+                self.msgtype, self.maxresp, self.csum, self.address,
+                self.s_flg, self.qrv, self.qqic, self.num, self.srcs)
+            self.test_parser()
 
     def test_default_args(self):
         prev = ipv4(proto=inet.IPPROTO_IGMP)
@@ -575,55 +575,55 @@ class Test_igmpv3_report(unittest.TestCase):
         self.setUp_with_records()
         self.test_to_string()
 
-    @raises(Exception)
     def test_record_num_larger_than_records(self):
-        self.record1 = igmpv3_report_group(
-            MODE_IS_INCLUDE, 0, 0, '225.0.0.1')
-        self.record2 = igmpv3_report_group(
-            MODE_IS_INCLUDE, 0, 2, '225.0.0.2',
-            ['172.16.10.10', '172.16.10.27'])
-        self.record3 = igmpv3_report_group(
-            MODE_IS_INCLUDE, 1, 0, '225.0.0.3', [], b'abc\x00')
-        self.record4 = igmpv3_report_group(
-            MODE_IS_INCLUDE, 1, 2, '225.0.0.4',
-            ['172.16.10.10', '172.16.10.27'], b'abc\x00')
-        self.records = [self.record1, self.record2, self.record3,
-                        self.record4]
-        self.record_num = len(self.records) + 1
-        self.buf = pack(igmpv3_report._PACK_STR, self.msgtype,
-                        self.csum, self.record_num)
-        self.buf += self.record1.serialize()
-        self.buf += self.record2.serialize()
-        self.buf += self.record3.serialize()
-        self.buf += self.record4.serialize()
-        self.g = igmpv3_report(
-            self.msgtype, self.csum, self.record_num, self.records)
-        self.test_parser()
+        with pytest.raises(Exception):
+            self.record1 = igmpv3_report_group(
+                MODE_IS_INCLUDE, 0, 0, '225.0.0.1')
+            self.record2 = igmpv3_report_group(
+                MODE_IS_INCLUDE, 0, 2, '225.0.0.2',
+                ['172.16.10.10', '172.16.10.27'])
+            self.record3 = igmpv3_report_group(
+                MODE_IS_INCLUDE, 1, 0, '225.0.0.3', [], b'abc\x00')
+            self.record4 = igmpv3_report_group(
+                MODE_IS_INCLUDE, 1, 2, '225.0.0.4',
+                ['172.16.10.10', '172.16.10.27'], b'abc\x00')
+            self.records = [self.record1, self.record2, self.record3,
+                            self.record4]
+            self.record_num = len(self.records) + 1
+            self.buf = pack(igmpv3_report._PACK_STR, self.msgtype,
+                            self.csum, self.record_num)
+            self.buf += self.record1.serialize()
+            self.buf += self.record2.serialize()
+            self.buf += self.record3.serialize()
+            self.buf += self.record4.serialize()
+            self.g = igmpv3_report(
+                self.msgtype, self.csum, self.record_num, self.records)
+            self.test_parser()
 
-    @raises(Exception)
     def test_record_num_smaller_than_records(self):
-        self.record1 = igmpv3_report_group(
-            MODE_IS_INCLUDE, 0, 0, '225.0.0.1')
-        self.record2 = igmpv3_report_group(
-            MODE_IS_INCLUDE, 0, 2, '225.0.0.2',
-            ['172.16.10.10', '172.16.10.27'])
-        self.record3 = igmpv3_report_group(
-            MODE_IS_INCLUDE, 1, 0, '225.0.0.3', [], b'abc\x00')
-        self.record4 = igmpv3_report_group(
-            MODE_IS_INCLUDE, 1, 2, '225.0.0.4',
-            ['172.16.10.10', '172.16.10.27'], b'abc\x00')
-        self.records = [self.record1, self.record2, self.record3,
-                        self.record4]
-        self.record_num = len(self.records) - 1
-        self.buf = pack(igmpv3_report._PACK_STR, self.msgtype,
-                        self.csum, self.record_num)
-        self.buf += self.record1.serialize()
-        self.buf += self.record2.serialize()
-        self.buf += self.record3.serialize()
-        self.buf += self.record4.serialize()
-        self.g = igmpv3_report(
-            self.msgtype, self.csum, self.record_num, self.records)
-        self.test_parser()
+        with pytest.raises(Exception):
+            self.record1 = igmpv3_report_group(
+                MODE_IS_INCLUDE, 0, 0, '225.0.0.1')
+            self.record2 = igmpv3_report_group(
+                MODE_IS_INCLUDE, 0, 2, '225.0.0.2',
+                ['172.16.10.10', '172.16.10.27'])
+            self.record3 = igmpv3_report_group(
+                MODE_IS_INCLUDE, 1, 0, '225.0.0.3', [], b'abc\x00')
+            self.record4 = igmpv3_report_group(
+                MODE_IS_INCLUDE, 1, 2, '225.0.0.4',
+                ['172.16.10.10', '172.16.10.27'], b'abc\x00')
+            self.records = [self.record1, self.record2, self.record3,
+                            self.record4]
+            self.record_num = len(self.records) - 1
+            self.buf = pack(igmpv3_report._PACK_STR, self.msgtype,
+                            self.csum, self.record_num)
+            self.buf += self.record1.serialize()
+            self.buf += self.record2.serialize()
+            self.buf += self.record3.serialize()
+            self.buf += self.record4.serialize()
+            self.g = igmpv3_report(
+                self.msgtype, self.csum, self.record_num, self.records)
+            self.test_parser()
 
     def test_default_args(self):
         prev = ipv4(proto=inet.IPPROTO_IGMP)

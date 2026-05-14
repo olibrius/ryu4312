@@ -50,13 +50,13 @@ class Test_vxlan(unittest.TestCase):
         assert self.vni == parsed_pkt.vni
         assert ethernet.ethernet == next_proto_cls
         assert b'test_payload' == rest_buf
-    @raises(AssertionError)
     def test_invalid_flags(self):
-        invalid_flags_bug = (
-            b'\x00\x00\x00\x00'  # all bits are set to zero
-            b'\x12\x34\x56\x00'  # vni = 0x123456 (24 bits)
-        )
-        vxlan.vxlan.parser(invalid_flags_bug)
+        with pytest.raises(AssertionError):
+            invalid_flags_bug = (
+                b'\x00\x00\x00\x00'  # all bits are set to zero
+                b'\x12\x34\x56\x00'  # vni = 0x123456 (24 bits)
+            )
+            vxlan.vxlan.parser(invalid_flags_bug)
 
     def test_serialize(self):
         serialized_buf = self.pkt.serialize(payload=None, prev=None)

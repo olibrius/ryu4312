@@ -57,21 +57,21 @@ class TestUtils(unittest.TestCase):
         addr, port = controller._split_addr('[::1]:6653')
         assert '::1' == addr
         assert 6653 == port
-    @raises(ValueError)
     def test_split_addr_with_invalid_addr(self):
-        controller._split_addr('127.0.0.1')
+        with pytest.raises(ValueError):
+            controller._split_addr('127.0.0.1')
 
-    @raises(ValueError)
     def test_split_addr_with_invalid_ipv4_addr(self):
-        controller._split_addr('xxx.xxx.xxx.xxx:6653')
+        with pytest.raises(ValueError):
+            controller._split_addr('xxx.xxx.xxx.xxx:6653')
 
-    @raises(ValueError)
     def test_split_addr_with_invalid_ipv6_addr(self):
-        controller._split_addr('[::xxxx]:6653')
+        with pytest.raises(ValueError):
+            controller._split_addr('[::xxxx]:6653')
 
-    @raises(ValueError)
     def test_split_addr_with_non_bracketed_ipv6_addr(self):
-        controller._split_addr('::1:6653')
+        with pytest.raises(ValueError):
+            controller._split_addr('::1:6653')
 
 
 class Test_Datapath(unittest.TestCase):

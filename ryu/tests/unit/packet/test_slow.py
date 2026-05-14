@@ -485,592 +485,592 @@ class Test_lacp(unittest.TestCase):
         assert l.collector_max_delay == self.collector_max_delay
         assert l._terminator_tag == self.terminator_tag
         assert l._terminator_length == self.terminator_length
-    @raises(Exception)
     def test_malformed_lacp(self):
-        m_short_buf = self.buf[1:self.length]
-        slow.parser(m_short_buf)
+        with pytest.raises(Exception):
+            m_short_buf = self.buf[1:self.length]
+            slow.parser(m_short_buf)
 
-    @raises(Exception)
     def test_invalid_subtype(self):
-        invalid_lacv = copy.deepcopy(self.l)
-        invalid_lacv.subtype = 0xff
-        invalid_buf = invalid_lacv.serialize()
-        slow.parser(invalid_buf)
+        with pytest.raises(Exception):
+            invalid_lacv = copy.deepcopy(self.l)
+            invalid_lacv.subtype = 0xff
+            invalid_buf = invalid_lacv.serialize()
+            slow.parser(invalid_buf)
 
-    @raises(Exception)
     def test_invalid_version(self):
-        invalid_lacv = copy.deepcopy(self.l)
-        invalid_lacv.version = 0xff
-        invalid_buf = invalid_lacv.serialize()
-        slow.parser(invalid_buf)
+        with pytest.raises(Exception):
+            invalid_lacv = copy.deepcopy(self.l)
+            invalid_lacv.version = 0xff
+            invalid_buf = invalid_lacv.serialize()
+            slow.parser(invalid_buf)
 
-    @raises(Exception)
     def test_invalid_actor_tag(self):
-        invalid_lacv = copy.deepcopy(self.l)
-        invalid_lacv.actor_tag = 0x04
-        invalid_buf = invalid_lacv.serialize()
-        slow.parser(invalid_buf)
+        with pytest.raises(Exception):
+            invalid_lacv = copy.deepcopy(self.l)
+            invalid_lacv.actor_tag = 0x04
+            invalid_buf = invalid_lacv.serialize()
+            slow.parser(invalid_buf)
 
-    @raises(Exception)
     def test_invalid_actor_length(self):
-        invalid_lacv = copy.deepcopy(self.l)
-        invalid_lacv.actor_length = 50
-        invalid_buf = invalid_lacv.serialize()
-        slow.parser(invalid_buf)
+        with pytest.raises(Exception):
+            invalid_lacv = copy.deepcopy(self.l)
+            invalid_lacv.actor_length = 50
+            invalid_buf = invalid_lacv.serialize()
+            slow.parser(invalid_buf)
 
-    @raises(Exception)
     def test_invalid_partner_tag(self):
-        invalid_lacv = copy.deepcopy(self.l)
-        invalid_lacv.partner_tag = 0x01
-        invalid_buf = invalid_lacv.serialize()
-        slow.parser(invalid_buf)
+        with pytest.raises(Exception):
+            invalid_lacv = copy.deepcopy(self.l)
+            invalid_lacv.partner_tag = 0x01
+            invalid_buf = invalid_lacv.serialize()
+            slow.parser(invalid_buf)
 
-    @raises(Exception)
     def test_invalid_partner_length(self):
-        invalid_lacv = copy.deepcopy(self.l)
-        invalid_lacv.partner_length = 0
-        invalid_buf = invalid_lacv.serialize()
-        slow.parser(invalid_buf)
+        with pytest.raises(Exception):
+            invalid_lacv = copy.deepcopy(self.l)
+            invalid_lacv.partner_length = 0
+            invalid_buf = invalid_lacv.serialize()
+            slow.parser(invalid_buf)
 
-    @raises(Exception)
     def test_invalid_collector_tag(self):
-        invalid_lacv = copy.deepcopy(self.l)
-        invalid_lacv.collector_tag = 0x00
-        invalid_buf = invalid_lacv.serialize()
-        slow.parser(invalid_buf)
+        with pytest.raises(Exception):
+            invalid_lacv = copy.deepcopy(self.l)
+            invalid_lacv.collector_tag = 0x00
+            invalid_buf = invalid_lacv.serialize()
+            slow.parser(invalid_buf)
 
-    @raises(Exception)
     def test_invalid_collector_length(self):
-        invalid_lacv = copy.deepcopy(self.l)
-        invalid_lacv.collector_length = 20
-        invalid_buf = invalid_lacv.serialize()
-        slow.parser(invalid_buf)
+        with pytest.raises(Exception):
+            invalid_lacv = copy.deepcopy(self.l)
+            invalid_lacv.collector_length = 20
+            invalid_buf = invalid_lacv.serialize()
+            slow.parser(invalid_buf)
 
-    @raises(Exception)
     def test_invalid_terminator_tag(self):
-        invalid_lacv = copy.deepcopy(self.l)
-        invalid_lacv.terminator_tag = 0x04
-        invalid_buf = invalid_lacv.serialize()
-        slow.parser(invalid_buf)
+        with pytest.raises(Exception):
+            invalid_lacv = copy.deepcopy(self.l)
+            invalid_lacv.terminator_tag = 0x04
+            invalid_buf = invalid_lacv.serialize()
+            slow.parser(invalid_buf)
 
-    @raises(Exception)
     def test_invalid_terminator_length(self):
-        invalid_lacv = copy.deepcopy(self.l)
-        invalid_lacv.terminator_length = self.trm_len
-        invalid_buf = invalid_lacv.serialize()
-        slow.parser(invalid_buf)
+        with pytest.raises(Exception):
+            invalid_lacv = copy.deepcopy(self.l)
+            invalid_lacv.terminator_length = self.trm_len
+            invalid_buf = invalid_lacv.serialize()
+            slow.parser(invalid_buf)
 
-    @raises(Exception)
     def test_invalid_actor_state_activity(self):
-        l = lacp(self.version,
-                 self.actor_system_priority,
-                 self.actor_system,
-                 self.actor_key,
-                 self.actor_port_priority,
-                 self.actor_port,
-                 2,
-                 self.actor_state_timeout,
-                 self.actor_state_aggregation,
-                 self.actor_state_synchronization,
-                 self.actor_state_collecting,
-                 self.actor_state_distributing,
-                 self.actor_state_defaulted,
-                 self.actor_state_expired,
-                 self.partner_system_priority,
-                 self.partner_system,
-                 self.partner_key,
-                 self.partner_port_priority,
-                 self.partner_port,
-                 self.partner_state_activity,
-                 self.partner_state_timeout,
-                 self.partner_state_aggregation,
-                 self.partner_state_synchronization,
-                 self.partner_state_collecting,
-                 self.partner_state_distributing,
-                 self.partner_state_defaulted,
-                 self.partner_state_expired,
-                 self.collector_max_delay)
-        l.serialize()
+        with pytest.raises(Exception):
+            l = lacp(self.version,
+                     self.actor_system_priority,
+                     self.actor_system,
+                     self.actor_key,
+                     self.actor_port_priority,
+                     self.actor_port,
+                     2,
+                     self.actor_state_timeout,
+                     self.actor_state_aggregation,
+                     self.actor_state_synchronization,
+                     self.actor_state_collecting,
+                     self.actor_state_distributing,
+                     self.actor_state_defaulted,
+                     self.actor_state_expired,
+                     self.partner_system_priority,
+                     self.partner_system,
+                     self.partner_key,
+                     self.partner_port_priority,
+                     self.partner_port,
+                     self.partner_state_activity,
+                     self.partner_state_timeout,
+                     self.partner_state_aggregation,
+                     self.partner_state_synchronization,
+                     self.partner_state_collecting,
+                     self.partner_state_distributing,
+                     self.partner_state_defaulted,
+                     self.partner_state_expired,
+                     self.collector_max_delay)
+            l.serialize()
 
-    @raises(Exception)
     def test_invalid_actor_state_timeout(self):
-        l = lacp(self.version,
-                 self.actor_system_priority,
-                 self.actor_system,
-                 self.actor_key,
-                 self.actor_port_priority,
-                 self.actor_port,
-                 self.actor_state_activity,
-                 2,
-                 self.actor_state_aggregation,
-                 self.actor_state_synchronization,
-                 self.actor_state_collecting,
-                 self.actor_state_distributing,
-                 self.actor_state_defaulted,
-                 self.actor_state_expired,
-                 self.partner_system_priority,
-                 self.partner_system,
-                 self.partner_key,
-                 self.partner_port_priority,
-                 self.partner_port,
-                 self.partner_state_activity,
-                 self.partner_state_timeout,
-                 self.partner_state_aggregation,
-                 self.partner_state_synchronization,
-                 self.partner_state_collecting,
-                 self.partner_state_distributing,
-                 self.partner_state_defaulted,
-                 self.partner_state_expired,
-                 self.collector_max_delay)
-        l.serialize()
+        with pytest.raises(Exception):
+            l = lacp(self.version,
+                     self.actor_system_priority,
+                     self.actor_system,
+                     self.actor_key,
+                     self.actor_port_priority,
+                     self.actor_port,
+                     self.actor_state_activity,
+                     2,
+                     self.actor_state_aggregation,
+                     self.actor_state_synchronization,
+                     self.actor_state_collecting,
+                     self.actor_state_distributing,
+                     self.actor_state_defaulted,
+                     self.actor_state_expired,
+                     self.partner_system_priority,
+                     self.partner_system,
+                     self.partner_key,
+                     self.partner_port_priority,
+                     self.partner_port,
+                     self.partner_state_activity,
+                     self.partner_state_timeout,
+                     self.partner_state_aggregation,
+                     self.partner_state_synchronization,
+                     self.partner_state_collecting,
+                     self.partner_state_distributing,
+                     self.partner_state_defaulted,
+                     self.partner_state_expired,
+                     self.collector_max_delay)
+            l.serialize()
 
-    @raises(Exception)
     def test_invalid_actor_state_aggregation(self):
-        l = lacp(self.version,
-                 self.actor_system_priority,
-                 self.actor_system,
-                 self.actor_key,
-                 self.actor_port_priority,
-                 self.actor_port,
-                 self.actor_state_activity,
-                 self.actor_state_timeout,
-                 2,
-                 self.actor_state_synchronization,
-                 self.actor_state_collecting,
-                 self.actor_state_distributing,
-                 self.actor_state_defaulted,
-                 self.actor_state_expired,
-                 self.partner_system_priority,
-                 self.partner_system,
-                 self.partner_key,
-                 self.partner_port_priority,
-                 self.partner_port,
-                 self.partner_state_activity,
-                 self.partner_state_timeout,
-                 self.partner_state_aggregation,
-                 self.partner_state_synchronization,
-                 self.partner_state_collecting,
-                 self.partner_state_distributing,
-                 self.partner_state_defaulted,
-                 self.partner_state_expired,
-                 self.collector_max_delay)
-        l.serialize()
+        with pytest.raises(Exception):
+            l = lacp(self.version,
+                     self.actor_system_priority,
+                     self.actor_system,
+                     self.actor_key,
+                     self.actor_port_priority,
+                     self.actor_port,
+                     self.actor_state_activity,
+                     self.actor_state_timeout,
+                     2,
+                     self.actor_state_synchronization,
+                     self.actor_state_collecting,
+                     self.actor_state_distributing,
+                     self.actor_state_defaulted,
+                     self.actor_state_expired,
+                     self.partner_system_priority,
+                     self.partner_system,
+                     self.partner_key,
+                     self.partner_port_priority,
+                     self.partner_port,
+                     self.partner_state_activity,
+                     self.partner_state_timeout,
+                     self.partner_state_aggregation,
+                     self.partner_state_synchronization,
+                     self.partner_state_collecting,
+                     self.partner_state_distributing,
+                     self.partner_state_defaulted,
+                     self.partner_state_expired,
+                     self.collector_max_delay)
+            l.serialize()
 
-    @raises(Exception)
     def test_invalid_actor_state_synchronization(self):
-        l = lacp(self.version,
-                 self.actor_system_priority,
-                 self.actor_system,
-                 self.actor_key,
-                 self.actor_port_priority,
-                 self.actor_port,
-                 self.actor_state_activity,
-                 self.actor_state_timeout,
-                 self.actor_state_aggregation,
-                 2,
-                 self.actor_state_collecting,
-                 self.actor_state_distributing,
-                 self.actor_state_defaulted,
-                 self.actor_state_expired,
-                 self.partner_system_priority,
-                 self.partner_system,
-                 self.partner_key,
-                 self.partner_port_priority,
-                 self.partner_port,
-                 self.partner_state_activity,
-                 self.partner_state_timeout,
-                 self.partner_state_aggregation,
-                 self.partner_state_synchronization,
-                 self.partner_state_collecting,
-                 self.partner_state_distributing,
-                 self.partner_state_defaulted,
-                 self.partner_state_expired,
-                 self.collector_max_delay)
-        l.serialize()
+        with pytest.raises(Exception):
+            l = lacp(self.version,
+                     self.actor_system_priority,
+                     self.actor_system,
+                     self.actor_key,
+                     self.actor_port_priority,
+                     self.actor_port,
+                     self.actor_state_activity,
+                     self.actor_state_timeout,
+                     self.actor_state_aggregation,
+                     2,
+                     self.actor_state_collecting,
+                     self.actor_state_distributing,
+                     self.actor_state_defaulted,
+                     self.actor_state_expired,
+                     self.partner_system_priority,
+                     self.partner_system,
+                     self.partner_key,
+                     self.partner_port_priority,
+                     self.partner_port,
+                     self.partner_state_activity,
+                     self.partner_state_timeout,
+                     self.partner_state_aggregation,
+                     self.partner_state_synchronization,
+                     self.partner_state_collecting,
+                     self.partner_state_distributing,
+                     self.partner_state_defaulted,
+                     self.partner_state_expired,
+                     self.collector_max_delay)
+            l.serialize()
 
-    @raises(Exception)
     def test_invalid_actor_state_collecting(self):
-        l = lacp(self.version,
-                 self.actor_system_priority,
-                 self.actor_system,
-                 self.actor_key,
-                 self.actor_port_priority,
-                 self.actor_port,
-                 self.actor_state_activity,
-                 self.actor_state_timeout,
-                 self.actor_state_aggregation,
-                 self.actor_state_synchronization,
-                 2,
-                 self.actor_state_distributing,
-                 self.actor_state_defaulted,
-                 self.actor_state_expired,
-                 self.partner_system_priority,
-                 self.partner_system,
-                 self.partner_key,
-                 self.partner_port_priority,
-                 self.partner_port,
-                 self.partner_state_activity,
-                 self.partner_state_timeout,
-                 self.partner_state_aggregation,
-                 self.partner_state_synchronization,
-                 self.partner_state_collecting,
-                 self.partner_state_distributing,
-                 self.partner_state_defaulted,
-                 self.partner_state_expired,
-                 self.collector_max_delay)
-        l.serialize()
+        with pytest.raises(Exception):
+            l = lacp(self.version,
+                     self.actor_system_priority,
+                     self.actor_system,
+                     self.actor_key,
+                     self.actor_port_priority,
+                     self.actor_port,
+                     self.actor_state_activity,
+                     self.actor_state_timeout,
+                     self.actor_state_aggregation,
+                     self.actor_state_synchronization,
+                     2,
+                     self.actor_state_distributing,
+                     self.actor_state_defaulted,
+                     self.actor_state_expired,
+                     self.partner_system_priority,
+                     self.partner_system,
+                     self.partner_key,
+                     self.partner_port_priority,
+                     self.partner_port,
+                     self.partner_state_activity,
+                     self.partner_state_timeout,
+                     self.partner_state_aggregation,
+                     self.partner_state_synchronization,
+                     self.partner_state_collecting,
+                     self.partner_state_distributing,
+                     self.partner_state_defaulted,
+                     self.partner_state_expired,
+                     self.collector_max_delay)
+            l.serialize()
 
-    @raises(Exception)
     def test_invalid_actor_state_distributing(self):
-        l = lacp(self.version,
-                 self.actor_system_priority,
-                 self.actor_system,
-                 self.actor_key,
-                 self.actor_port_priority,
-                 self.actor_port,
-                 self.actor_state_activity,
-                 self.actor_state_timeout,
-                 self.actor_state_aggregation,
-                 self.actor_state_synchronization,
-                 self.actor_state_collecting,
-                 2,
-                 self.actor_state_defaulted,
-                 self.actor_state_expired,
-                 self.partner_system_priority,
-                 self.partner_system,
-                 self.partner_key,
-                 self.partner_port_priority,
-                 self.partner_port,
-                 self.partner_state_activity,
-                 self.partner_state_timeout,
-                 self.partner_state_aggregation,
-                 self.partner_state_synchronization,
-                 self.partner_state_collecting,
-                 self.partner_state_distributing,
-                 self.partner_state_defaulted,
-                 self.partner_state_expired,
-                 self.collector_max_delay)
-        l.serialize()
+        with pytest.raises(Exception):
+            l = lacp(self.version,
+                     self.actor_system_priority,
+                     self.actor_system,
+                     self.actor_key,
+                     self.actor_port_priority,
+                     self.actor_port,
+                     self.actor_state_activity,
+                     self.actor_state_timeout,
+                     self.actor_state_aggregation,
+                     self.actor_state_synchronization,
+                     self.actor_state_collecting,
+                     2,
+                     self.actor_state_defaulted,
+                     self.actor_state_expired,
+                     self.partner_system_priority,
+                     self.partner_system,
+                     self.partner_key,
+                     self.partner_port_priority,
+                     self.partner_port,
+                     self.partner_state_activity,
+                     self.partner_state_timeout,
+                     self.partner_state_aggregation,
+                     self.partner_state_synchronization,
+                     self.partner_state_collecting,
+                     self.partner_state_distributing,
+                     self.partner_state_defaulted,
+                     self.partner_state_expired,
+                     self.collector_max_delay)
+            l.serialize()
 
-    @raises(Exception)
     def test_invalid_actor_state_defaulted(self):
-        l = lacp(self.version,
-                 self.actor_system_priority,
-                 self.actor_system,
-                 self.actor_key,
-                 self.actor_port_priority,
-                 self.actor_port,
-                 self.actor_state_activity,
-                 self.actor_state_timeout,
-                 self.actor_state_aggregation,
-                 self.actor_state_synchronization,
-                 self.actor_state_collecting,
-                 self.actor_state_distributing,
-                 2,
-                 self.actor_state_expired,
-                 self.partner_system_priority,
-                 self.partner_system,
-                 self.partner_key,
-                 self.partner_port_priority,
-                 self.partner_port,
-                 self.partner_state_activity,
-                 self.partner_state_timeout,
-                 self.partner_state_aggregation,
-                 self.partner_state_synchronization,
-                 self.partner_state_collecting,
-                 self.partner_state_distributing,
-                 self.partner_state_defaulted,
-                 self.partner_state_expired,
-                 self.collector_max_delay)
-        l.serialize()
+        with pytest.raises(Exception):
+            l = lacp(self.version,
+                     self.actor_system_priority,
+                     self.actor_system,
+                     self.actor_key,
+                     self.actor_port_priority,
+                     self.actor_port,
+                     self.actor_state_activity,
+                     self.actor_state_timeout,
+                     self.actor_state_aggregation,
+                     self.actor_state_synchronization,
+                     self.actor_state_collecting,
+                     self.actor_state_distributing,
+                     2,
+                     self.actor_state_expired,
+                     self.partner_system_priority,
+                     self.partner_system,
+                     self.partner_key,
+                     self.partner_port_priority,
+                     self.partner_port,
+                     self.partner_state_activity,
+                     self.partner_state_timeout,
+                     self.partner_state_aggregation,
+                     self.partner_state_synchronization,
+                     self.partner_state_collecting,
+                     self.partner_state_distributing,
+                     self.partner_state_defaulted,
+                     self.partner_state_expired,
+                     self.collector_max_delay)
+            l.serialize()
 
-    @raises(Exception)
     def test_invalid_actor_state_expired(self):
-        l = lacp(self.version,
-                 self.actor_system_priority,
-                 self.actor_system,
-                 self.actor_key,
-                 self.actor_port_priority,
-                 self.actor_port,
-                 self.actor_state_activity,
-                 self.actor_state_timeout,
-                 self.actor_state_aggregation,
-                 self.actor_state_synchronization,
-                 self.actor_state_collecting,
-                 self.actor_state_distributing,
-                 self.actor_state_defaulted,
-                 2,
-                 self.partner_system_priority,
-                 self.partner_system,
-                 self.partner_key,
-                 self.partner_port_priority,
-                 self.partner_port,
-                 self.partner_state_activity,
-                 self.partner_state_timeout,
-                 self.partner_state_aggregation,
-                 self.partner_state_synchronization,
-                 self.partner_state_collecting,
-                 self.partner_state_distributing,
-                 self.partner_state_defaulted,
-                 self.partner_state_expired,
-                 self.collector_max_delay)
-        l.serialize()
+        with pytest.raises(Exception):
+            l = lacp(self.version,
+                     self.actor_system_priority,
+                     self.actor_system,
+                     self.actor_key,
+                     self.actor_port_priority,
+                     self.actor_port,
+                     self.actor_state_activity,
+                     self.actor_state_timeout,
+                     self.actor_state_aggregation,
+                     self.actor_state_synchronization,
+                     self.actor_state_collecting,
+                     self.actor_state_distributing,
+                     self.actor_state_defaulted,
+                     2,
+                     self.partner_system_priority,
+                     self.partner_system,
+                     self.partner_key,
+                     self.partner_port_priority,
+                     self.partner_port,
+                     self.partner_state_activity,
+                     self.partner_state_timeout,
+                     self.partner_state_aggregation,
+                     self.partner_state_synchronization,
+                     self.partner_state_collecting,
+                     self.partner_state_distributing,
+                     self.partner_state_defaulted,
+                     self.partner_state_expired,
+                     self.collector_max_delay)
+            l.serialize()
 
-    @raises(Exception)
     def test_invalid_partner_state_activity(self):
-        l = lacp(self.version,
-                 self.actor_system_priority,
-                 self.actor_system,
-                 self.actor_key,
-                 self.actor_port_priority,
-                 self.actor_port,
-                 self.actor_state_activity,
-                 self.actor_state_timeout,
-                 self.actor_state_aggregation,
-                 self.actor_state_synchronization,
-                 self.actor_state_collecting,
-                 self.actor_state_distributing,
-                 self.actor_state_defaulted,
-                 self.actor_state_expired,
-                 self.partner_system_priority,
-                 self.partner_system,
-                 self.partner_key,
-                 self.partner_port_priority,
-                 self.partner_port,
-                 -1,
-                 self.partner_state_timeout,
-                 self.partner_state_aggregation,
-                 self.partner_state_synchronization,
-                 self.partner_state_collecting,
-                 self.partner_state_distributing,
-                 self.partner_state_defaulted,
-                 self.partner_state_expired,
-                 self.collector_max_delay)
-        l.serialize()
+        with pytest.raises(Exception):
+            l = lacp(self.version,
+                     self.actor_system_priority,
+                     self.actor_system,
+                     self.actor_key,
+                     self.actor_port_priority,
+                     self.actor_port,
+                     self.actor_state_activity,
+                     self.actor_state_timeout,
+                     self.actor_state_aggregation,
+                     self.actor_state_synchronization,
+                     self.actor_state_collecting,
+                     self.actor_state_distributing,
+                     self.actor_state_defaulted,
+                     self.actor_state_expired,
+                     self.partner_system_priority,
+                     self.partner_system,
+                     self.partner_key,
+                     self.partner_port_priority,
+                     self.partner_port,
+                     -1,
+                     self.partner_state_timeout,
+                     self.partner_state_aggregation,
+                     self.partner_state_synchronization,
+                     self.partner_state_collecting,
+                     self.partner_state_distributing,
+                     self.partner_state_defaulted,
+                     self.partner_state_expired,
+                     self.collector_max_delay)
+            l.serialize()
 
-    @raises(Exception)
     def test_invalid_partner_state_timeout(self):
-        l = lacp(self.version,
-                 self.actor_system_priority,
-                 self.actor_system,
-                 self.actor_key,
-                 self.actor_port_priority,
-                 self.actor_port,
-                 self.actor_state_activity,
-                 self.actor_state_timeout,
-                 self.actor_state_aggregation,
-                 self.actor_state_synchronization,
-                 self.actor_state_collecting,
-                 self.actor_state_distributing,
-                 self.actor_state_defaulted,
-                 self.actor_state_expired,
-                 self.partner_system_priority,
-                 self.partner_system,
-                 self.partner_key,
-                 self.partner_port_priority,
-                 self.partner_port,
-                 self.partner_state_activity,
-                 -1,
-                 self.partner_state_aggregation,
-                 self.partner_state_synchronization,
-                 self.partner_state_collecting,
-                 self.partner_state_distributing,
-                 self.partner_state_defaulted,
-                 self.partner_state_expired,
-                 self.collector_max_delay)
-        l.serialize()
+        with pytest.raises(Exception):
+            l = lacp(self.version,
+                     self.actor_system_priority,
+                     self.actor_system,
+                     self.actor_key,
+                     self.actor_port_priority,
+                     self.actor_port,
+                     self.actor_state_activity,
+                     self.actor_state_timeout,
+                     self.actor_state_aggregation,
+                     self.actor_state_synchronization,
+                     self.actor_state_collecting,
+                     self.actor_state_distributing,
+                     self.actor_state_defaulted,
+                     self.actor_state_expired,
+                     self.partner_system_priority,
+                     self.partner_system,
+                     self.partner_key,
+                     self.partner_port_priority,
+                     self.partner_port,
+                     self.partner_state_activity,
+                     -1,
+                     self.partner_state_aggregation,
+                     self.partner_state_synchronization,
+                     self.partner_state_collecting,
+                     self.partner_state_distributing,
+                     self.partner_state_defaulted,
+                     self.partner_state_expired,
+                     self.collector_max_delay)
+            l.serialize()
 
-    @raises(Exception)
     def test_invalid_partner_state_aggregation(self):
-        l = lacp(self.version,
-                 self.actor_system_priority,
-                 self.actor_system,
-                 self.actor_key,
-                 self.actor_port_priority,
-                 self.actor_port,
-                 self.actor_state_activity,
-                 self.actor_state_timeout,
-                 self.actor_state_aggregation,
-                 self.actor_state_synchronization,
-                 self.actor_state_collecting,
-                 self.actor_state_distributing,
-                 self.actor_state_defaulted,
-                 self.actor_state_expired,
-                 self.partner_system_priority,
-                 self.partner_system,
-                 self.partner_key,
-                 self.partner_port_priority,
-                 self.partner_port,
-                 self.partner_state_activity,
-                 self.partner_state_timeout,
-                 -1,
-                 self.partner_state_synchronization,
-                 self.partner_state_collecting,
-                 self.partner_state_distributing,
-                 self.partner_state_defaulted,
-                 self.partner_state_expired,
-                 self.collector_max_delay)
-        l.serialize()
+        with pytest.raises(Exception):
+            l = lacp(self.version,
+                     self.actor_system_priority,
+                     self.actor_system,
+                     self.actor_key,
+                     self.actor_port_priority,
+                     self.actor_port,
+                     self.actor_state_activity,
+                     self.actor_state_timeout,
+                     self.actor_state_aggregation,
+                     self.actor_state_synchronization,
+                     self.actor_state_collecting,
+                     self.actor_state_distributing,
+                     self.actor_state_defaulted,
+                     self.actor_state_expired,
+                     self.partner_system_priority,
+                     self.partner_system,
+                     self.partner_key,
+                     self.partner_port_priority,
+                     self.partner_port,
+                     self.partner_state_activity,
+                     self.partner_state_timeout,
+                     -1,
+                     self.partner_state_synchronization,
+                     self.partner_state_collecting,
+                     self.partner_state_distributing,
+                     self.partner_state_defaulted,
+                     self.partner_state_expired,
+                     self.collector_max_delay)
+            l.serialize()
 
-    @raises(Exception)
     def test_invalid_partner_state_synchronization(self):
-        l = lacp(self.version,
-                 self.actor_system_priority,
-                 self.actor_system,
-                 self.actor_key,
-                 self.actor_port_priority,
-                 self.actor_port,
-                 self.actor_state_activity,
-                 self.actor_state_timeout,
-                 self.actor_state_aggregation,
-                 self.actor_state_synchronization,
-                 self.actor_state_collecting,
-                 self.actor_state_distributing,
-                 self.actor_state_defaulted,
-                 self.actor_state_expired,
-                 self.partner_system_priority,
-                 self.partner_system,
-                 self.partner_key,
-                 self.partner_port_priority,
-                 self.partner_port,
-                 self.partner_state_activity,
-                 self.partner_state_timeout,
-                 self.partner_state_aggregation,
-                 -1,
-                 self.partner_state_collecting,
-                 self.partner_state_distributing,
-                 self.partner_state_defaulted,
-                 self.partner_state_expired,
-                 self.collector_max_delay)
-        l.serialize()
+        with pytest.raises(Exception):
+            l = lacp(self.version,
+                     self.actor_system_priority,
+                     self.actor_system,
+                     self.actor_key,
+                     self.actor_port_priority,
+                     self.actor_port,
+                     self.actor_state_activity,
+                     self.actor_state_timeout,
+                     self.actor_state_aggregation,
+                     self.actor_state_synchronization,
+                     self.actor_state_collecting,
+                     self.actor_state_distributing,
+                     self.actor_state_defaulted,
+                     self.actor_state_expired,
+                     self.partner_system_priority,
+                     self.partner_system,
+                     self.partner_key,
+                     self.partner_port_priority,
+                     self.partner_port,
+                     self.partner_state_activity,
+                     self.partner_state_timeout,
+                     self.partner_state_aggregation,
+                     -1,
+                     self.partner_state_collecting,
+                     self.partner_state_distributing,
+                     self.partner_state_defaulted,
+                     self.partner_state_expired,
+                     self.collector_max_delay)
+            l.serialize()
 
-    @raises(Exception)
     def test_invalid_partner_state_collecting(self):
-        l = lacp(self.version,
-                 self.actor_system_priority,
-                 self.actor_system,
-                 self.actor_key,
-                 self.actor_port_priority,
-                 self.actor_port,
-                 self.actor_state_activity,
-                 self.actor_state_timeout,
-                 self.actor_state_aggregation,
-                 self.actor_state_synchronization,
-                 self.actor_state_collecting,
-                 self.actor_state_distributing,
-                 self.actor_state_defaulted,
-                 self.actor_state_expired,
-                 self.partner_system_priority,
-                 self.partner_system,
-                 self.partner_key,
-                 self.partner_port_priority,
-                 self.partner_port,
-                 self.partner_state_activity,
-                 self.partner_state_timeout,
-                 self.partner_state_aggregation,
-                 self.partner_state_synchronization,
-                 -1,
-                 self.partner_state_distributing,
-                 self.partner_state_defaulted,
-                 self.partner_state_expired,
-                 self.collector_max_delay)
-        l.serialize()
+        with pytest.raises(Exception):
+            l = lacp(self.version,
+                     self.actor_system_priority,
+                     self.actor_system,
+                     self.actor_key,
+                     self.actor_port_priority,
+                     self.actor_port,
+                     self.actor_state_activity,
+                     self.actor_state_timeout,
+                     self.actor_state_aggregation,
+                     self.actor_state_synchronization,
+                     self.actor_state_collecting,
+                     self.actor_state_distributing,
+                     self.actor_state_defaulted,
+                     self.actor_state_expired,
+                     self.partner_system_priority,
+                     self.partner_system,
+                     self.partner_key,
+                     self.partner_port_priority,
+                     self.partner_port,
+                     self.partner_state_activity,
+                     self.partner_state_timeout,
+                     self.partner_state_aggregation,
+                     self.partner_state_synchronization,
+                     -1,
+                     self.partner_state_distributing,
+                     self.partner_state_defaulted,
+                     self.partner_state_expired,
+                     self.collector_max_delay)
+            l.serialize()
 
-    @raises(Exception)
     def test_invalid_partner_state_distributing(self):
-        l = lacp(self.version,
-                 self.actor_system_priority,
-                 self.actor_system,
-                 self.actor_key,
-                 self.actor_port_priority,
-                 self.actor_port,
-                 self.actor_state_activity,
-                 self.actor_state_timeout,
-                 self.actor_state_aggregation,
-                 self.actor_state_synchronization,
-                 self.actor_state_collecting,
-                 self.actor_state_distributing,
-                 self.actor_state_defaulted,
-                 self.actor_state_expired,
-                 self.partner_system_priority,
-                 self.partner_system,
-                 self.partner_key,
-                 self.partner_port_priority,
-                 self.partner_port,
-                 self.partner_state_activity,
-                 self.partner_state_timeout,
-                 self.partner_state_aggregation,
-                 self.partner_state_synchronization,
-                 self.partner_state_collecting,
-                 -1,
-                 self.partner_state_defaulted,
-                 self.partner_state_expired,
-                 self.collector_max_delay)
-        l.serialize()
+        with pytest.raises(Exception):
+            l = lacp(self.version,
+                     self.actor_system_priority,
+                     self.actor_system,
+                     self.actor_key,
+                     self.actor_port_priority,
+                     self.actor_port,
+                     self.actor_state_activity,
+                     self.actor_state_timeout,
+                     self.actor_state_aggregation,
+                     self.actor_state_synchronization,
+                     self.actor_state_collecting,
+                     self.actor_state_distributing,
+                     self.actor_state_defaulted,
+                     self.actor_state_expired,
+                     self.partner_system_priority,
+                     self.partner_system,
+                     self.partner_key,
+                     self.partner_port_priority,
+                     self.partner_port,
+                     self.partner_state_activity,
+                     self.partner_state_timeout,
+                     self.partner_state_aggregation,
+                     self.partner_state_synchronization,
+                     self.partner_state_collecting,
+                     -1,
+                     self.partner_state_defaulted,
+                     self.partner_state_expired,
+                     self.collector_max_delay)
+            l.serialize()
 
-    @raises(Exception)
     def test_invalid_partner_state_defaulted(self):
-        l = lacp(self.version,
-                 self.actor_system_priority,
-                 self.actor_system,
-                 self.actor_key,
-                 self.actor_port_priority,
-                 self.actor_port,
-                 self.actor_state_activity,
-                 self.actor_state_timeout,
-                 self.actor_state_aggregation,
-                 self.actor_state_synchronization,
-                 self.actor_state_collecting,
-                 self.actor_state_distributing,
-                 self.actor_state_defaulted,
-                 self.actor_state_expired,
-                 self.partner_system_priority,
-                 self.partner_system,
-                 self.partner_key,
-                 self.partner_port_priority,
-                 self.partner_port,
-                 self.partner_state_activity,
-                 self.partner_state_timeout,
-                 self.partner_state_aggregation,
-                 self.partner_state_synchronization,
-                 self.partner_state_collecting,
-                 self.partner_state_distributing,
-                 -1,
-                 self.partner_state_expired,
-                 self.collector_max_delay)
-        l.serialize()
+        with pytest.raises(Exception):
+            l = lacp(self.version,
+                     self.actor_system_priority,
+                     self.actor_system,
+                     self.actor_key,
+                     self.actor_port_priority,
+                     self.actor_port,
+                     self.actor_state_activity,
+                     self.actor_state_timeout,
+                     self.actor_state_aggregation,
+                     self.actor_state_synchronization,
+                     self.actor_state_collecting,
+                     self.actor_state_distributing,
+                     self.actor_state_defaulted,
+                     self.actor_state_expired,
+                     self.partner_system_priority,
+                     self.partner_system,
+                     self.partner_key,
+                     self.partner_port_priority,
+                     self.partner_port,
+                     self.partner_state_activity,
+                     self.partner_state_timeout,
+                     self.partner_state_aggregation,
+                     self.partner_state_synchronization,
+                     self.partner_state_collecting,
+                     self.partner_state_distributing,
+                     -1,
+                     self.partner_state_expired,
+                     self.collector_max_delay)
+            l.serialize()
 
-    @raises(Exception)
     def test_invalid_partner_state_expired(self):
-        l = lacp(self.version,
-                 self.actor_system_priority,
-                 self.actor_system,
-                 self.actor_key,
-                 self.actor_port_priority,
-                 self.actor_port,
-                 self.actor_state_activity,
-                 self.actor_state_timeout,
-                 self.actor_state_aggregation,
-                 self.actor_state_synchronization,
-                 self.actor_state_collecting,
-                 self.actor_state_distributing,
-                 self.actor_state_defaulted,
-                 self.actor_state_expired,
-                 self.partner_system_priority,
-                 self.partner_system,
-                 self.partner_key,
-                 self.partner_port_priority,
-                 self.partner_port,
-                 self.partner_state_activity,
-                 self.partner_state_timeout,
-                 self.partner_state_aggregation,
-                 self.partner_state_synchronization,
-                 self.partner_state_collecting,
-                 self.partner_state_distributing,
-                 self.partner_state_defaulted,
-                 -1,
-                 self.collector_max_delay)
-        l.serialize()
+        with pytest.raises(Exception):
+            l = lacp(self.version,
+                     self.actor_system_priority,
+                     self.actor_system,
+                     self.actor_key,
+                     self.actor_port_priority,
+                     self.actor_port,
+                     self.actor_state_activity,
+                     self.actor_state_timeout,
+                     self.actor_state_aggregation,
+                     self.actor_state_synchronization,
+                     self.actor_state_collecting,
+                     self.actor_state_distributing,
+                     self.actor_state_defaulted,
+                     self.actor_state_expired,
+                     self.partner_system_priority,
+                     self.partner_system,
+                     self.partner_key,
+                     self.partner_port_priority,
+                     self.partner_port,
+                     self.partner_state_activity,
+                     self.partner_state_timeout,
+                     self.partner_state_aggregation,
+                     self.partner_state_synchronization,
+                     self.partner_state_collecting,
+                     self.partner_state_distributing,
+                     self.partner_state_defaulted,
+                     -1,
+                     self.collector_max_delay)
+            l.serialize()
 
     def test_json(self):
         jsondict = self.l.to_jsondict()

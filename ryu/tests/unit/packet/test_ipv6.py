@@ -511,9 +511,9 @@ class Test_hop_opts(unittest.TestCase):
         assert self.nxt == self.hop.nxt
         assert self.size == self.hop.size
         assert self.data == self.hop.data
-    @raises(Exception)
     def test_invalid_size(self):
-        ipv6.hop_opts(self.nxt, 1, self.data)
+        with pytest.raises(Exception):
+            ipv6.hop_opts(self.nxt, 1, self.data)
 
     def test_parser(self):
         _res = ipv6.hop_opts.parser(self.buf)
@@ -586,9 +586,9 @@ class Test_dst_opts(unittest.TestCase):
         assert self.nxt == self.dst.nxt
         assert self.size == self.dst.size
         assert self.data == self.dst.data
-    @raises(Exception)
     def test_invalid_size(self):
-        ipv6.dst_opts(self.nxt, 1, self.data)
+        with pytest.raises(Exception):
+            ipv6.dst_opts(self.nxt, 1, self.data)
 
     def test_parser(self):
         _res = ipv6.dst_opts.parser(self.buf)

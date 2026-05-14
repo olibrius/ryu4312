@@ -85,10 +85,10 @@ class Test_udp(unittest.TestCase):
         d = ph + buf + bytearray()
         s = packet_utils.checksum(d)
         assert 0 == s
-    @raises(Exception)
     def test_malformed_udp(self):
-        m_short_buf = self.buf[1:udp._MIN_LEN]
-        udp.parser(m_short_buf)
+        with pytest.raises(Exception):
+            m_short_buf = self.buf[1:udp._MIN_LEN]
+            udp.parser(m_short_buf)
 
     def test_default_args(self):
         prev = ipv4(proto=inet.IPPROTO_UDP)

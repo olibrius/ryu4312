@@ -156,10 +156,10 @@ class Test_rpc(unittest.TestCase):
         self._client_sock.shutdown(socket.SHUT_WR)
         hub.joinall([self._server_thread])
 
-    @raises(EOFError)
     def test_1_client_shutdown_wr(self):
-        c = rpc.Client(self._client_sock)
-        c.call('shutdown', ['SHUT_WR'])
+        with pytest.raises(EOFError):
+            c = rpc.Client(self._client_sock)
+            c.call('shutdown', ['SHUT_WR'])
 
     def test_1_call_True(self):
         c = rpc.Client(self._client_sock)

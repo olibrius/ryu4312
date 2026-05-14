@@ -125,10 +125,10 @@ class Test_vlan(unittest.TestCase):
         assert v.cfi == self.cfi
         assert v.vid == self.vid
         assert v.ethertype == self.ethertype
-    @raises(Exception)
     def test_malformed_vlan(self):
-        m_short_buf = self.buf[1:vlan._MIN_LEN]
-        vlan.parser(m_short_buf)
+        with pytest.raises(Exception):
+            m_short_buf = self.buf[1:vlan._MIN_LEN]
+            vlan.parser(m_short_buf)
 
     def test_json(self):
         jsondict = self.v.to_jsondict()
@@ -237,10 +237,10 @@ class Test_svlan(unittest.TestCase):
         assert sv.cfi == self.cfi
         assert sv.vid == self.vid
         assert sv.ethertype == self.ethertype
-    @raises(Exception)
     def test_malformed_svlan(self):
-        m_short_buf = self.buf[1:svlan._MIN_LEN]
-        svlan.parser(m_short_buf)
+        with pytest.raises(Exception):
+            m_short_buf = self.buf[1:svlan._MIN_LEN]
+            svlan.parser(m_short_buf)
 
     def test_json(self):
         jsondict = self.sv.to_jsondict()

@@ -105,12 +105,12 @@ class TestOfproto_Parser(unittest.TestCase):
                                  self.bufPacketIn)
         LOG.debug(msg)
         assert isinstance(msg, ofproto_v1_0_parser.OFPPacketIn)
-    @raises(AssertionError)
     def test_check_msg_len(self):
-        (version,
-         msg_type,
-         msg_len,
-         xid) = ofproto_parser.header(self.bufPacketIn)
+        with pytest.raises(AssertionError):
+            (version,
+             msg_type,
+             msg_len,
+             xid) = ofproto_parser.header(self.bufPacketIn)
 
         msg_len = len(self.bufPacketIn) + 1
         ofproto_parser.msg(self,
@@ -120,12 +120,12 @@ class TestOfproto_Parser(unittest.TestCase):
                            xid,
                            self.bufPacketIn)
 
-    @raises(exception.OFPUnknownVersion)
     def test_check_msg_parser(self):
-        (version,
-         msg_type,
-         msg_len,
-         xid) = ofproto_parser.header(self.bufPacketIn)
+        with pytest.raises(exception.OFPUnknownVersion):
+            (version,
+             msg_type,
+             msg_len,
+             xid) = ofproto_parser.header(self.bufPacketIn)
 
         version = 0xff
         ofproto_parser.msg(self,
@@ -154,12 +154,12 @@ class TestMsgBase(unittest.TestCase):
         c = ofproto_parser.MsgBase(object)
         c.set_xid(xid)
         assert xid == c.xid
-    @raises(AssertionError)
     def test_set_xid_check_xid(self):
-        xid = 2160492514
-        c = ofproto_parser.MsgBase(object)
-        c.xid = xid
-        c.set_xid(xid)
+        with pytest.raises(AssertionError):
+            xid = 2160492514
+            c = ofproto_parser.MsgBase(object)
+            c.xid = xid
+            c.set_xid(xid)
 
     def _test_parser(self, msg_type=ofproto_v1_0.OFPT_HELLO):
         version = ofproto_v1_0.OFP_VERSION
@@ -196,9 +196,9 @@ class TestMsgBase(unittest.TestCase):
 
     def test_parser(self):
         assert self._test_parser()
-    @raises(AssertionError)
     def test_parser_check_msg_type(self):
-        self._test_parser(ofproto_v1_0.OFPT_ERROR)
+        with pytest.raises(AssertionError):
+            self._test_parser(ofproto_v1_0.OFPT_ERROR)
 
     def _test_serialize(self):
 

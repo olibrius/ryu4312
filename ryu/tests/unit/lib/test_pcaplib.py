@@ -98,9 +98,9 @@ class Test_PcapFileHdr(unittest.TestCase):
     def test_serialize_with_little_endian(self):
         buf = self.hdr.serialize()
         assert binary_str(self.buf_little) == binary_str(buf)
-    @raises(struct.error)
     def test_parser_with_invalid_magic_number(self):
-        pcaplib.PcapFileHdr.parser(self.buf_invalid)
+        with pytest.raises(struct.error):
+            pcaplib.PcapFileHdr.parser(self.buf_invalid)
 
 
 class Test_PcapPktHdr(unittest.TestCase):

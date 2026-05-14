@@ -80,10 +80,10 @@ class Test_ethernet(unittest.TestCase):
         assert res[0] == addrconv.mac.text_to_bin(self.dst)
         assert res[1] == addrconv.mac.text_to_bin(self.src)
         assert res[2] == self.ethertype
-    @raises(Exception)
     def test_malformed_ethernet(self):
-        m_short_buf = self.buf[1:ethernet._MIN_LEN]
-        ethernet.parser(m_short_buf)
+        with pytest.raises(Exception):
+            m_short_buf = self.buf[1:ethernet._MIN_LEN]
+            ethernet.parser(m_short_buf)
 
     def test_default_args(self):
         e = ethernet()

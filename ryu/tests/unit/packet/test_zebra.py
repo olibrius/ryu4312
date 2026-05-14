@@ -94,9 +94,9 @@ class TestZebraMessage(unittest.TestCase):
         assert zebra.ZebraMessage.V3_HEADER_SIZE == zebra.ZebraMessage.get_header_size(3)
         assert zebra.ZebraMessage.V3_HEADER_SIZE == zebra.ZebraMessage.get_header_size(4)
 
-    @raises(ValueError)
     def test_get_header_size_invalid_version(self):
-        assert zebra.ZebraMessage.V0_HEADER_SIZE == zebra.ZebraMessage.get_header_size(0xff)
+        with pytest.raises(ValueError):
+            assert zebra.ZebraMessage.V0_HEADER_SIZE == zebra.ZebraMessage.get_header_size(0xff)
 
 
 class TestZebraRedistributeAdd(unittest.TestCase):

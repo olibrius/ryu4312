@@ -260,97 +260,97 @@ class Test_TableCoreManager(unittest.TestCase):
                                     next_hop, route_family, route_type,
                                     is_withdraw=True, **kwargs)
 
-    @raises(BgpCoreError)
     @mock.patch(
         'ryu.services.protocols.bgp.core_managers.TableCoreManager.__init__',
         mock.MagicMock(return_value=None))
     def test_update_vrf_table_no_vrf(self):
-        # Prepare test data
-        route_dist = '65000:100'
-        ip_network = '192.168.0.0'
-        ip_prefix_len = 24
-        prefix_str = '%s/%d' % (ip_network, ip_prefix_len)
-        next_hop = '10.0.0.1'
-        route_family = VRF_RF_IPV4
-        route_type = None  # should be ignored
-        kwargs = {}  # should be ignored
+        with pytest.raises(BgpCoreError):
+            # Prepare test data
+            route_dist = '65000:100'
+            ip_network = '192.168.0.0'
+            ip_prefix_len = 24
+            prefix_str = '%s/%d' % (ip_network, ip_prefix_len)
+            next_hop = '10.0.0.1'
+            route_family = VRF_RF_IPV4
+            route_type = None  # should be ignored
+            kwargs = {}  # should be ignored
 
-        # Instantiate TableCoreManager
-        tbl_mng = table_manager.TableCoreManager(None, None)
-        tbl_mng._tables = {}  # no table
+            # Instantiate TableCoreManager
+            tbl_mng = table_manager.TableCoreManager(None, None)
+            tbl_mng._tables = {}  # no table
 
-        # Test
-        tbl_mng.update_vrf_table(
-            route_dist=route_dist,
-            prefix=prefix_str,
-            next_hop=next_hop,
-            route_family=route_family,
-            route_type=route_type,
-            **kwargs)
+            # Test
+            tbl_mng.update_vrf_table(
+                route_dist=route_dist,
+                prefix=prefix_str,
+                next_hop=next_hop,
+                route_family=route_family,
+                route_type=route_type,
+                **kwargs)
 
-    @raises(BgpCoreError)
     def test_update_vrf_table_invalid_next_hop(self):
-        # Prepare test data
-        route_dist = '65000:100'
-        ip_network = '192.168.0.0'
-        ip_prefix_len = 24
-        prefix_str = '%s/%d' % (ip_network, ip_prefix_len)
-        prefix_inst = IPAddrPrefix(ip_prefix_len, ip_network)
-        next_hop = 'xxx.xxx.xxx.xxx'  # invalid
-        route_family = VRF_RF_IPV4
-        route_type = None  # should be ignored
-        kwargs = {}  # should be ignored
+        with pytest.raises(BgpCoreError):
+            # Prepare test data
+            route_dist = '65000:100'
+            ip_network = '192.168.0.0'
+            ip_prefix_len = 24
+            prefix_str = '%s/%d' % (ip_network, ip_prefix_len)
+            prefix_inst = IPAddrPrefix(ip_prefix_len, ip_network)
+            next_hop = 'xxx.xxx.xxx.xxx'  # invalid
+            route_family = VRF_RF_IPV4
+            route_type = None  # should be ignored
+            kwargs = {}  # should be ignored
 
         self._test_update_vrf_table(prefix_inst, route_dist, prefix_str,
                                     next_hop, route_family, route_type,
                                     **kwargs)
 
-    @raises(BgpCoreError)
     def test_update_vrf_table_invalid_ipv4_prefix(self):
-        # Prepare test data
-        route_dist = '65000:100'
-        ip_network = 'xxx.xxx.xxx.xxx'  # invalid
-        ip_prefix_len = 24
-        prefix_str = '%s/%d' % (ip_network, ip_prefix_len)
-        prefix_inst = IPAddrPrefix(ip_prefix_len, ip_network)
-        next_hop = '10.0.0.1'
-        route_family = VRF_RF_IPV4
-        route_type = None  # should be ignored
-        kwargs = {}  # should be ignored
+        with pytest.raises(BgpCoreError):
+            # Prepare test data
+            route_dist = '65000:100'
+            ip_network = 'xxx.xxx.xxx.xxx'  # invalid
+            ip_prefix_len = 24
+            prefix_str = '%s/%d' % (ip_network, ip_prefix_len)
+            prefix_inst = IPAddrPrefix(ip_prefix_len, ip_network)
+            next_hop = '10.0.0.1'
+            route_family = VRF_RF_IPV4
+            route_type = None  # should be ignored
+            kwargs = {}  # should be ignored
 
         self._test_update_vrf_table(prefix_inst, route_dist, prefix_str,
                                     next_hop, route_family, route_type,
                                     **kwargs)
 
-    @raises(BgpCoreError)
     def test_update_vrf_table_invalid_ipv6_prefix(self):
-        # Prepare test data
-        route_dist = '65000:100'
-        ip_network = 'xxxx::'  # invalid
-        ip_prefix_len = 64
-        prefix_str = '%s/%d' % (ip_network, ip_prefix_len)
-        prefix_inst = IP6AddrPrefix(ip_prefix_len, ip_network)
-        next_hop = 'fe80::0011:aabb:ccdd:eeff'
-        route_family = VRF_RF_IPV6
-        route_type = None  # should be ignored
-        kwargs = {}  # should be ignored
+        with pytest.raises(BgpCoreError):
+            # Prepare test data
+            route_dist = '65000:100'
+            ip_network = 'xxxx::'  # invalid
+            ip_prefix_len = 64
+            prefix_str = '%s/%d' % (ip_network, ip_prefix_len)
+            prefix_inst = IP6AddrPrefix(ip_prefix_len, ip_network)
+            next_hop = 'fe80::0011:aabb:ccdd:eeff'
+            route_family = VRF_RF_IPV6
+            route_type = None  # should be ignored
+            kwargs = {}  # should be ignored
 
         self._test_update_vrf_table(prefix_inst, route_dist, prefix_str,
                                     next_hop, route_family, route_type,
                                     **kwargs)
 
-    @raises(BgpCoreError)
     def test_update_vrf_table_invalid_route_family(self):
-        # Prepare test data
-        route_dist = '65000:100'
-        ip_network = '192.168.0.0'
-        ip_prefix_len = 24
-        prefix_str = '%s/%d' % (ip_network, ip_prefix_len)
-        prefix_inst = IPAddrPrefix(ip_prefix_len, ip_network)
-        next_hop = '10.0.0.1'
-        route_family = 'foobar'  # invalid
-        route_type = None  # should be ignored
-        kwargs = {}  # should be ignored
+        with pytest.raises(BgpCoreError):
+            # Prepare test data
+            route_dist = '65000:100'
+            ip_network = '192.168.0.0'
+            ip_prefix_len = 24
+            prefix_str = '%s/%d' % (ip_network, ip_prefix_len)
+            prefix_inst = IPAddrPrefix(ip_prefix_len, ip_network)
+            next_hop = '10.0.0.1'
+            route_family = 'foobar'  # invalid
+            route_type = None  # should be ignored
+            kwargs = {}  # should be ignored
 
         self._test_update_vrf_table(prefix_inst, route_dist, prefix_str,
                                     next_hop, route_family, route_type,
@@ -513,20 +513,20 @@ class Test_TableCoreManager(unittest.TestCase):
             is_withdraw=False,
         )
 
-    @raises(BgpCoreError)
     def test_update_flowspec_vrf_table_vpnv4_invalid_actions(self):
-        flowspec_family = 'vpnv4fs'
-        route_family = 'ipv4fs'
-        route_dist = '65001:100'
-        rules = {
-            'dst_prefix': '10.70.1.0/24',
-        }
-        actions = {
-            'invalid_actions': {
-                'invalid_param': 10,
-            },
-        }
-        prefix = 'ipv4fs(dst_prefix:10.70.1.0/24)'
+        with pytest.raises(BgpCoreError):
+            flowspec_family = 'vpnv4fs'
+            route_family = 'ipv4fs'
+            route_dist = '65001:100'
+            rules = {
+                'dst_prefix': '10.70.1.0/24',
+            }
+            actions = {
+                'invalid_actions': {
+                    'invalid_param': 10,
+                },
+            }
+            prefix = 'ipv4fs(dst_prefix:10.70.1.0/24)'
 
         self._test_update_flowspec_vrf_table(
             flowspec_family=flowspec_family,
@@ -538,15 +538,15 @@ class Test_TableCoreManager(unittest.TestCase):
             actions=actions,
         )
 
-    @raises(BgpCoreError)
     def test_update_flowspec_vrf_table_vpnv4_invalid_flowspec_family(self):
-        flowspec_family = 'invalid'
-        route_family = 'ipv4fs'
-        route_dist = '65001:100'
-        rules = {
-            'dst_prefix': '10.70.1.0/24',
-        }
-        prefix = 'ipv4fs(dst_prefix:10.70.1.0/24)'
+        with pytest.raises(BgpCoreError):
+            flowspec_family = 'invalid'
+            route_family = 'ipv4fs'
+            route_dist = '65001:100'
+            rules = {
+                'dst_prefix': '10.70.1.0/24',
+            }
+            prefix = 'ipv4fs(dst_prefix:10.70.1.0/24)'
 
         self._test_update_flowspec_vrf_table(
             flowspec_family=flowspec_family,
@@ -557,15 +557,15 @@ class Test_TableCoreManager(unittest.TestCase):
             is_withdraw=False,
         )
 
-    @raises(BgpCoreError)
     def test_update_flowspec_vrf_table_vpnv4_invalid_route_family(self):
-        flowspec_family = 'vpnv4fs'
-        route_family = 'invalid'
-        route_dist = '65001:100'
-        rules = {
-            'dst_prefix': '10.70.1.0/24',
-        }
-        prefix = 'ipv4fs(dst_prefix:10.70.1.0/24)'
+        with pytest.raises(BgpCoreError):
+            flowspec_family = 'vpnv4fs'
+            route_family = 'invalid'
+            route_dist = '65001:100'
+            rules = {
+                'dst_prefix': '10.70.1.0/24',
+            }
+            prefix = 'ipv4fs(dst_prefix:10.70.1.0/24)'
 
         self._test_update_flowspec_vrf_table(
             flowspec_family=flowspec_family,
@@ -641,18 +641,18 @@ class Test_TableCoreManager(unittest.TestCase):
             is_withdraw=False,
         )
 
-    @raises(BgpCoreError)
     def test_update_flowspec_global_table_ipv4_invalid_actions(self):
-        flowspec_family = 'ipv4fs'
-        rules = {
-            'dst_prefix': '10.60.1.0/24',
-        }
-        actions = {
-            'invalid_actions': {
-                'invalid_param': 10,
-            },
-        }
-        prefix = 'ipv4fs(dst_prefix:10.60.1.0/24)'
+        with pytest.raises(BgpCoreError):
+            flowspec_family = 'ipv4fs'
+            rules = {
+                'dst_prefix': '10.60.1.0/24',
+            }
+            actions = {
+                'invalid_actions': {
+                    'invalid_param': 10,
+                },
+            }
+            prefix = 'ipv4fs(dst_prefix:10.60.1.0/24)'
 
         self._test_update_flowspec_global_table(
             flowspec_family=flowspec_family,
@@ -662,19 +662,19 @@ class Test_TableCoreManager(unittest.TestCase):
             actions=actions,
         )
 
-    @raises(BgpCoreError)
     def test_update_flowspec_global_table_ipv4_invalid_flowspec_family(self):
-        flowspec_family = 'invalid'
-        rules = {
-            'dst_prefix': '10.60.1.0/24',
-        }
-        actions = {
-            'traffic_rate': {
-                'as_number': 0,
-                'rate_info': 100.0,
-            },
-        }
-        prefix = 'ipv4fs(dst_prefix:10.60.1.0/24)'
+        with pytest.raises(BgpCoreError):
+            flowspec_family = 'invalid'
+            rules = {
+                'dst_prefix': '10.60.1.0/24',
+            }
+            actions = {
+                'traffic_rate': {
+                    'as_number': 0,
+                    'rate_info': 100.0,
+                },
+            }
+            prefix = 'ipv4fs(dst_prefix:10.60.1.0/24)'
 
         self._test_update_flowspec_global_table(
             flowspec_family=flowspec_family,
@@ -719,18 +719,18 @@ class Test_TableCoreManager(unittest.TestCase):
             is_withdraw=False,
         )
 
-    @raises(BgpCoreError)
     def test_update_flowspec_global_table_ipv6_invalid_actions(self):
-        flowspec_family = 'ipv6fs'
-        rules = {
-            'dst_prefix': '2001::3/128/32',
-        }
-        actions = {
-            'invalid_actions': {
-                'invalid_param': 10,
-            },
-        }
-        prefix = 'ipv4fs(dst_prefix:2001::3/128/32)'
+        with pytest.raises(BgpCoreError):
+            flowspec_family = 'ipv6fs'
+            rules = {
+                'dst_prefix': '2001::3/128/32',
+            }
+            actions = {
+                'invalid_actions': {
+                    'invalid_param': 10,
+                },
+            }
+            prefix = 'ipv4fs(dst_prefix:2001::3/128/32)'
 
         self._test_update_flowspec_global_table(
             flowspec_family=flowspec_family,
@@ -740,19 +740,19 @@ class Test_TableCoreManager(unittest.TestCase):
             actions=actions,
         )
 
-    @raises(BgpCoreError)
     def test_update_flowspec_global_table_ipv6_invalid_flowspec_family(self):
-        flowspec_family = 'invalid'
-        rules = {
-            'dst_prefix': '2001::3/128/32',
-        }
-        actions = {
-            'traffic_rate': {
-                'as_number': 0,
-                'rate_info': 100.0,
-            },
-        }
-        prefix = 'ipv4fs(dst_prefix:2001::3/128/32)'
+        with pytest.raises(BgpCoreError):
+            flowspec_family = 'invalid'
+            rules = {
+                'dst_prefix': '2001::3/128/32',
+            }
+            actions = {
+                'traffic_rate': {
+                    'as_number': 0,
+                    'rate_info': 100.0,
+                },
+            }
+            prefix = 'ipv4fs(dst_prefix:2001::3/128/32)'
 
         self._test_update_flowspec_global_table(
             flowspec_family=flowspec_family,
@@ -805,20 +805,20 @@ class Test_TableCoreManager(unittest.TestCase):
             is_withdraw=False,
         )
 
-    @raises(BgpCoreError)
     def test_update_flowspec_vrf_table_vpnv6_invalid_actions(self):
-        flowspec_family = 'vpnv6fs'
-        route_family = 'ipv6fs'
-        route_dist = '65001:100'
-        rules = {
-            'dst_prefix': '2001::3/128/32',
-        }
-        actions = {
-            'invalid_actions': {
-                'invalid_param': 10,
-            },
-        }
-        prefix = 'ipv6fs(dst_prefix:2001::3/128/32)'
+        with pytest.raises(BgpCoreError):
+            flowspec_family = 'vpnv6fs'
+            route_family = 'ipv6fs'
+            route_dist = '65001:100'
+            rules = {
+                'dst_prefix': '2001::3/128/32',
+            }
+            actions = {
+                'invalid_actions': {
+                    'invalid_param': 10,
+                },
+            }
+            prefix = 'ipv6fs(dst_prefix:2001::3/128/32)'
 
         self._test_update_flowspec_vrf_table(
             flowspec_family=flowspec_family,
@@ -830,15 +830,15 @@ class Test_TableCoreManager(unittest.TestCase):
             actions=actions,
         )
 
-    @raises(BgpCoreError)
     def test_update_flowspec_vrf_table_vpnv6_invalid_route_family(self):
-        flowspec_family = 'vpnv6fs'
-        route_family = 'invalid'
-        route_dist = '65001:100'
-        rules = {
-            'dst_prefix': '2001::3/128/32',
-        }
-        prefix = 'ipv4fs(dst_prefix:2001::3/128/32)'
+        with pytest.raises(BgpCoreError):
+            flowspec_family = 'vpnv6fs'
+            route_family = 'invalid'
+            route_dist = '65001:100'
+            rules = {
+                'dst_prefix': '2001::3/128/32',
+            }
+            prefix = 'ipv4fs(dst_prefix:2001::3/128/32)'
 
         self._test_update_flowspec_vrf_table(
             flowspec_family=flowspec_family,
@@ -892,20 +892,20 @@ class Test_TableCoreManager(unittest.TestCase):
             is_withdraw=False,
         )
 
-    @raises(BgpCoreError)
     def test_update_flowspec_vrf_table_l2vpn_invalid_actions(self):
-        flowspec_family = 'l2vpnfs'
-        route_family = 'l2vpnfs'
-        route_dist = '65001:100'
-        rules = {
-            'dst_mac': '12:34:56:78:9a:bc',
-        }
-        actions = {
-            'invalid_actions': {
-                'invalid_param': 10,
-            },
-        }
-        prefix = 'l2vpnfs(dst_mac:12:34:56:78:9a:bc)'
+        with pytest.raises(BgpCoreError):
+            flowspec_family = 'l2vpnfs'
+            route_family = 'l2vpnfs'
+            route_dist = '65001:100'
+            rules = {
+                'dst_mac': '12:34:56:78:9a:bc',
+            }
+            actions = {
+                'invalid_actions': {
+                    'invalid_param': 10,
+                },
+            }
+            prefix = 'l2vpnfs(dst_mac:12:34:56:78:9a:bc)'
 
         self._test_update_flowspec_vrf_table(
             flowspec_family=flowspec_family,
@@ -917,15 +917,15 @@ class Test_TableCoreManager(unittest.TestCase):
             actions=actions,
         )
 
-    @raises(BgpCoreError)
     def test_update_flowspec_vrf_table_l2vpn_invalid_route_family(self):
-        flowspec_family = 'l2vpnfs'
-        route_family = 'invalid'
-        route_dist = '65001:100'
-        rules = {
-            'dst_mac': '12:34:56:78:9a:bc',
-        }
-        prefix = 'l2vpnfs(dst_mac:12:34:56:78:9a:bc)'
+        with pytest.raises(BgpCoreError):
+            flowspec_family = 'l2vpnfs'
+            route_family = 'invalid'
+            route_dist = '65001:100'
+            rules = {
+                'dst_mac': '12:34:56:78:9a:bc',
+            }
+            prefix = 'l2vpnfs(dst_mac:12:34:56:78:9a:bc)'
 
         self._test_update_flowspec_vrf_table(
             flowspec_family=flowspec_family,

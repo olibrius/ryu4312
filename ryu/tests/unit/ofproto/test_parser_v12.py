@@ -61,16 +61,16 @@ class TestRegisterParser(unittest.TestCase):
         assert res.dummy
         assert res_parser() == 'dummy'
 
-    @raises(AssertionError)
     def test_cls_msg_type_none(self):
-        cls = OFPHello(_Datapath)
-        cls.cls_msg_type = None
-        ofproto_v1_2_parser._register_parser(cls)
+        with pytest.raises(AssertionError):
+            cls = OFPHello(_Datapath)
+            cls.cls_msg_type = None
+            ofproto_v1_2_parser._register_parser(cls)
 
-    @raises(AssertionError)
     def test_cls_msg_type_already_registed(self):
-        cls = OFPHello(_Datapath)
-        ofproto_v1_2_parser._register_parser(cls)
+        with pytest.raises(AssertionError):
+            cls = OFPHello(_Datapath)
+            ofproto_v1_2_parser._register_parser(cls)
 
 
 class TestMsgParser(unittest.TestCase):
@@ -839,10 +839,10 @@ class TestOFPErrorMsg(unittest.TestCase):
         data = b'Error Message.'
         self._test_serialize(type_, code, data)
 
-    @raises(AssertionError)
     def test_serialize_check_data(self):
-        c = OFPErrorMsg(_Datapath)
-        c.serialize()
+        with pytest.raises(AssertionError):
+            c = OFPErrorMsg(_Datapath)
+            c.serialize()
 
     def _test_serialize_p(self, type_, code):
         self._test_serialize(type_, code, b'Error Message.')
@@ -1435,10 +1435,10 @@ class TestOFPEchoReply(unittest.TestCase):
         data = b'Reply Message.'.ljust(65527)
         self._test_serialize(data)
 
-    @raises(AssertionError)
     def test_serialize_check_data(self):
-        c = OFPEchoReply(_Datapath)
-        c.serialize()
+        with pytest.raises(AssertionError):
+            c = OFPEchoReply(_Datapath)
+            c.serialize()
 
 
 class TestOFPExperimenter(unittest.TestCase):
@@ -2046,19 +2046,19 @@ class TestOFPSetConfig(unittest.TestCase):
         miss_send_len = 13838
         self._test_serialize(flags, miss_send_len)
 
-    @raises(AssertionError)
     def test_serialize_check_flags(self):
-        flags = None
-        miss_send_len = 13838
-        c = OFPSetConfig(_Datapath, flags, miss_send_len)
-        c.serialize()
+        with pytest.raises(AssertionError):
+            flags = None
+            miss_send_len = 13838
+            c = OFPSetConfig(_Datapath, flags, miss_send_len)
+            c.serialize()
 
-    @raises(AssertionError)
     def test_serialize_check_miss_send_len(self):
-        flags = 41186
-        miss_send_len = None
-        c = OFPSetConfig(_Datapath, flags, miss_send_len)
-        c.serialize()
+        with pytest.raises(AssertionError):
+            flags = 41186
+            miss_send_len = None
+            c = OFPSetConfig(_Datapath, flags, miss_send_len)
+            c.serialize()
 
 
 class TestOFPPacketIn(unittest.TestCase):
@@ -2466,10 +2466,10 @@ class TestOFPPacketOut(unittest.TestCase):
         in_port = 0x00040455
         self._test_init(in_port)
 
-    @raises(AssertionError)
     def test_init_check_in_port(self):
-        in_port = None
-        self._test_init(in_port)
+        with pytest.raises(AssertionError):
+            in_port = None
+            self._test_init(in_port)
 
     def _test_serialize(self, buffer_id, in_port, action_cnt=0, data=None):
         actions = []
@@ -2539,13 +2539,13 @@ class TestOFPPacketOut(unittest.TestCase):
         in_port = ofproto.OFPP_CONTROLLER
         self._test_serialize(buffer_id, in_port)
 
-    @raises(AssertionError)
     def test_serialize_check_buffer_id(self):
-        buffer_id = 2147483648
-        in_port = 1
-        action_cnt = 0
-        data = b'DATA'
-        self._test_serialize(buffer_id, in_port, action_cnt, data)
+        with pytest.raises(AssertionError):
+            buffer_id = 2147483648
+            in_port = 1
+            action_cnt = 0
+            data = b'DATA'
+            self._test_serialize(buffer_id, in_port, action_cnt, data)
 
 
 class TestOFPFlowMod(unittest.TestCase):
