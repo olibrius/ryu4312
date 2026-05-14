@@ -15,12 +15,9 @@
 
 import unittest
 import logging
-try:
-    import mock  # Python 2
-except ImportError:
-    from unittest import mock  # Python 3
+from unittest import mock
 
-from nose.tools import raises
+import pytest
 
 from ryu.services.protocols.bgp import bgpspeaker
 from ryu.services.protocols.bgp.bgpspeaker import EVPN_MAX_ET
@@ -395,35 +392,31 @@ class Test_BGPSpeaker(unittest.TestCase):
         mock_call.assert_called_with(
             'evpn_prefix.add_local', **expected_kwargs)
 
-    @raises(ValueError)
     @mock.patch('ryu.services.protocols.bgp.bgpspeaker.BGPSpeaker.__init__',
                 mock.MagicMock(return_value=None))
     @mock.patch('ryu.services.protocols.bgp.bgpspeaker.call')
     def test_evpn_prefix_add_invalid_route_type(self, mock_call):
-        # Prepare test data
-        route_type = 'foobar'  # Invalid EVPN route type
-        route_dist = '65000:100'
-        esi = 0  # denotes single-homed
-        ethernet_tag_id = 200
-        mac_addr = 'aa:bb:cc:dd:ee:ff'
-        ip_addr = '192.168.0.1'
-        next_hop = '10.0.0.1'
+        with pytest.raises(ValueError):
+            # Prepare test data
+            route_type = 'foobar'  # Invalid EVPN route type
+            route_dist = '65000:100'
+            esi = 0  # denotes single-homed
+            ethernet_tag_id = 200
+            mac_addr = 'aa:bb:cc:dd:ee:ff'
+            ip_addr = '192.168.0.1'
+            next_hop = '10.0.0.1'
 
-        # Test
-        speaker = bgpspeaker.BGPSpeaker(65000, '10.0.0.1')
-        speaker.evpn_prefix_add(
-            route_type=route_type,
-            route_dist=route_dist,
-            esi=esi,
-            ethernet_tag_id=ethernet_tag_id,
-            mac_addr=mac_addr,
-            ip_addr=ip_addr,
-            next_hop=next_hop,
-        )
-
-        # Check
-        mock_call.assert_called_with(
-            'evpn_prefix.add_local', 'Invalid arguments detected')
+            # Test
+            speaker = bgpspeaker.BGPSpeaker(65000, '10.0.0.1')
+            speaker.evpn_prefix_add(
+                route_type=route_type,
+                route_dist=route_dist,
+                esi=esi,
+                ethernet_tag_id=ethernet_tag_id,
+                mac_addr=mac_addr,
+                ip_addr=ip_addr,
+                next_hop=next_hop,
+            )
 
     @mock.patch(
         'ryu.services.protocols.bgp.bgpspeaker.BGPSpeaker.__init__',
@@ -526,33 +519,29 @@ class Test_BGPSpeaker(unittest.TestCase):
         mock_call.assert_called_with(
             'evpn_prefix.delete_local', **expected_kwargs)
 
-    @raises(ValueError)
     @mock.patch('ryu.services.protocols.bgp.bgpspeaker.BGPSpeaker.__init__',
                 mock.MagicMock(return_value=None))
     @mock.patch('ryu.services.protocols.bgp.bgpspeaker.call')
     def test_evpn_prefix_del_invalid_route_type(self, mock_call):
-        # Prepare test data
-        route_type = 'foobar'  # Invalid EVPN route type
-        route_dist = '65000:100'
-        esi = 0  # denotes single-homed
-        ethernet_tag_id = 200
-        mac_addr = 'aa:bb:cc:dd:ee:ff'
-        ip_addr = '192.168.0.1'
+        with pytest.raises(ValueError):
+            # Prepare test data
+            route_type = 'foobar'  # Invalid EVPN route type
+            route_dist = '65000:100'
+            esi = 0  # denotes single-homed
+            ethernet_tag_id = 200
+            mac_addr = 'aa:bb:cc:dd:ee:ff'
+            ip_addr = '192.168.0.1'
 
-        # Test
-        speaker = bgpspeaker.BGPSpeaker(65000, '10.0.0.1')
-        speaker.evpn_prefix_del(
-            route_type=route_type,
-            route_dist=route_dist,
-            esi=esi,
-            ethernet_tag_id=ethernet_tag_id,
-            mac_addr=mac_addr,
-            ip_addr=ip_addr,
-        )
-
-        # Check
-        mock_call.assert_called_with(
-            'evpn_prefix.delete_local', 'Invalid arguments detected')
+            # Test
+            speaker = bgpspeaker.BGPSpeaker(65000, '10.0.0.1')
+            speaker.evpn_prefix_del(
+                route_type=route_type,
+                route_dist=route_dist,
+                esi=esi,
+                ethernet_tag_id=ethernet_tag_id,
+                mac_addr=mac_addr,
+                ip_addr=ip_addr,
+            )
 
     @mock.patch(
         'ryu.services.protocols.bgp.bgpspeaker.BGPSpeaker.__init__',
@@ -687,33 +676,29 @@ class Test_BGPSpeaker(unittest.TestCase):
         mock_call.assert_called_with(
             'evpn_prefix.add_local', **expected_kwargs)
 
-    @raises(ValueError)
     @mock.patch(
         'ryu.services.protocols.bgp.bgpspeaker.BGPSpeaker.__init__',
         mock.MagicMock(return_value=None))
     @mock.patch('ryu.services.protocols.bgp.bgpspeaker.call')
     def test_evpn_prefix_add_invalid_pmsi_tunnel_type(self, mock_call):
-        # Prepare test data
-        route_type = bgpspeaker.EVPN_MULTICAST_ETAG_ROUTE
-        route_dist = '65000:100'
-        ethernet_tag_id = 200
-        next_hop = '0.0.0.0'
-        ip_addr = '192.168.0.1'
-        pmsi_tunnel_type = 1
+        with pytest.raises(ValueError):
+            # Prepare test data
+            route_type = bgpspeaker.EVPN_MULTICAST_ETAG_ROUTE
+            route_dist = '65000:100'
+            ethernet_tag_id = 200
+            next_hop = '0.0.0.0'
+            ip_addr = '192.168.0.1'
+            pmsi_tunnel_type = 1
 
-        # Test
-        speaker = bgpspeaker.BGPSpeaker(65000, '10.0.0.1')
-        speaker.evpn_prefix_add(
-            route_type=route_type,
-            route_dist=route_dist,
-            ethernet_tag_id=ethernet_tag_id,
-            ip_addr=ip_addr,
-            pmsi_tunnel_type=pmsi_tunnel_type,
-        )
-
-        # Check
-        mock_call.assert_called_with(
-            'evpn_prefix.add_local', 'Invalid arguments detected')
+            # Test
+            speaker = bgpspeaker.BGPSpeaker(65000, '10.0.0.1')
+            speaker.evpn_prefix_add(
+                route_type=route_type,
+                route_dist=route_dist,
+                ethernet_tag_id=ethernet_tag_id,
+                ip_addr=ip_addr,
+                pmsi_tunnel_type=pmsi_tunnel_type,
+            )
 
     @mock.patch(
         'ryu.services.protocols.bgp.bgpspeaker.BGPSpeaker.__init__',

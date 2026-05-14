@@ -20,7 +20,7 @@ import logging
 import struct
 import netaddr
 from struct import *
-from nose.tools import *
+import pytest
 
 from ryu.lib import mac
 
@@ -43,16 +43,14 @@ class Test_mac(unittest.TestCase):
 
         res = mac.is_multicast(addr)
 
-        eq_(val, res)
-
+        assert val == res
     def test_mac_haddr_to_str(self):
         addr = 'aa:aa:aa:aa:aa:aa'
         val = b'\xaa\xaa\xaa\xaa\xaa\xaa'
 
         res = mac.haddr_to_str(val)
 
-        eq_(addr, res)
-
+        assert addr == res
     def test_mac_haddr_to_str_none(self):
         """ addr is None
         """
@@ -60,13 +58,11 @@ class Test_mac(unittest.TestCase):
         val = 'None'
         res = mac.haddr_to_str(addr)
 
-        eq_(val, res)
-
-    @raises(AssertionError)
+        assert val == res
     def test_mac_haddr_to_str_assert(self):
         val = b'\xaa\xaa\xaa\xaa\xaa'
-
-        res = mac.haddr_to_str(val)
+        with pytest.raises(AssertionError):
+            mac.haddr_to_str(val)
 
     def test_mac_haddr_to_bin_false(self):
         """ len(hexes) = 6 (False)
@@ -76,14 +72,13 @@ class Test_mac(unittest.TestCase):
 
         res = mac.haddr_to_bin(addr)
 
-        eq_(val, res)
-
-    @raises(ValueError)
+        assert val == res
     def test_mac_haddr_to_bin_true(self):
-        """ len(hexes) != 6 (True)
-        """
-        addr = 'aa:aa:aa:aa:aa'
-        res = mac.haddr_to_bin(addr)
+        with pytest.raises(ValueError):
+            """ len(hexes) != 6 (True)
+            """
+            addr = 'aa:aa:aa:aa:aa'
+            res = mac.haddr_to_bin(addr)
 
     def test_mac_haddr_bitand(self):
         addr = b'\xaa\xaa\xaa\xaa\xaa\xaa'
@@ -92,4 +87,4 @@ class Test_mac(unittest.TestCase):
 
         res = mac.haddr_bitand(addr, mask)
 
-        eq_(val, res)
+        assert val == res

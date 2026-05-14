@@ -23,13 +23,8 @@ import struct
 import sys
 import unittest
 
-try:
-    import mock  # Python 2
-except ImportError:
-    from unittest import mock  # Python 3
+from unittest import mock
 
-from nose.tools import eq_
-from nose.tools import ok_
 
 from ryu.lib import addrconv
 from ryu.lib import mrtlib
@@ -61,7 +56,7 @@ class TestMrtlib(unittest.TestCase):
             input_file = os.path.join(MRT_DATA_DIR, f)
             for record in mrtlib.Reader(bz2.BZ2File(input_file, 'rb')):
                 # print('* No.%d\n%s' % (counter, record))
-                ok_(not isinstance(record, mrtlib.UnknownMrtRecord))
+                assert not isinstance(record, mrtlib.UnknownMrtRecord)
                 counter += 1
 
     def test_writer(self):
@@ -86,13 +81,10 @@ class TestMrtlib(unittest.TestCase):
 
             output_buf = f.getvalue()
 
-            eq_(binary_str(input_buf), binary_str(output_buf))
-
+            assert binary_str(input_buf) == binary_str(output_buf)
             mrt_writer.close()
 
-            eq_(True, mrt_writer._f.closed)
-
-
+            assert True == mrt_writer._f.closed
 class TestMrtlibMrtRecord(unittest.TestCase):
     """
     Test case for ryu.lib.mrtlib.MrtRecord.
@@ -115,9 +107,8 @@ class TestMrtlibMrtRecord(unittest.TestCase):
         )
         record = mrtlib.TableDumpMrtRecord(message)
 
-        eq_(type_, record.type)
-        eq_(subtype, record.subtype)
-
+        assert type_ == record.type
+        assert subtype == record.subtype
     def test_parse_pre_with_type_et(self):
         buf = (
             b'\x00\x00\x00\x00'  # timestamp
@@ -127,10 +118,7 @@ class TestMrtlibMrtRecord(unittest.TestCase):
 
         required_len = mrtlib.MrtRecord.parse_pre(buf)
 
-        eq_(0xaa + mrtlib.ExtendedTimestampMrtRecord.HEADER_SIZE,
-            required_len)
-
-
+        assert 0xaa + mrtlib.ExtendedTimestampMrtRecord.HEADER_SIZE == required_len
 # Note: MrtCommonRecord is tested in TestMrtlibMrtRecord.
 # class TestMrtlibMrtCommonRecord(unittest.TestCase):
 
@@ -150,11 +138,10 @@ class TestMrtlibExtendedTimestampMrtRecord(unittest.TestCase):
         (headers,
          rest) = mrtlib.ExtendedTimestampMrtRecord.parse_extended_header(buf)
 
-        ok_(isinstance(headers, list))
-        eq_(1, len(headers))
-        eq_(0x11111111, headers[0])
-        eq_(body, rest)
-
+        assert isinstance(headers, list)
+        assert 1 == len(headers)
+        assert 0x11111111 == headers[0]
+        assert body == rest
     def test_serialize(self):
         body = b'test'  # 4 bytes
         buf = (
@@ -178,9 +165,7 @@ class TestMrtlibExtendedTimestampMrtRecord(unittest.TestCase):
 
         output = record.serialize()
 
-        eq_(buf, output)
-
-
+        assert buf == output
 class TestMrtlibUnknownMrtRecord(unittest.TestCase):
     """
     Test case for ryu.lib.mrtlib.UnknownMrtRecord.
@@ -197,13 +182,12 @@ class TestMrtlibUnknownMrtRecord(unittest.TestCase):
 
         (record, rest) = mrtlib.MrtRecord.parse(buf)
 
-        eq_(0x11111111, record.timestamp)
-        eq_(0x2222, record.type)
-        eq_(0x3333, record.subtype)
-        eq_(0x00000004, record.length)
-        eq_(body, record.message.buf)
-        eq_(b'', rest)
-
+        assert 0x11111111 == record.timestamp
+        assert 0x2222 == record.type
+        assert 0x3333 == record.subtype
+        assert 0x00000004 == record.length
+        assert body == record.message.buf
+        assert b'' == rest
     def test_serialize(self):
         body = b'test'  # 4 bytes
         buf = (
@@ -223,9 +207,7 @@ class TestMrtlibUnknownMrtRecord(unittest.TestCase):
 
         output = record.serialize()
 
-        eq_(buf, output)
-
-
+        assert buf == output
 class TestMrtlibOspf2MrtRecord(unittest.TestCase):
     """
     Test case for ryu.lib.mrtlib.Ospf2MrtRecord.
@@ -250,15 +232,14 @@ class TestMrtlibOspf2MrtRecord(unittest.TestCase):
 
         (record, rest) = mrtlib.MrtRecord.parse(buf)
 
-        eq_(0x11111111, record.timestamp)
-        eq_(mrtlib.MrtRecord.TYPE_OSPFv2, record.type)
-        eq_(0x0000, record.subtype)
-        eq_(0x0000000c, record.length)
-        eq_(remote_ip, record.message.remote_ip)
-        eq_(local_ip, record.message.local_ip)
-        eq_(mock_ospf_message, record.message.ospf_message)
-        eq_(b'', rest)
-
+        assert 0x11111111 == record.timestamp
+        assert mrtlib.MrtRecord.TYPE_OSPFv2 == record.type
+        assert 0x0000 == record.subtype
+        assert 0x0000000c == record.length
+        assert remote_ip == record.message.remote_ip
+        assert local_ip == record.message.local_ip
+        assert mock_ospf_message == record.message.ospf_message
+        assert b'' == rest
     def test_serialize(self):
         remote_ip = '10.0.0.1'
         local_ip = '10.0.0.2'
@@ -290,9 +271,7 @@ class TestMrtlibOspf2MrtRecord(unittest.TestCase):
 
         output = record.serialize()
 
-        eq_(buf, output)
-
-
+        assert buf == output
 class TestMrtlibTableDumpMrtRecord(unittest.TestCase):
     """
     Test case for ryu.lib.mrtlib.TableDumpMrtRecord.
@@ -322,22 +301,21 @@ class TestMrtlibTableDumpMrtRecord(unittest.TestCase):
 
         (record, rest) = mrtlib.MrtRecord.parse(buf)
 
-        eq_(0x11111111, record.timestamp)
-        eq_(mrtlib.MrtRecord.TYPE_TABLE_DUMP, record.type)
-        eq_(mrtlib.TableDumpMrtRecord.SUBTYPE_AFI_IPv4, record.subtype)
-        eq_(0x0000001a, record.length)
-        eq_(0x2222, record.message.view_num)
-        eq_(0x3333, record.message.seq_num)
-        eq_(prefix, record.message.prefix)
-        eq_(24, record.message.prefix_len)
-        eq_(1, record.message.status)
-        eq_(0x44444444, record.message.originated_time)
-        eq_(peer_ip, record.message.peer_ip)
-        eq_(65000, record.message.peer_as)
-        eq_(0x0004, record.message.attr_len)
-        eq_([mock_bgp_attr], record.message.bgp_attributes)
-        eq_(b'', rest)
-
+        assert 0x11111111 == record.timestamp
+        assert mrtlib.MrtRecord.TYPE_TABLE_DUMP == record.type
+        assert mrtlib.TableDumpMrtRecord.SUBTYPE_AFI_IPv4 == record.subtype
+        assert 0x0000001a == record.length
+        assert 0x2222 == record.message.view_num
+        assert 0x3333 == record.message.seq_num
+        assert prefix == record.message.prefix
+        assert 24 == record.message.prefix_len
+        assert 1 == record.message.status
+        assert 0x44444444 == record.message.originated_time
+        assert peer_ip == record.message.peer_ip
+        assert 65000 == record.message.peer_as
+        assert 0x0004 == record.message.attr_len
+        assert [mock_bgp_attr] == record.message.bgp_attributes
+        assert b'' == rest
     def test_serialize_afi_ipv4(self):
         prefix = '10.0.0.0'
         peer_ip = '172.16.0.1'
@@ -381,8 +359,7 @@ class TestMrtlibTableDumpMrtRecord(unittest.TestCase):
 
         output = record.serialize()
 
-        eq_(buf, output)
-
+        assert buf == output
     @mock.patch('ryu.lib.packet.bgp._PathAttribute.parser')
     def test_parse_afi_ipv6(self, mock_bgp_attr_parser):
         prefix = '2001:db8::1'
@@ -407,22 +384,21 @@ class TestMrtlibTableDumpMrtRecord(unittest.TestCase):
 
         (record, rest) = mrtlib.MrtRecord.parse(buf)
 
-        eq_(0x11111111, record.timestamp)
-        eq_(mrtlib.MrtRecord.TYPE_TABLE_DUMP, record.type)
-        eq_(mrtlib.TableDumpMrtRecord.SUBTYPE_AFI_IPv6, record.subtype)
-        eq_(0x00000032, record.length)
-        eq_(0x2222, record.message.view_num)
-        eq_(0x3333, record.message.seq_num)
-        eq_(prefix, record.message.prefix)
-        eq_(64, record.message.prefix_len)
-        eq_(1, record.message.status)
-        eq_(0x44444444, record.message.originated_time)
-        eq_(peer_ip, record.message.peer_ip)
-        eq_(65000, record.message.peer_as)
-        eq_(0x0004, record.message.attr_len)
-        eq_([mock_bgp_attr], record.message.bgp_attributes)
-        eq_(b'', rest)
-
+        assert 0x11111111 == record.timestamp
+        assert mrtlib.MrtRecord.TYPE_TABLE_DUMP == record.type
+        assert mrtlib.TableDumpMrtRecord.SUBTYPE_AFI_IPv6 == record.subtype
+        assert 0x00000032 == record.length
+        assert 0x2222 == record.message.view_num
+        assert 0x3333 == record.message.seq_num
+        assert prefix == record.message.prefix
+        assert 64 == record.message.prefix_len
+        assert 1 == record.message.status
+        assert 0x44444444 == record.message.originated_time
+        assert peer_ip == record.message.peer_ip
+        assert 65000 == record.message.peer_as
+        assert 0x0004 == record.message.attr_len
+        assert [mock_bgp_attr] == record.message.bgp_attributes
+        assert b'' == rest
     def test_serialize_afi_ipv6(self):
         prefix = '2001:db8::1'
         peer_ip = 'fe80::1'
@@ -466,9 +442,7 @@ class TestMrtlibTableDumpMrtRecord(unittest.TestCase):
 
         output = record.serialize()
 
-        eq_(buf, output)
-
-
+        assert buf == output
 class TestMrtlibTableDump2MrtRecord(unittest.TestCase):
     """
     Test case for ryu.lib.mrtlib.TableDump2MrtRecord.
@@ -511,18 +485,17 @@ class TestMrtlibTableDump2MrtRecord(unittest.TestCase):
 
         (record, rest) = mrtlib.MrtRecord.parse(buf)
 
-        eq_(0x11111111, record.timestamp)
-        eq_(mrtlib.MrtRecord.TYPE_TABLE_DUMP_V2, record.type)
-        eq_(mrtlib.TableDump2MrtRecord.SUBTYPE_RIB_GENERIC, record.subtype)
-        eq_(0x00000011, record.length)
-        eq_(0x22222222, record.message.seq_num)
-        eq_(0x3333, record.message.afi)
-        eq_(0x44, record.message.safi)
-        eq_(mock_bgp_nlri, record.message.nlri)
-        eq_(0x0001, record.message.entry_count)
-        eq_([mock_rib_entry], record.message.rib_entries)
-        eq_(b'', rest)
-
+        assert 0x11111111 == record.timestamp
+        assert mrtlib.MrtRecord.TYPE_TABLE_DUMP_V2 == record.type
+        assert mrtlib.TableDump2MrtRecord.SUBTYPE_RIB_GENERIC == record.subtype
+        assert 0x00000011 == record.length
+        assert 0x22222222 == record.message.seq_num
+        assert 0x3333 == record.message.afi
+        assert 0x44 == record.message.safi
+        assert mock_bgp_nlri == record.message.nlri
+        assert 0x0001 == record.message.entry_count
+        assert [mock_rib_entry] == record.message.rib_entries
+        assert b'' == rest
     def test_serialize_rib_generic(self):
         nlri_bin = b'nlri'  # 4 bytes
         rib_entries_bin = b'ribs'  # 4 bytes
@@ -562,9 +535,7 @@ class TestMrtlibTableDump2MrtRecord(unittest.TestCase):
 
         output = record.serialize()
 
-        eq_(buf, output)
-
-
+        assert buf == output
 class TestMrtlibMrtPeer(unittest.TestCase):
     """
     Test case for ryu.lib.mrtlib.MrtPeer.
@@ -582,12 +553,11 @@ class TestMrtlibMrtPeer(unittest.TestCase):
 
         peer, rest = mrtlib.MrtPeer.parse(buf)
 
-        eq_(0, peer.type)
-        eq_(bgp_id, peer.bgp_id)
-        eq_(ip_addr, peer.ip_addr)
-        eq_(65000, peer.as_num)
-        eq_(b'', rest)
-
+        assert 0 == peer.type
+        assert bgp_id == peer.bgp_id
+        assert ip_addr == peer.ip_addr
+        assert 65000 == peer.as_num
+        assert b'' == rest
     def test_serialize_two_octet_as(self):
         bgp_id = '1.1.1.1'
         ip_addr = '10.0.0.1'
@@ -607,9 +577,7 @@ class TestMrtlibMrtPeer(unittest.TestCase):
 
         output = peer.serialize()
 
-        eq_(buf, output)
-
-
+        assert buf == output
 class TestMrtlibMrtRibEntry(unittest.TestCase):
     """
     Test case for ryu.lib.mrtlib.MrtRibEntry.
@@ -633,14 +601,13 @@ class TestMrtlibMrtRibEntry(unittest.TestCase):
 
         rib, rest = mrtlib.MrtRibEntry.parse(buf, is_addpath=True)
 
-        eq_(peer_index, rib.peer_index)
-        eq_(originated_time, rib.originated_time)
-        eq_(path_id, rib.path_id)
-        eq_(attr_len, rib.attr_len)
-        eq_(1, len(rib.bgp_attributes))
-        eq_(nexthop, rib.bgp_attributes[0].value)
-        eq_(b'', rest)
-
+        assert peer_index == rib.peer_index
+        assert originated_time == rib.originated_time
+        assert path_id == rib.path_id
+        assert attr_len == rib.attr_len
+        assert 1 == len(rib.bgp_attributes)
+        assert nexthop == rib.bgp_attributes[0].value
+        assert b'' == rest
     def test_serialize_add_path(self):
         peer_index = 1
         originated_time = 2
@@ -667,9 +634,7 @@ class TestMrtlibMrtRibEntry(unittest.TestCase):
 
         output = rib.serialize()
 
-        eq_(buf, output)
-
-
+        assert buf == output
 class TestMrtlibBgp4MpMrtRecord(unittest.TestCase):
     """
     Test case for ryu.lib.mrtlib.Bgp4MpMrtRecord.
@@ -701,21 +666,17 @@ class TestMrtlibBgp4MpMrtRecord(unittest.TestCase):
 
         (record, rest) = mrtlib.MrtRecord.parse(buf)
 
-        eq_(0x11111111, record.timestamp)
-        eq_(mrtlib.MrtRecord.TYPE_BGP4MP, record.type)
-        eq_(mrtlib.Bgp4MpMrtRecord.SUBTYPE_BGP4MP_STATE_CHANGE, record.subtype)
-        eq_(0x00000014, record.length)
-        eq_(65001, record.message.peer_as)
-        eq_(65002, record.message.local_as)
-        eq_(0x2222, record.message.if_index)
-        eq_(mrtlib.Bgp4MpStateChangeMrtMessage.AFI_IPv4,
-            record.message.afi)
-        eq_(mrtlib.Bgp4MpStateChangeMrtMessage.STATE_IDLE,
-            record.message.old_state)
-        eq_(mrtlib.Bgp4MpStateChangeMrtMessage.STATE_CONNECT,
-            record.message.new_state)
-        eq_(b'', rest)
-
+        assert 0x11111111 == record.timestamp
+        assert mrtlib.MrtRecord.TYPE_BGP4MP == record.type
+        assert mrtlib.Bgp4MpMrtRecord.SUBTYPE_BGP4MP_STATE_CHANGE == record.subtype
+        assert 0x00000014 == record.length
+        assert 65001 == record.message.peer_as
+        assert 65002 == record.message.local_as
+        assert 0x2222 == record.message.if_index
+        assert mrtlib.Bgp4MpStateChangeMrtMessage.AFI_IPv4 == record.message.afi
+        assert mrtlib.Bgp4MpStateChangeMrtMessage.STATE_IDLE == record.message.old_state
+        assert mrtlib.Bgp4MpStateChangeMrtMessage.STATE_CONNECT == record.message.new_state
+        assert b'' == rest
     def test_serialize_state_change_afi_ipv4(self):
         peer_ip = '10.0.0.1'
         local_ip = '10.0.0.2'
@@ -752,8 +713,7 @@ class TestMrtlibBgp4MpMrtRecord(unittest.TestCase):
 
         output = record.serialize()
 
-        eq_(buf, output)
-
+        assert buf == output
     def test_parse_state_change_afi_ipv6(self):
         peer_ip = 'fe80::1'
         local_ip = 'fe80::2'
@@ -772,21 +732,17 @@ class TestMrtlibBgp4MpMrtRecord(unittest.TestCase):
 
         (record, rest) = mrtlib.MrtRecord.parse(buf)
 
-        eq_(0x11111111, record.timestamp)
-        eq_(mrtlib.MrtRecord.TYPE_BGP4MP, record.type)
-        eq_(mrtlib.Bgp4MpMrtRecord.SUBTYPE_BGP4MP_STATE_CHANGE, record.subtype)
-        eq_(0x0000002c, record.length)
-        eq_(65001, record.message.peer_as)
-        eq_(65002, record.message.local_as)
-        eq_(0x2222, record.message.if_index)
-        eq_(mrtlib.Bgp4MpStateChangeMrtMessage.AFI_IPv6,
-            record.message.afi)
-        eq_(mrtlib.Bgp4MpStateChangeMrtMessage.STATE_IDLE,
-            record.message.old_state)
-        eq_(mrtlib.Bgp4MpStateChangeMrtMessage.STATE_CONNECT,
-            record.message.new_state)
-        eq_(b'', rest)
-
+        assert 0x11111111 == record.timestamp
+        assert mrtlib.MrtRecord.TYPE_BGP4MP == record.type
+        assert mrtlib.Bgp4MpMrtRecord.SUBTYPE_BGP4MP_STATE_CHANGE == record.subtype
+        assert 0x0000002c == record.length
+        assert 65001 == record.message.peer_as
+        assert 65002 == record.message.local_as
+        assert 0x2222 == record.message.if_index
+        assert mrtlib.Bgp4MpStateChangeMrtMessage.AFI_IPv6 == record.message.afi
+        assert mrtlib.Bgp4MpStateChangeMrtMessage.STATE_IDLE == record.message.old_state
+        assert mrtlib.Bgp4MpStateChangeMrtMessage.STATE_CONNECT == record.message.new_state
+        assert b'' == rest
     def test_serialize_state_change_afi_ipv6(self):
         peer_ip = 'fe80::1'
         local_ip = 'fe80::2'
@@ -823,4 +779,4 @@ class TestMrtlibBgp4MpMrtRecord(unittest.TestCase):
 
         output = record.serialize()
 
-        eq_(buf, output)
+        assert buf == output

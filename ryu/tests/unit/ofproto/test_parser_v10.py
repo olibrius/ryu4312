@@ -18,7 +18,7 @@
 import unittest
 import logging
 import six
-from nose.tools import *
+import pytest
 from ryu.ofproto.ofproto_v1_0_parser import *
 from ryu.ofproto.nx_actions import *
 from ryu.ofproto import ofproto_v1_0_parser
@@ -72,30 +72,27 @@ class TestOFPPhyPort(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.port_no['val'], self.c.port_no)
-        eq_(self.hw_addr, self.c.hw_addr)
-        eq_(self.name, self.c.name)
-        eq_(self.config['val'], self.c.config)
-        eq_(self.state['val'], self.c.state)
-        eq_(self.curr['val'], self.c.curr)
-        eq_(self.advertised['val'], self.c.advertised)
-        eq_(self.supported['val'], self.c.supported)
-        eq_(self.peer['val'], self.c.peer)
-
+        assert self.port_no['val'] == self.c.port_no
+        assert self.hw_addr == self.c.hw_addr
+        assert self.name == self.c.name
+        assert self.config['val'] == self.c.config
+        assert self.state['val'] == self.c.state
+        assert self.curr['val'] == self.c.curr
+        assert self.advertised['val'] == self.c.advertised
+        assert self.supported['val'] == self.c.supported
+        assert self.peer['val'] == self.c.peer
     def test_parser(self):
         res = self.c.parser(self.buf, 0)
 
-        eq_(self.port_no['val'], res.port_no)
-        eq_(self.hw_addr, res.hw_addr)
-        eq_(self.name, res.name)
-        eq_(self.config['val'], res.config)
-        eq_(self.state['val'], res.state)
-        eq_(self.curr['val'], res.curr)
-        eq_(self.advertised['val'], res.advertised)
-        eq_(self.supported['val'], res.supported)
-        eq_(self.peer['val'], res.peer)
-
-
+        assert self.port_no['val'] == res.port_no
+        assert self.hw_addr == res.hw_addr
+        assert self.name == res.name
+        assert self.config['val'] == res.config
+        assert self.state['val'] == res.state
+        assert self.curr['val'] == res.curr
+        assert self.advertised['val'] == res.advertised
+        assert self.supported['val'] == res.supported
+        assert self.peer['val'] == res.peer
 class TestOFPMatch(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPMatch
     """
@@ -165,43 +162,40 @@ class TestOFPMatch(unittest.TestCase):
     def test_init(self):
         c = self._get_obj(self.dl_src['buf'], self.dl_dst['buf'])
 
-        eq_(self.wildcards['val'], c.wildcards)
-        eq_(self.in_port['val'], c.in_port)
-        eq_(self.dl_src['buf'], c.dl_src)
-        eq_(self.dl_dst['buf'], c.dl_dst)
-        eq_(self.dl_vlan['val'], c.dl_vlan)
-        eq_(self.dl_vlan_pcp['val'], c.dl_vlan_pcp)
-        eq_(self.dl_type['val'], c.dl_type)
-        eq_(self.nw_tos['val'], c.nw_tos)
-        eq_(self.nw_proto['val'], c.nw_proto)
-        eq_(self.nw_src['val'], c.nw_src)
-        eq_(self.nw_dst['val'], c.nw_dst)
-        eq_(self.tp_src['val'], c.tp_src)
-        eq_(self.tp_dst['val'], c.tp_dst)
-
+        assert self.wildcards['val'] == c.wildcards
+        assert self.in_port['val'] == c.in_port
+        assert self.dl_src['buf'] == c.dl_src
+        assert self.dl_dst['buf'] == c.dl_dst
+        assert self.dl_vlan['val'] == c.dl_vlan
+        assert self.dl_vlan_pcp['val'] == c.dl_vlan_pcp
+        assert self.dl_type['val'] == c.dl_type
+        assert self.nw_tos['val'] == c.nw_tos
+        assert self.nw_proto['val'] == c.nw_proto
+        assert self.nw_src['val'] == c.nw_src
+        assert self.nw_dst['val'] == c.nw_dst
+        assert self.tp_src['val'] == c.tp_src
+        assert self.tp_dst['val'] == c.tp_dst
     def test_init_zero(self):
         c = self._get_obj(0, 0)
-        eq_(mac.DONTCARE, c.dl_src)
-        eq_(mac.DONTCARE, c.dl_dst)
-
+        assert mac.DONTCARE == c.dl_src
+        assert mac.DONTCARE == c.dl_dst
     def test_parse(self):
         c = self._get_obj(self.dl_src['buf'], self.dl_dst['buf'])
         res = c.parse(self.buf, 0)
 
-        eq_(self.wildcards['val'], res.wildcards)
-        eq_(self.in_port['val'], res.in_port)
-        eq_(self.dl_src['buf'], res.dl_src)
-        eq_(self.dl_dst['buf'], res.dl_dst)
-        eq_(self.dl_vlan['val'], res.dl_vlan)
-        eq_(self.dl_vlan_pcp['val'], res.dl_vlan_pcp)
-        eq_(self.dl_type['val'], res.dl_type)
-        eq_(self.nw_tos['val'], res.nw_tos)
-        eq_(self.nw_proto['val'], res.nw_proto)
-        eq_(self.nw_src['val'], res.nw_src)
-        eq_(self.nw_dst['val'], res.nw_dst)
-        eq_(self.tp_src['val'], res.tp_src)
-        eq_(self.tp_dst['val'], res.tp_dst)
-
+        assert self.wildcards['val'] == res.wildcards
+        assert self.in_port['val'] == res.in_port
+        assert self.dl_src['buf'] == res.dl_src
+        assert self.dl_dst['buf'] == res.dl_dst
+        assert self.dl_vlan['val'] == res.dl_vlan
+        assert self.dl_vlan_pcp['val'] == res.dl_vlan_pcp
+        assert self.dl_type['val'] == res.dl_type
+        assert self.nw_tos['val'] == res.nw_tos
+        assert self.nw_proto['val'] == res.nw_proto
+        assert self.nw_src['val'] == res.nw_src
+        assert self.nw_dst['val'] == res.nw_dst
+        assert self.tp_src['val'] == res.tp_src
+        assert self.tp_dst['val'] == res.tp_dst
     def test_serialize(self):
         buf = bytearray()
         c = self._get_obj(self.dl_src['buf'], self.dl_dst['buf'])
@@ -211,38 +205,35 @@ class TestOFPMatch(unittest.TestCase):
         fmt = ofproto.OFP_MATCH_PACK_STR
         res = struct.unpack_from(fmt, six.binary_type(buf))
 
-        eq_(self.wildcards['val'], res[0])
-        eq_(self.in_port['val'], res[1])
-        eq_(self.dl_src['buf'], res[2])
-        eq_(self.dl_dst['buf'], res[3])
-        eq_(self.dl_vlan['val'], res[4])
-        eq_(self.dl_vlan_pcp['val'], res[5])
-        eq_(self.dl_type['val'], res[6])
-        eq_(self.nw_tos['val'], res[7])
-        eq_(self.nw_proto['val'], res[8])
-        eq_(self.nw_src['val'], res[9])
-        eq_(self.nw_dst['val'], res[10])
-        eq_(self.tp_src['val'], res[11])
-        eq_(self.tp_dst['val'], res[12])
-
+        assert self.wildcards['val'] == res[0]
+        assert self.in_port['val'] == res[1]
+        assert self.dl_src['buf'] == res[2]
+        assert self.dl_dst['buf'] == res[3]
+        assert self.dl_vlan['val'] == res[4]
+        assert self.dl_vlan_pcp['val'] == res[5]
+        assert self.dl_type['val'] == res[6]
+        assert self.nw_tos['val'] == res[7]
+        assert self.nw_proto['val'] == res[8]
+        assert self.nw_src['val'] == res[9]
+        assert self.nw_dst['val'] == res[10]
+        assert self.tp_src['val'] == res[11]
+        assert self.tp_dst['val'] == res[12]
     def test_getitem(self):
         c = self._get_obj(self.dl_src['buf'], self.dl_dst['buf'])
 
-        eq_(self.wildcards['val'], c["wildcards"])
-        eq_(self.in_port['val'], c["in_port"])
-        eq_(self.dl_src['human'], c["dl_src"])
-        eq_(self.dl_dst['human'], c["dl_dst"])
-        eq_(self.dl_vlan['val'], c["dl_vlan"])
-        eq_(self.dl_vlan_pcp['val'], c["dl_vlan_pcp"])
-        eq_(self.dl_type['val'], c["dl_type"])
-        eq_(self.nw_tos['val'], c["nw_tos"])
-        eq_(self.nw_proto['val'], c["nw_proto"])
-        eq_(self.nw_src['human'], c["nw_src"])
-        eq_(self.nw_dst['human'], c["nw_dst"])
-        eq_(self.tp_src['val'], c["tp_src"])
-        eq_(self.tp_dst['val'], c["tp_dst"])
-
-
+        assert self.wildcards['val'] == c["wildcards"]
+        assert self.in_port['val'] == c["in_port"]
+        assert self.dl_src['human'] == c["dl_src"]
+        assert self.dl_dst['human'] == c["dl_dst"]
+        assert self.dl_vlan['val'] == c["dl_vlan"]
+        assert self.dl_vlan_pcp['val'] == c["dl_vlan_pcp"]
+        assert self.dl_type['val'] == c["dl_type"]
+        assert self.nw_tos['val'] == c["nw_tos"]
+        assert self.nw_proto['val'] == c["nw_proto"]
+        assert self.nw_src['human'] == c["nw_src"]
+        assert self.nw_dst['human'] == c["nw_dst"]
+        assert self.tp_src['val'] == c["tp_src"]
+        assert self.tp_dst['val'] == c["tp_dst"]
 class TestOFPActionHeader(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPActionHeader
     """
@@ -266,9 +257,8 @@ class TestOFPActionHeader(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.type['val'], self.c.type)
-        eq_(self.len['val'], self.c.len)
-
+        assert self.type['val'] == self.c.type
+        assert self.len['val'] == self.c.len
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -276,10 +266,8 @@ class TestOFPActionHeader(unittest.TestCase):
         fmt = ofproto.OFP_ACTION_HEADER_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type['val'], res[0])
-        eq_(self.len['val'], res[1])
-
-
+        assert self.type['val'] == res[0]
+        assert self.len['val'] == res[1]
 class TestOFPActionOutput(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPActionOutput
     """
@@ -305,37 +293,29 @@ class TestOFPActionOutput(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.port['val'], self.c.port)
-        eq_(self.max_len['val'], self.c.max_len)
-
+        assert self.port['val'] == self.c.port
+        assert self.max_len['val'] == self.c.max_len
     def test_parser(self):
         res = self.c.parser(self.buf, 0)
 
-        eq_(self.port['val'], res.port)
-        eq_(self.max_len['val'], res.max_len)
-
-    @raises(AssertionError)
+        assert self.port['val'] == res.port
+        assert self.max_len['val'] == res.max_len
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x01', 'val': 1}
-
-        buf = type_['buf'] \
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x01', 'val': 1}
+            buf = type_['buf'] \
             + self.len_['buf'] \
             + self.port['buf'] \
             + self.max_len['buf']
-
-        self.c.parser(buf, 0)
-
-    @raises(AssertionError)
+            self.c.parser(buf, 0)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
-
-        buf = self.type_['buf'] \
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
+            buf = self.type_['buf'] \
             + len_['buf'] \
             + self.port['buf'] \
             + self.max_len['buf']
-
-        self.c.parser(buf, 0)
-
+            self.c.parser(buf, 0)
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -343,12 +323,10 @@ class TestOFPActionOutput(unittest.TestCase):
         fmt = ofproto.OFP_ACTION_OUTPUT_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.port['val'], res[2])
-        eq_(self.max_len['val'], res[3])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.port['val'] == res[2]
+        assert self.max_len['val'] == res[3]
 class TestOFPActionVlanVid(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPActionVlanVid
     """
@@ -374,35 +352,27 @@ class TestOFPActionVlanVid(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.vlan_vid['val'], self.c.vlan_vid)
-
+        assert self.vlan_vid['val'] == self.c.vlan_vid
     def test_parser(self):
         res = self.c.parser(self.buf, 0)
 
-        eq_(self.vlan_vid['val'], res.vlan_vid)
-
-    @raises(AssertionError)
+        assert self.vlan_vid['val'] == res.vlan_vid
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x02', 'val': 2}
-
-        buf = type_['buf'] \
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x02', 'val': 2}
+            buf = type_['buf'] \
             + self.len_['buf'] \
             + self.vlan_vid['buf'] \
             + self.zfill
-
-        self.c.parser(buf, 0)
-
-    @raises(AssertionError)
+            self.c.parser(buf, 0)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
-
-        buf = self.type_['buf'] \
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
+            buf = self.type_['buf'] \
             + len_['buf'] \
             + self.vlan_vid['buf'] \
             + self.zfill
-
-        self.c.parser(buf, 0)
-
+            self.c.parser(buf, 0)
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -410,11 +380,9 @@ class TestOFPActionVlanVid(unittest.TestCase):
         fmt = ofproto.OFP_ACTION_VLAN_VID_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.vlan_vid['val'], res[2])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.vlan_vid['val'] == res[2]
 class TestOFPActionVlanPcp(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPActionVlanPcp
     """
@@ -440,34 +408,26 @@ class TestOFPActionVlanPcp(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.vlan_pcp['val'], self.c.vlan_pcp)
-
+        assert self.vlan_pcp['val'] == self.c.vlan_pcp
     def test_parser(self):
         res = self.c.parser(self.buf, 0)
-        eq_(self.vlan_pcp['val'], res.vlan_pcp)
-
-    @raises(AssertionError)
+        assert self.vlan_pcp['val'] == res.vlan_pcp
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x01', 'val': 1}
-
-        buf = type_['buf'] \
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x01', 'val': 1}
+            buf = type_['buf'] \
             + self.len_['buf'] \
             + self.vlan_pcp['buf'] \
             + self.zfill
-
-        self.c.parser(buf, 0)
-
-    @raises(AssertionError)
+            self.c.parser(buf, 0)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
-
-        buf = self.type_['buf'] \
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
+            buf = self.type_['buf'] \
             + len_['buf'] \
             + self.vlan_pcp['buf'] \
             + self.zfill
-
-        self.c.parser(buf, 0)
-
+            self.c.parser(buf, 0)
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -475,11 +435,9 @@ class TestOFPActionVlanPcp(unittest.TestCase):
         fmt = ofproto.OFP_ACTION_VLAN_PCP_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.vlan_pcp['val'], res[2])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.vlan_pcp['val'] == res[2]
 class TestOFPActionStripVlan(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPActionStripVlan
     """
@@ -506,29 +464,21 @@ class TestOFPActionStripVlan(unittest.TestCase):
         pass
 
     def test_parser(self):
-        ok_(self.c.parser(self.buf, 0))
-
-    @raises(AssertionError)
+        assert self.c.parser(self.buf, 0)
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x01', 'val': 1}
-
-        buf = type_['buf'] \
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x01', 'val': 1}
+            buf = type_['buf'] \
             + self.len_['buf'] \
             + self.zfill
-
-        self.c.parser(buf, 0)
-
-    @raises(AssertionError)
+            self.c.parser(buf, 0)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
-
-        buf = self.type_['buf'] \
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
+            buf = self.type_['buf'] \
             + len_['buf'] \
             + self.zfill
-
-        self.c.parser(buf, 0)
-
-
+            self.c.parser(buf, 0)
 class TestOFPActionSetDlSrc(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPActionSetDlSrc
     """
@@ -554,12 +504,10 @@ class TestOFPActionSetDlSrc(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.dl_addr, self.c.dl_addr)
-
+        assert self.dl_addr == self.c.dl_addr
     def test_parser_type_src(self):
         res = self.c.parser(self.buf, 0)
-        eq_(self.dl_addr, res.dl_addr)
-
+        assert self.dl_addr == res.dl_addr
     def test_parser_type_dst(self):
         type_ = {'buf': b'\x00\x05', 'val': ofproto.OFPAT_SET_DL_DST}
         buf = type_['buf'] \
@@ -569,28 +517,23 @@ class TestOFPActionSetDlSrc(unittest.TestCase):
 
         res = self.c.parser(buf, 0)
 
-        eq_(self.dl_addr, res.dl_addr)
-
-    @raises(AssertionError)
+        assert self.dl_addr == res.dl_addr
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x06', 'val': 6}
-        buf = type_['buf'] \
-            + self.len_['buf'] \
-            + self.dl_addr \
-            + self.zfill
-
-        res = self.c.parser(buf, 0)
-
-    @raises(AssertionError)
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x06', 'val': 6}
+            buf = type_['buf'] \
+                + self.len_['buf'] \
+                + self.dl_addr \
+                + self.zfill
+            res = self.c.parser(buf, 0)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
-        buf = self.type_['buf'] \
-            + len_['buf'] \
-            + self.dl_addr \
-            + self.zfill
-
-        res = self.c.parser(buf, 0)
-
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
+            buf = self.type_['buf'] \
+                + len_['buf'] \
+                + self.dl_addr \
+                + self.zfill
+            res = self.c.parser(buf, 0)
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -598,11 +541,9 @@ class TestOFPActionSetDlSrc(unittest.TestCase):
         fmt = ofproto.OFP_ACTION_DL_ADDR_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.dl_addr, res[2])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.dl_addr == res[2]
 class TestOFPActionSetDlDst(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPActionSetDlDst
     """
@@ -628,12 +569,10 @@ class TestOFPActionSetDlDst(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.dl_addr, self.c.dl_addr)
-
+        assert self.dl_addr == self.c.dl_addr
     def test_parser_type_dst(self):
         res = self.c.parser(self.buf, 0)
-        eq_(self.dl_addr, res.dl_addr)
-
+        assert self.dl_addr == res.dl_addr
     def test_parser_type_src(self):
         type_ = {'buf': b'\x00\x04', 'val': ofproto.OFPAT_SET_DL_SRC}
         buf = type_['buf'] \
@@ -643,28 +582,23 @@ class TestOFPActionSetDlDst(unittest.TestCase):
 
         res = self.c.parser(buf, 0)
 
-        eq_(self.dl_addr, res.dl_addr)
-
-    @raises(AssertionError)
+        assert self.dl_addr == res.dl_addr
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x06', 'val': 6}
-        buf = type_['buf'] \
-            + self.len_['buf'] \
-            + self.dl_addr \
-            + self.zfill
-
-        res = self.c.parser(buf, 0)
-
-    @raises(AssertionError)
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x06', 'val': 6}
+            buf = type_['buf'] \
+                + self.len_['buf'] \
+                + self.dl_addr \
+                + self.zfill
+            res = self.c.parser(buf, 0)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
-        buf = self.type_['buf'] \
-            + len_['buf'] \
-            + self.dl_addr \
-            + self.zfill
-
-        res = self.c.parser(buf, 0)
-
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
+            buf = self.type_['buf'] \
+                + len_['buf'] \
+                + self.dl_addr \
+                + self.zfill
+            res = self.c.parser(buf, 0)
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -672,11 +606,9 @@ class TestOFPActionSetDlDst(unittest.TestCase):
         fmt = ofproto.OFP_ACTION_DL_ADDR_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.dl_addr, res[2])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.dl_addr == res[2]
 class TestOFPActionSetNwSrc(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPActionSetNwSrc
     """
@@ -700,12 +632,10 @@ class TestOFPActionSetNwSrc(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.nw_addr['val'], self.c.nw_addr)
-
+        assert self.nw_addr['val'] == self.c.nw_addr
     def test_parser_src(self):
         res = self.c.parser(self.buf, 0)
-        eq_(self.nw_addr['val'], res.nw_addr)
-
+        assert self.nw_addr['val'] == res.nw_addr
     def test_parser_dst(self):
         type_ = {'buf': b'\x00\x07', 'val': ofproto.OFPAT_SET_NW_DST}
 
@@ -714,28 +644,21 @@ class TestOFPActionSetNwSrc(unittest.TestCase):
             + self.nw_addr['buf']
 
         res = self.c.parser(buf, 0)
-        eq_(self.nw_addr['val'], res.nw_addr)
-
-    @raises(AssertionError)
+        assert self.nw_addr['val'] == res.nw_addr
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x05', 'val': 5}
-
-        buf = type_['buf'] \
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x05', 'val': 5}
+            buf = type_['buf'] \
             + self.len_['buf'] \
             + self.nw_addr['buf']
-
-        self.c.parser(buf, 0)
-
-    @raises(AssertionError)
+            self.c.parser(buf, 0)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x10', 'val': 16}
-
-        buf = self.type_['buf'] \
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x10', 'val': 16}
+            buf = self.type_['buf'] \
             + len_['buf'] \
             + self.nw_addr['buf']
-
-        self.c.parser(buf, 0)
-
+            self.c.parser(buf, 0)
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -743,11 +666,9 @@ class TestOFPActionSetNwSrc(unittest.TestCase):
         fmt = ofproto.OFP_ACTION_NW_ADDR_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.nw_addr['val'], res[2])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.nw_addr['val'] == res[2]
 class TestOFPActionSetNwDst(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPActionSetNwDst
     """
@@ -771,12 +692,10 @@ class TestOFPActionSetNwDst(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.nw_addr['val'], self.c.nw_addr)
-
+        assert self.nw_addr['val'] == self.c.nw_addr
     def test_parser_dst(self):
         res = self.c.parser(self.buf, 0)
-        eq_(self.nw_addr['val'], res.nw_addr)
-
+        assert self.nw_addr['val'] == res.nw_addr
     def test_parser_src(self):
         type_ = {'buf': b'\x00\x06', 'val': ofproto.OFPAT_SET_NW_SRC}
 
@@ -785,28 +704,21 @@ class TestOFPActionSetNwDst(unittest.TestCase):
             + self.nw_addr['buf']
 
         res = self.c.parser(buf, 0)
-        eq_(self.nw_addr['val'], res.nw_addr)
-
-    @raises(AssertionError)
+        assert self.nw_addr['val'] == res.nw_addr
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x05', 'val': 5}
-
-        buf = type_['buf'] \
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x05', 'val': 5}
+            buf = type_['buf'] \
             + self.len_['buf'] \
             + self.nw_addr['buf']
-
-        self.c.parser(buf, 0)
-
-    @raises(AssertionError)
+            self.c.parser(buf, 0)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x10', 'val': 16}
-
-        buf = self.type_['buf'] \
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x10', 'val': 16}
+            buf = self.type_['buf'] \
             + len_['buf'] \
             + self.nw_addr['buf']
-
-        self.c.parser(buf, 0)
-
+            self.c.parser(buf, 0)
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -814,11 +726,9 @@ class TestOFPActionSetNwDst(unittest.TestCase):
         fmt = ofproto.OFP_ACTION_NW_ADDR_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.nw_addr['val'], res[2])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.nw_addr['val'] == res[2]
 class TestOFPActionSetNwTos(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPActionSetNwTos
     """
@@ -844,34 +754,26 @@ class TestOFPActionSetNwTos(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.tos['val'], self.c.tos)
-
+        assert self.tos['val'] == self.c.tos
     def test_parser(self):
         res = self.c.parser(self.buf, 0)
-        eq_(self.tos['val'], res.tos)
-
-    @raises(AssertionError)
+        assert self.tos['val'] == res.tos
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x05', 'val': 5}
-
-        buf = type_['buf'] \
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x05', 'val': 5}
+            buf = type_['buf'] \
             + self.len_['buf'] \
             + self.tos['buf'] \
             + self.zfill
-
-        self.c.parser(buf, 0)
-
-    @raises(AssertionError)
+            self.c.parser(buf, 0)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
-
-        buf = self.type_['buf'] \
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
+            buf = self.type_['buf'] \
             + len_['buf'] \
             + self.tos['buf'] \
             + self.zfill
-
-        self.c.parser(buf, 0)
-
+            self.c.parser(buf, 0)
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -879,11 +781,9 @@ class TestOFPActionSetNwTos(unittest.TestCase):
         fmt = ofproto.OFP_ACTION_NW_TOS_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.tos['val'], res[2])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.tos['val'] == res[2]
 class TestOFPActionSetTpSrc(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPActionSetTpSrc
     """
@@ -909,12 +809,10 @@ class TestOFPActionSetTpSrc(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.tp['val'], self.c.tp)
-
+        assert self.tp['val'] == self.c.tp
     def test_parser_src(self):
         res = self.c.parser(self.buf, 0)
-        eq_(self.tp['val'], res.tp)
-
+        assert self.tp['val'] == res.tp
     def test_parser_dst(self):
         type_ = {'buf': b'\x00\x0a', 'val': ofproto.OFPAT_SET_TP_DST}
 
@@ -924,30 +822,23 @@ class TestOFPActionSetTpSrc(unittest.TestCase):
             + self.zfill
 
         res = self.c.parser(self.buf, 0)
-        eq_(self.tp['val'], res.tp)
-
-    @raises(AssertionError)
+        assert self.tp['val'] == res.tp
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x07', 'val': 7}
-
-        buf = type_['buf'] \
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x07', 'val': 7}
+            buf = type_['buf'] \
             + self.len_['buf'] \
             + self.tp['buf'] \
             + self.zfill
-
-        self.c.parser(buf, 0)
-
-    @raises(AssertionError)
+            self.c.parser(buf, 0)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
-
-        buf = self.type_['buf'] \
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
+            buf = self.type_['buf'] \
             + len_['buf'] \
             + self.tp['buf'] \
             + self.zfill
-
-        self.c.parser(buf, 0)
-
+            self.c.parser(buf, 0)
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -955,11 +846,9 @@ class TestOFPActionSetTpSrc(unittest.TestCase):
         fmt = ofproto.OFP_ACTION_TP_PORT_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.tp['val'], res[2])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.tp['val'] == res[2]
 class TestOFPActionSetTpDst(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPActionSetTpDst
     """
@@ -985,12 +874,10 @@ class TestOFPActionSetTpDst(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.tp['val'], self.c.tp)
-
+        assert self.tp['val'] == self.c.tp
     def test_parser_dst(self):
         res = self.c.parser(self.buf, 0)
-        eq_(self.tp['val'], res.tp)
-
+        assert self.tp['val'] == res.tp
     def test_parser_src(self):
         type_ = {'buf': b'\x00\x09', 'val': ofproto.OFPAT_SET_TP_SRC}
 
@@ -1000,30 +887,23 @@ class TestOFPActionSetTpDst(unittest.TestCase):
             + self.zfill
 
         res = self.c.parser(buf, 0)
-        eq_(self.tp['val'], res.tp)
-
-    @raises(AssertionError)
+        assert self.tp['val'] == res.tp
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x10', 'val': 16}
-
-        buf = type_['buf'] \
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x10', 'val': 16}
+            buf = type_['buf'] \
             + self.len_['buf'] \
             + self.tp['buf'] \
             + self.zfill
-
-        self.c.parser(buf, 0)
-
-    @raises(AssertionError)
+            self.c.parser(buf, 0)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x07', 'val': 7}
-
-        buf = self.type_['buf'] \
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x07', 'val': 7}
+            buf = self.type_['buf'] \
             + len_['buf'] \
             + self.tp['buf'] \
             + self.zfill
-
-        self.c.parser(buf, 0)
-
+            self.c.parser(buf, 0)
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -1031,11 +911,9 @@ class TestOFPActionSetTpDst(unittest.TestCase):
         fmt = ofproto.OFP_ACTION_TP_PORT_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.tp['val'], res[2])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.tp['val'] == res[2]
 class TestOFPActionEnqueue(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPActionEnqueue
     """
@@ -1063,39 +941,31 @@ class TestOFPActionEnqueue(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.port['val'], self.c.port)
-        eq_(self.queue_id['val'], self.c.queue_id)
-
+        assert self.port['val'] == self.c.port
+        assert self.queue_id['val'] == self.c.queue_id
     def test_parser(self):
         res = self.c.parser(self.buf, 0)
 
-        eq_(self.port['val'], res.port)
-        eq_(self.queue_id['val'], res.queue_id)
-
-    @raises(AssertionError)
+        assert self.port['val'] == res.port
+        assert self.queue_id['val'] == res.queue_id
     def test_parser_check_type(self):
-        type_ = {'buf': b'\x00\x0a', 'val': 10}
-
-        buf = type_['buf'] \
+        with pytest.raises(AssertionError):
+            type_ = {'buf': b'\x00\x0a', 'val': 10}
+            buf = type_['buf'] \
             + self.len_['buf'] \
             + self.port['buf'] \
             + self.zfill \
             + self.queue_id['buf']
-
-        self.c.parser(buf, 0)
-
-    @raises(AssertionError)
+            self.c.parser(buf, 0)
     def test_parser_check_len(self):
-        len_ = {'buf': b'\x00\x05', 'val': 5}
-
-        buf = self.type_['buf'] \
+        with pytest.raises(AssertionError):
+            len_ = {'buf': b'\x00\x05', 'val': 5}
+            buf = self.type_['buf'] \
             + len_['buf'] \
             + self.port['buf'] \
             + self.zfill \
             + self.queue_id['buf']
-
-        self.c.parser(buf, 0)
-
+            self.c.parser(buf, 0)
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -1103,12 +973,10 @@ class TestOFPActionEnqueue(unittest.TestCase):
         fmt = ofproto.OFP_ACTION_ENQUEUE_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.port['val'], res[2])
-        eq_(self.queue_id['val'], res[3])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.port['val'] == res[2]
+        assert self.queue_id['val'] == res[3]
 class TestNXActionResubmit(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXActionResubmit
     """
@@ -1140,15 +1008,13 @@ class TestNXActionResubmit(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.subtype['val'], self.c.subtype)
-        eq_(self.in_port['val'], self.c.in_port)
-
+        assert self.subtype['val'] == self.c.subtype
+        assert self.in_port['val'] == self.c.in_port
     def test_parser(self):
         res = OFPActionVendor.parser(self.buf, 0)
-        eq_(self.type_['val'], res.type)
-        eq_(self.len_['val'], res.len)
-        eq_(self.in_port['val'], res.in_port)
-
+        assert self.type_['val'] == res.type
+        assert self.len_['val'] == res.len
+        assert self.in_port['val'] == res.in_port
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -1156,13 +1022,11 @@ class TestNXActionResubmit(unittest.TestCase):
         fmt = ofproto.NX_ACTION_RESUBMIT_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.vendor['val'], res[2])
-        eq_(self.subtype['val'], res[3])
-        eq_(self.in_port['val'], res[4])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.vendor['val'] == res[2]
+        assert self.subtype['val'] == res[3]
+        assert self.in_port['val'] == res[4]
 class TestNXActionResubmitTable(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXActionResubmitTable
     """
@@ -1194,17 +1058,15 @@ class TestNXActionResubmitTable(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.subtype['val'], self.c.subtype)
-        eq_(self.in_port['val'], self.c.in_port)
-        eq_(self.table_id['val'], self.c.table_id)
-
+        assert self.subtype['val'] == self.c.subtype
+        assert self.in_port['val'] == self.c.in_port
+        assert self.table_id['val'] == self.c.table_id
     def test_parser(self):
         res = OFPActionVendor.parser(self.buf, 0)
-        eq_(self.type_['val'], res.type)
-        eq_(self.len_['val'], res.len)
-        eq_(self.in_port['val'], res.in_port)
-        eq_(self.table_id['val'], res.table_id)
-
+        assert self.type_['val'] == res.type
+        assert self.len_['val'] == res.len
+        assert self.in_port['val'] == res.in_port
+        assert self.table_id['val'] == res.table_id
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -1212,14 +1074,12 @@ class TestNXActionResubmitTable(unittest.TestCase):
         fmt = ofproto.NX_ACTION_RESUBMIT_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.vendor['val'], res[2])
-        eq_(self.subtype['val'], res[3])
-        eq_(self.in_port['val'], res[4])
-        eq_(self.table_id['val'], res[5])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.vendor['val'] == res[2]
+        assert self.subtype['val'] == res[3]
+        assert self.in_port['val'] == res[4]
+        assert self.table_id['val'] == res[5]
 class TestNXActionSetTunnel(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXActionSetTunnel
     """
@@ -1249,15 +1109,13 @@ class TestNXActionSetTunnel(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.subtype['val'], self.c.subtype)
-        eq_(self.tun_id['val'], self.c.tun_id)
-
+        assert self.subtype['val'] == self.c.subtype
+        assert self.tun_id['val'] == self.c.tun_id
     def test_parse(self):
         res = OFPActionVendor.parser(self.buf, 0)
-        eq_(self.type_['val'], res.type)
-        eq_(self.len_['val'], res.len)
-        eq_(self.tun_id['val'], res.tun_id)
-
+        assert self.type_['val'] == res.type
+        assert self.len_['val'] == res.len
+        assert self.tun_id['val'] == res.tun_id
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -1265,13 +1123,11 @@ class TestNXActionSetTunnel(unittest.TestCase):
         fmt = ofproto.NX_ACTION_SET_TUNNEL_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.vendor['val'], res[2])
-        eq_(self.subtype['val'], res[3])
-        eq_(self.tun_id['val'], res[4])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.vendor['val'] == res[2]
+        assert self.subtype['val'] == res[3]
+        assert self.tun_id['val'] == res[4]
 class TestNXActionSetQueue(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXActionSetQueue
     """
@@ -1302,15 +1158,13 @@ class TestNXActionSetQueue(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.subtype['val'], self.c.subtype)
-        eq_(self.queue_id['val'], self.c.queue_id)
-
+        assert self.subtype['val'] == self.c.subtype
+        assert self.queue_id['val'] == self.c.queue_id
     def test_parser(self):
         res = OFPActionVendor.parser(self.buf, 0)
-        eq_(self.type_['val'], res.type)
-        eq_(self.len_['val'], res.len)
-        eq_(self.queue_id['val'], res.queue_id)
-
+        assert self.type_['val'] == res.type
+        assert self.len_['val'] == res.len
+        assert self.queue_id['val'] == res.queue_id
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -1318,13 +1172,11 @@ class TestNXActionSetQueue(unittest.TestCase):
         fmt = ofproto.NX_ACTION_SET_QUEUE_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.vendor['val'], res[2])
-        eq_(self.subtype['val'], res[3])
-        eq_(self.queue_id['val'], res[4])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.vendor['val'] == res[2]
+        assert self.subtype['val'] == res[3]
+        assert self.queue_id['val'] == res[4]
 class TestNXActionPopQueue(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXActionPopQueue
     """
@@ -1353,14 +1205,12 @@ class TestNXActionPopQueue(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.subtype['val'], self.c.subtype)
-
+        assert self.subtype['val'] == self.c.subtype
     def test_parser(self):
         res = OFPActionVendor.parser(self.buf, 0)
-        eq_(self.type_['val'], res.type)
-        eq_(self.len_['val'], res.len)
-        eq_(self.subtype['val'], res.subtype)
-
+        assert self.type_['val'] == res.type
+        assert self.len_['val'] == res.len
+        assert self.subtype['val'] == res.subtype
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -1368,12 +1218,10 @@ class TestNXActionPopQueue(unittest.TestCase):
         fmt = ofproto.NX_ACTION_POP_QUEUE_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.vendor['val'], res[2])
-        eq_(self.subtype['val'], res[3])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.vendor['val'] == res[2]
+        assert self.subtype['val'] == res[3]
 class TestNXActionRegMove(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXActionRegMove
     """
@@ -1415,24 +1263,22 @@ class TestNXActionRegMove(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.subtype['val'], self.c.subtype)
-        eq_(self.src_field['val'], self.c.src_field)
-        eq_(self.dst_field['val'], self.c.dst_field)
-        eq_(self.n_bits['val'], self.c.n_bits)
-        eq_(self.src_field['val'], self.c.src_field)
-        eq_(self.dst_field['val'], self.c.dst_field)
-
+        assert self.subtype['val'] == self.c.subtype
+        assert self.src_field['val'] == self.c.src_field
+        assert self.dst_field['val'] == self.c.dst_field
+        assert self.n_bits['val'] == self.c.n_bits
+        assert self.src_field['val'] == self.c.src_field
+        assert self.dst_field['val'] == self.c.dst_field
     def test_parser(self):
         res = OFPActionVendor.parser(self.buf, 0)
-        eq_(self.type_['val'], res.type)
-        eq_(self.len_['val'], res.len)
-        eq_(self.subtype['val'], res.subtype)
-        eq_(self.src_ofs['val'], res.src_ofs)
-        eq_(self.dst_ofs['val'], res.dst_ofs)
-        eq_(self.n_bits['val'], res.n_bits)
-        eq_(self.src_field['val'], res.src_field)
-        eq_(self.dst_field['val'], res.dst_field)
-
+        assert self.type_['val'] == res.type
+        assert self.len_['val'] == res.len
+        assert self.subtype['val'] == res.subtype
+        assert self.src_ofs['val'] == res.src_ofs
+        assert self.dst_ofs['val'] == res.dst_ofs
+        assert self.n_bits['val'] == res.n_bits
+        assert self.src_field['val'] == res.src_field
+        assert self.dst_field['val'] == res.dst_field
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -1440,17 +1286,15 @@ class TestNXActionRegMove(unittest.TestCase):
         fmt = ofproto.NX_ACTION_REG_MOVE_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.vendor['val'], res[2])
-        eq_(self.subtype['val'], res[3])
-        eq_(self.n_bits['val'], res[4])
-        eq_(self.src_ofs['val'], res[5])
-        eq_(self.dst_ofs['val'], res[6])
-        eq_(self.src_field['val2'], res[7])
-        eq_(self.dst_field['val2'], res[8])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.vendor['val'] == res[2]
+        assert self.subtype['val'] == res[3]
+        assert self.n_bits['val'] == res[4]
+        assert self.src_ofs['val'] == res[5]
+        assert self.dst_ofs['val'] == res[6]
+        assert self.src_field['val2'] == res[7]
+        assert self.dst_field['val2'] == res[8]
 class TestNXActionRegLoad(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXActionRegLoad
     """
@@ -1489,19 +1333,17 @@ class TestNXActionRegLoad(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.subtype['val'], self.c.subtype)
-        eq_(self.ofs_nbits['val'], self.c.ofs_nbits)
-        eq_(self.dst['val'], self.c.dst)
-        eq_(self.value['val'], self.c.value)
-
+        assert self.subtype['val'] == self.c.subtype
+        assert self.ofs_nbits['val'] == self.c.ofs_nbits
+        assert self.dst['val'] == self.c.dst
+        assert self.value['val'] == self.c.value
     def test_parser(self):
         res = OFPActionVendor.parser(self.buf, 0)
-        eq_(self.type_['val'], res.type)
-        eq_(self.len_['val'], res.len)
-        eq_(self.ofs_nbits['val'], self.c.ofs_nbits)
-        eq_(self.dst['val'], res.dst)
-        eq_(self.value['val'], res.value)
-
+        assert self.type_['val'] == res.type
+        assert self.len_['val'] == res.len
+        assert self.ofs_nbits['val'] == self.c.ofs_nbits
+        assert self.dst['val'] == res.dst
+        assert self.value['val'] == res.value
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -1509,15 +1351,13 @@ class TestNXActionRegLoad(unittest.TestCase):
         fmt = ofproto.NX_ACTION_REG_LOAD_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.vendor['val'], res[2])
-        eq_(self.subtype['val'], res[3])
-        eq_(self.ofs_nbits['val'], res[4])
-        eq_(self.dst['val2'], res[5])
-        eq_(self.value['val'], res[6])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.vendor['val'] == res[2]
+        assert self.subtype['val'] == res[3]
+        assert self.ofs_nbits['val'] == res[4]
+        assert self.dst['val2'] == res[5]
+        assert self.value['val'] == res[6]
 class TestNXActionSetTunnel64(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXActionSetTunnel64
     """
@@ -1549,16 +1389,14 @@ class TestNXActionSetTunnel64(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.subtype['val'], self.c.subtype)
-        eq_(self.tun_id['val'], self.c.tun_id)
-
+        assert self.subtype['val'] == self.c.subtype
+        assert self.tun_id['val'] == self.c.tun_id
     def test_parser(self):
         res = OFPActionVendor.parser(self.buf, 0)
-        eq_(self.type_['val'], res.type)
-        eq_(self.len_['val'], res.len)
-        eq_(self.subtype['val'], res.subtype)
-        eq_(self.tun_id['val'], res.tun_id)
-
+        assert self.type_['val'] == res.type
+        assert self.len_['val'] == res.len
+        assert self.subtype['val'] == res.subtype
+        assert self.tun_id['val'] == res.tun_id
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -1566,13 +1404,11 @@ class TestNXActionSetTunnel64(unittest.TestCase):
         fmt = ofproto.NX_ACTION_SET_TUNNEL64_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.vendor['val'], res[2])
-        eq_(self.subtype['val'], res[3])
-        eq_(self.tun_id['val'], res[4])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.vendor['val'] == res[2]
+        assert self.subtype['val'] == res[3]
+        assert self.tun_id['val'] == res[4]
 class TestNXActionMultipath(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXActionMultipath
     """
@@ -1626,28 +1462,26 @@ class TestNXActionMultipath(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.subtype['val'], self.c.subtype)
-        eq_(self.fields['val'], self.c.fields)
-        eq_(self.basis['val'], self.c.basis)
-        eq_(self.algorithm['val'], self.c.algorithm)
-        eq_(self.max_link['val'], self.c.max_link)
-        eq_(self.arg['val'], self.c.arg)
-        eq_(self.ofs_nbits['val'], self.c.ofs_nbits)
-        eq_(self.dst['val'], self.c.dst)
-
+        assert self.subtype['val'] == self.c.subtype
+        assert self.fields['val'] == self.c.fields
+        assert self.basis['val'] == self.c.basis
+        assert self.algorithm['val'] == self.c.algorithm
+        assert self.max_link['val'] == self.c.max_link
+        assert self.arg['val'] == self.c.arg
+        assert self.ofs_nbits['val'] == self.c.ofs_nbits
+        assert self.dst['val'] == self.c.dst
     def test_parser(self):
         res = OFPActionVendor.parser(self.buf, 0)
-        eq_(self.type_['val'], res.type)
-        eq_(self.len_['val'], res.len)
-        eq_(self.subtype['val'], res.subtype)
-        eq_(self.fields['val'], res.fields)
-        eq_(self.basis['val'], res.basis)
-        eq_(self.algorithm['val'], res.algorithm)
-        eq_(self.max_link['val'], res.max_link)
-        eq_(self.arg['val'], res.arg)
-        eq_(self.ofs_nbits['val'], res.ofs_nbits)
-        eq_(self.dst['val'], res.dst)
-
+        assert self.type_['val'] == res.type
+        assert self.len_['val'] == res.len
+        assert self.subtype['val'] == res.subtype
+        assert self.fields['val'] == res.fields
+        assert self.basis['val'] == res.basis
+        assert self.algorithm['val'] == res.algorithm
+        assert self.max_link['val'] == res.max_link
+        assert self.arg['val'] == res.arg
+        assert self.ofs_nbits['val'] == res.ofs_nbits
+        assert self.dst['val'] == res.dst
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -1655,19 +1489,17 @@ class TestNXActionMultipath(unittest.TestCase):
         fmt = ofproto.NX_ACTION_MULTIPATH_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.vendor['val'], res[2])
-        eq_(self.subtype['val'], res[3])
-        eq_(self.fields['val'], res[4])
-        eq_(self.basis['val'], res[5])
-        eq_(self.algorithm['val'], res[6])
-        eq_(self.max_link['val'], res[7])
-        eq_(self.arg['val'], res[8])
-        eq_(self.ofs_nbits['val'], res[9])
-        eq_(self.dst['val2'], res[10])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.vendor['val'] == res[2]
+        assert self.subtype['val'] == res[3]
+        assert self.fields['val'] == res[4]
+        assert self.basis['val'] == res[5]
+        assert self.algorithm['val'] == res[6]
+        assert self.max_link['val'] == res[7]
+        assert self.arg['val'] == res[8]
+        assert self.ofs_nbits['val'] == res[9]
+        assert self.dst['val2'] == res[10]
 class TestNXActionBundle(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXActionBundle
     """
@@ -1727,38 +1559,34 @@ class TestNXActionBundle(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.subtype['val'], self.c.subtype)
-        eq_(self.algorithm['val'], self.c.algorithm)
-        eq_(self.fields['val'], self.c.fields)
-        eq_(self.basis['val'], self.c.basis)
-        eq_(self.slave_type['val'], self.c.slave_type)
-        eq_(self.n_slaves['val'], self.c.n_slaves)
-        eq_(self.ofs_nbits['val'], self.c.ofs_nbits)
-        eq_(self.dst['val'], self.c.dst)
-
+        assert self.subtype['val'] == self.c.subtype
+        assert self.algorithm['val'] == self.c.algorithm
+        assert self.fields['val'] == self.c.fields
+        assert self.basis['val'] == self.c.basis
+        assert self.slave_type['val'] == self.c.slave_type
+        assert self.n_slaves['val'] == self.c.n_slaves
+        assert self.ofs_nbits['val'] == self.c.ofs_nbits
+        assert self.dst['val'] == self.c.dst
         # slaves
         slaves = self.c.slaves
-        eq_(self.slaves_val[0], slaves[0])
-        eq_(self.slaves_val[1], slaves[1])
-
+        assert self.slaves_val[0] == slaves[0]
+        assert self.slaves_val[1] == slaves[1]
     def test_parser(self):
         res = OFPActionVendor.parser(self.buf, 0)
-        eq_(self.type_['val'], res.type)
-        eq_(self.len_['val'], res.len)
-        eq_(self.subtype['val'], res.subtype)
-        eq_(self.algorithm['val'], res.algorithm)
-        eq_(self.fields['val'], res.fields)
-        eq_(self.basis['val'], res.basis)
-        eq_(self.slave_type['val'], res.slave_type)
-        eq_(self.n_slaves['val'], res.n_slaves)
-        eq_(self.ofs_nbits['val'], res.ofs_nbits)
-        eq_(self.dst['val'], res.dst)
-
+        assert self.type_['val'] == res.type
+        assert self.len_['val'] == res.len
+        assert self.subtype['val'] == res.subtype
+        assert self.algorithm['val'] == res.algorithm
+        assert self.fields['val'] == res.fields
+        assert self.basis['val'] == res.basis
+        assert self.slave_type['val'] == res.slave_type
+        assert self.n_slaves['val'] == res.n_slaves
+        assert self.ofs_nbits['val'] == res.ofs_nbits
+        assert self.dst['val'] == res.dst
         # slaves
         slaves = res.slaves
-        eq_(self.slaves_val[0], slaves[0])
-        eq_(self.slaves_val[1], slaves[1])
-
+        assert self.slaves_val[0] == slaves[0]
+        assert self.slaves_val[1] == slaves[1]
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -1769,19 +1597,17 @@ class TestNXActionBundle(unittest.TestCase):
 
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.vendor['val'], res[2])
-        eq_(self.subtype['val'], res[3])
-        eq_(self.algorithm['val'], res[4])
-        eq_(self.fields['val'], res[5])
-        eq_(self.basis['val'], res[6])
-        eq_(self.slave_type['val'], res[7])
-        eq_(self.n_slaves['val'], res[8])
-        eq_(self.ofs_nbits['val'], res[9])
-        eq_(self.dst['val'], res[10])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.vendor['val'] == res[2]
+        assert self.subtype['val'] == res[3]
+        assert self.algorithm['val'] == res[4]
+        assert self.fields['val'] == res[5]
+        assert self.basis['val'] == res[6]
+        assert self.slave_type['val'] == res[7]
+        assert self.n_slaves['val'] == res[8]
+        assert self.ofs_nbits['val'] == res[9]
+        assert self.dst['val'] == res[10]
 class TestNXActionBundleLoad(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXActionBundleLoad
     """
@@ -1841,38 +1667,34 @@ class TestNXActionBundleLoad(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.subtype['val'], self.c.subtype)
-        eq_(self.algorithm['val'], self.c.algorithm)
-        eq_(self.fields['val'], self.c.fields)
-        eq_(self.basis['val'], self.c.basis)
-        eq_(self.slave_type['val'], self.c.slave_type)
-        eq_(self.n_slaves['val'], self.c.n_slaves)
-        eq_(self.ofs_nbits['val'], self.c.ofs_nbits)
-        eq_(self.dst['val'], self.c.dst)
-
+        assert self.subtype['val'] == self.c.subtype
+        assert self.algorithm['val'] == self.c.algorithm
+        assert self.fields['val'] == self.c.fields
+        assert self.basis['val'] == self.c.basis
+        assert self.slave_type['val'] == self.c.slave_type
+        assert self.n_slaves['val'] == self.c.n_slaves
+        assert self.ofs_nbits['val'] == self.c.ofs_nbits
+        assert self.dst['val'] == self.c.dst
         # slaves
         slaves = self.c.slaves
-        eq_(self.slaves_val[0], slaves[0])
-        eq_(self.slaves_val[1], slaves[1])
-
+        assert self.slaves_val[0] == slaves[0]
+        assert self.slaves_val[1] == slaves[1]
     def test_parser(self):
         res = OFPActionVendor.parser(self.buf, 0)
-        eq_(self.type_['val'], res.type)
-        eq_(self.len_['val'], res.len)
-        eq_(self.subtype['val'], res.subtype)
-        eq_(self.algorithm['val'], res.algorithm)
-        eq_(self.fields['val'], res.fields)
-        eq_(self.basis['val'], res.basis)
-        eq_(self.slave_type['val'], res.slave_type)
-        eq_(self.n_slaves['val'], res.n_slaves)
-        eq_(self.ofs_nbits['val'], res.ofs_nbits)
-        eq_(self.dst['val'], res.dst)
-
+        assert self.type_['val'] == res.type
+        assert self.len_['val'] == res.len
+        assert self.subtype['val'] == res.subtype
+        assert self.algorithm['val'] == res.algorithm
+        assert self.fields['val'] == res.fields
+        assert self.basis['val'] == res.basis
+        assert self.slave_type['val'] == res.slave_type
+        assert self.n_slaves['val'] == res.n_slaves
+        assert self.ofs_nbits['val'] == res.ofs_nbits
+        assert self.dst['val'] == res.dst
         # slaves
         slaves = res.slaves
-        eq_(self.slaves_val[0], slaves[0])
-        eq_(self.slaves_val[1], slaves[1])
-
+        assert self.slaves_val[0] == slaves[0]
+        assert self.slaves_val[1] == slaves[1]
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -1883,19 +1705,17 @@ class TestNXActionBundleLoad(unittest.TestCase):
 
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.vendor['val'], res[2])
-        eq_(self.subtype['val'], res[3])
-        eq_(self.algorithm['val'], res[4])
-        eq_(self.fields['val'], res[5])
-        eq_(self.basis['val'], res[6])
-        eq_(self.slave_type['val'], res[7])
-        eq_(self.n_slaves['val'], res[8])
-        eq_(self.ofs_nbits['val'], res[9])
-        eq_(self.dst['val2'], res[10])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.vendor['val'] == res[2]
+        assert self.subtype['val'] == res[3]
+        assert self.algorithm['val'] == res[4]
+        assert self.fields['val'] == res[5]
+        assert self.basis['val'] == res[6]
+        assert self.slave_type['val'] == res[7]
+        assert self.n_slaves['val'] == res[8]
+        assert self.ofs_nbits['val'] == res[9]
+        assert self.dst['val2'] == res[10]
 class TestNXActionOutputReg(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXActionOutputReg
     """
@@ -1933,20 +1753,18 @@ class TestNXActionOutputReg(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.subtype['val'], self.c.subtype)
-        eq_(self.ofs_nbits['val'], self.c.ofs_nbits)
-        eq_(self.src['val'], self.c.src)
-        eq_(self.max_len['val'], self.c.max_len)
-
+        assert self.subtype['val'] == self.c.subtype
+        assert self.ofs_nbits['val'] == self.c.ofs_nbits
+        assert self.src['val'] == self.c.src
+        assert self.max_len['val'] == self.c.max_len
     def test_parser(self):
         res = OFPActionVendor.parser(self.buf, 0)
-        eq_(self.type_['val'], res.type)
-        eq_(self.len_['val'], res.len)
-        eq_(self.subtype['val'], res.subtype)
-        eq_(self.ofs_nbits['val'], self.c.ofs_nbits)
-        eq_(self.src['val'], res.src)
-        eq_(self.max_len['val'], res.max_len)
-
+        assert self.type_['val'] == res.type
+        assert self.len_['val'] == res.len
+        assert self.subtype['val'] == res.subtype
+        assert self.ofs_nbits['val'] == self.c.ofs_nbits
+        assert self.src['val'] == res.src
+        assert self.max_len['val'] == res.max_len
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -1954,15 +1772,13 @@ class TestNXActionOutputReg(unittest.TestCase):
         fmt = ofproto.NX_ACTION_OUTPUT_REG_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.vendor['val'], res[2])
-        eq_(self.subtype['val'], res[3])
-        eq_(self.ofs_nbits['val'], res[4])
-        eq_(self.src['val2'], res[5])
-        eq_(self.max_len['val'], res[6])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.vendor['val'] == res[2]
+        assert self.subtype['val'] == res[3]
+        assert self.ofs_nbits['val'] == res[4]
+        assert self.src['val2'] == res[5]
+        assert self.max_len['val'] == res[6]
 class TestNXActionExit(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXActionExit
     """
@@ -1991,14 +1807,12 @@ class TestNXActionExit(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.subtype['val'], self.c.subtype)
-
+        assert self.subtype['val'] == self.c.subtype
     def test_parser(self):
         res = OFPActionVendor.parser(self.buf, 0)
-        eq_(self.type_['val'], res.type)
-        eq_(self.len_['val'], res.len)
-        eq_(self.subtype['val'], res.subtype)
-
+        assert self.type_['val'] == res.type
+        assert self.len_['val'] == res.len
+        assert self.subtype['val'] == res.subtype
     def test_serialize(self):
         buf = bytearray()
         self.c.serialize(buf, 0)
@@ -2006,12 +1820,10 @@ class TestNXActionExit(unittest.TestCase):
         fmt = ofproto.NX_ACTION_HEADER_PACK_STR
         res = struct.unpack(fmt, six.binary_type(buf))
 
-        eq_(self.type_['val'], res[0])
-        eq_(self.len_['val'], res[1])
-        eq_(self.vendor['val'], res[2])
-        eq_(self.subtype['val'], res[3])
-
-
+        assert self.type_['val'] == res[0]
+        assert self.len_['val'] == res[1]
+        assert self.vendor['val'] == res[2]
+        assert self.subtype['val'] == res[3]
 class TestOFPDescStats(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPDescStats
     """
@@ -2039,22 +1851,19 @@ class TestOFPDescStats(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.mfr_desc, self.c.mfr_desc)
-        eq_(self.hw_desc, self.c.hw_desc)
-        eq_(self.sw_desc, self.c.sw_desc)
-        eq_(self.serial_num, self.c.serial_num)
-        eq_(self.dp_desc, self.c.dp_desc)
-
+        assert self.mfr_desc == self.c.mfr_desc
+        assert self.hw_desc == self.c.hw_desc
+        assert self.sw_desc == self.c.sw_desc
+        assert self.serial_num == self.c.serial_num
+        assert self.dp_desc == self.c.dp_desc
     def test_parser(self):
         res = self.c.parser(self.buf, 0)
 
-        eq_(self.mfr_desc, self.mfr_desc)
-        eq_(self.hw_desc, self.hw_desc)
-        eq_(self.sw_desc, self.sw_desc)
-        eq_(self.serial_num, self.serial_num)
-        eq_(self.dp_desc, self.dp_desc)
-
-
+        assert self.mfr_desc == self.mfr_desc
+        assert self.hw_desc == self.hw_desc
+        assert self.sw_desc == self.sw_desc
+        assert self.serial_num == self.serial_num
+        assert self.dp_desc == self.dp_desc
 class TestOFPFlowStats(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPFlowStats
     """
@@ -2151,26 +1960,23 @@ class TestOFPFlowStats(unittest.TestCase):
     def test_parser(self):
         res = self._parser()
 
-        eq_(self.length['val'], res.length)
-        eq_(self.table_id['val'], res.table_id)
-        eq_(self.duration_sec['val'], res.duration_sec)
-        eq_(self.duration_nsec['val'], res.duration_nsec)
-        eq_(self.priority['val'], res.priority)
-        eq_(self.idle_timeout['val'], res.idle_timeout)
-        eq_(self.hard_timeout['val'], res.hard_timeout)
-        eq_(self.cookie['val'], res.cookie)
-        eq_(self.packet_count['val'], res.packet_count)
-        eq_(self.byte_count['val'], res.byte_count)
-
+        assert self.length['val'] == res.length
+        assert self.table_id['val'] == res.table_id
+        assert self.duration_sec['val'] == res.duration_sec
+        assert self.duration_nsec['val'] == res.duration_nsec
+        assert self.priority['val'] == res.priority
+        assert self.idle_timeout['val'] == res.idle_timeout
+        assert self.hard_timeout['val'] == res.hard_timeout
+        assert self.cookie['val'] == res.cookie
+        assert self.packet_count['val'] == res.packet_count
+        assert self.byte_count['val'] == res.byte_count
     def test_parser_append_actions(self):
         res = self._parser(True).actions[0]
 
-        eq_(self.action[self.ACTION_TYPE]['val'], res.type)
-        eq_(self.action[self.ACTION_LEN]['val'], res.len)
-        eq_(self.action[self.ACTION_PORT]['val'], res.port)
-        eq_(self.action[self.ACTION_MAX_LEN]['val'], res.max_len)
-
-
+        assert self.action[self.ACTION_TYPE]['val'] == res.type
+        assert self.action[self.ACTION_LEN]['val'] == res.len
+        assert self.action[self.ACTION_PORT]['val'] == res.port
+        assert self.action[self.ACTION_MAX_LEN]['val'] == res.max_len
 class TestOFPAggregateStats(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPAggregateStats
     """
@@ -2200,19 +2006,16 @@ class TestOFPAggregateStats(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.packet_count['val'], self.c.packet_count)
-        eq_(self.byte_count['val'], self.c.byte_count)
-        eq_(self.flow_count['val'], self.c.flow_count)
-
+        assert self.packet_count['val'] == self.c.packet_count
+        assert self.byte_count['val'] == self.c.byte_count
+        assert self.flow_count['val'] == self.c.flow_count
     def test_parser(self):
 
         res = self.c.parser(self.buf, 0)
 
-        eq_(self.packet_count['val'], res.packet_count)
-        eq_(self.byte_count['val'], res.byte_count)
-        eq_(self.flow_count['val'], res.flow_count)
-
-
+        assert self.packet_count['val'] == res.packet_count
+        assert self.byte_count['val'] == res.byte_count
+        assert self.flow_count['val'] == res.flow_count
 class TestOFPTableStats(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPTableStats
     """
@@ -2255,26 +2058,23 @@ class TestOFPTableStats(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.table_id['val'], self.c.table_id)
-        eq_(self.name, self.c.name)
-        eq_(self.wildcards['val'], self.c.wildcards)
-        eq_(self.max_entries['val'], self.c.max_entries)
-        eq_(self.active_count['val'], self.c.active_count)
-        eq_(self.lookup_count['val'], self.c.lookup_count)
-        eq_(self.matched_count['val'], self.c.matched_count)
-
+        assert self.table_id['val'] == self.c.table_id
+        assert self.name == self.c.name
+        assert self.wildcards['val'] == self.c.wildcards
+        assert self.max_entries['val'] == self.c.max_entries
+        assert self.active_count['val'] == self.c.active_count
+        assert self.lookup_count['val'] == self.c.lookup_count
+        assert self.matched_count['val'] == self.c.matched_count
     def test_parser(self):
         res = self.c.parser(self.buf, 0)
 
-        eq_(self.table_id['val'], res.table_id)
-        eq_(self.name, res.name)
-        eq_(self.wildcards['val'], res.wildcards)
-        eq_(self.max_entries['val'], res.max_entries)
-        eq_(self.active_count['val'], res.active_count)
-        eq_(self.lookup_count['val'], res.lookup_count)
-        eq_(self.matched_count['val'], res.matched_count)
-
-
+        assert self.table_id['val'] == res.table_id
+        assert self.name == res.name
+        assert self.wildcards['val'] == res.wildcards
+        assert self.max_entries['val'] == res.max_entries
+        assert self.active_count['val'] == res.active_count
+        assert self.lookup_count['val'] == res.lookup_count
+        assert self.matched_count['val'] == res.matched_count
 class TestOFPPortStats(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPPortStats
     """
@@ -2347,38 +2147,35 @@ class TestOFPPortStats(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.port_no['val'], self.c.port_no)
-        eq_(self.rx_packets['val'], self.c.rx_packets)
-        eq_(self.tx_packets['val'], self.c.tx_packets)
-        eq_(self.rx_bytes['val'], self.c.rx_bytes)
-        eq_(self.tx_bytes['val'], self.c.tx_bytes)
-        eq_(self.rx_dropped['val'], self.c.rx_dropped)
-        eq_(self.tx_dropped['val'], self.c.tx_dropped)
-        eq_(self.rx_errors['val'], self.c.rx_errors)
-        eq_(self.tx_errors['val'], self.c.tx_errors)
-        eq_(self.rx_frame_err['val'], self.c.rx_frame_err)
-        eq_(self.rx_over_err['val'], self.c.rx_over_err)
-        eq_(self.rx_crc_err['val'], self.c.rx_crc_err)
-        eq_(self.collisions['val'], self.c.collisions)
-
+        assert self.port_no['val'] == self.c.port_no
+        assert self.rx_packets['val'] == self.c.rx_packets
+        assert self.tx_packets['val'] == self.c.tx_packets
+        assert self.rx_bytes['val'] == self.c.rx_bytes
+        assert self.tx_bytes['val'] == self.c.tx_bytes
+        assert self.rx_dropped['val'] == self.c.rx_dropped
+        assert self.tx_dropped['val'] == self.c.tx_dropped
+        assert self.rx_errors['val'] == self.c.rx_errors
+        assert self.tx_errors['val'] == self.c.tx_errors
+        assert self.rx_frame_err['val'] == self.c.rx_frame_err
+        assert self.rx_over_err['val'] == self.c.rx_over_err
+        assert self.rx_crc_err['val'] == self.c.rx_crc_err
+        assert self.collisions['val'] == self.c.collisions
     def test_parser(self):
         res = self.c.parser(self.buf, 0)
 
-        eq_(self.port_no['val'], res.port_no)
-        eq_(self.rx_packets['val'], res.rx_packets)
-        eq_(self.tx_packets['val'], res.tx_packets)
-        eq_(self.rx_bytes['val'], res.rx_bytes)
-        eq_(self.tx_bytes['val'], res.tx_bytes)
-        eq_(self.rx_dropped['val'], res.rx_dropped)
-        eq_(self.tx_dropped['val'], res.tx_dropped)
-        eq_(self.rx_errors['val'], res.rx_errors)
-        eq_(self.tx_errors['val'], res.tx_errors)
-        eq_(self.rx_frame_err['val'], res.rx_frame_err)
-        eq_(self.rx_over_err['val'], res.rx_over_err)
-        eq_(self.rx_crc_err['val'], res.rx_crc_err)
-        eq_(self.collisions['val'], res.collisions)
-
-
+        assert self.port_no['val'] == res.port_no
+        assert self.rx_packets['val'] == res.rx_packets
+        assert self.tx_packets['val'] == res.tx_packets
+        assert self.rx_bytes['val'] == res.rx_bytes
+        assert self.tx_bytes['val'] == res.tx_bytes
+        assert self.rx_dropped['val'] == res.rx_dropped
+        assert self.tx_dropped['val'] == res.tx_dropped
+        assert self.rx_errors['val'] == res.rx_errors
+        assert self.tx_errors['val'] == res.tx_errors
+        assert self.rx_frame_err['val'] == res.rx_frame_err
+        assert self.rx_over_err['val'] == res.rx_over_err
+        assert self.rx_crc_err['val'] == res.rx_crc_err
+        assert self.collisions['val'] == res.collisions
 class TestOFPQueueStats(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPQueueStats
     """
@@ -2415,22 +2212,19 @@ class TestOFPQueueStats(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.port_no['val'], self.c.port_no)
-        eq_(self.queue_id['val'], self.c.queue_id)
-        eq_(self.tx_bytes['val'], self.c.tx_bytes)
-        eq_(self.tx_packets['val'], self.c.tx_packets)
-        eq_(self.tx_errors['val'], self.c.tx_errors)
-
+        assert self.port_no['val'] == self.c.port_no
+        assert self.queue_id['val'] == self.c.queue_id
+        assert self.tx_bytes['val'] == self.c.tx_bytes
+        assert self.tx_packets['val'] == self.c.tx_packets
+        assert self.tx_errors['val'] == self.c.tx_errors
     def test_parser(self):
         res = self.c.parser(self.buf, 0)
 
-        eq_(self.port_no['val'], res.port_no)
-        eq_(self.queue_id['val'], res.queue_id)
-        eq_(self.tx_bytes['val'], res.tx_bytes)
-        eq_(self.tx_packets['val'], res.tx_packets)
-        eq_(self.tx_errors['val'], res.tx_errors)
-
-
+        assert self.port_no['val'] == res.port_no
+        assert self.queue_id['val'] == res.queue_id
+        assert self.tx_bytes['val'] == res.tx_bytes
+        assert self.tx_packets['val'] == res.tx_packets
+        assert self.tx_errors['val'] == res.tx_errors
 class TestOFPVendorStats(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPVendorStats
     """
@@ -2448,13 +2242,10 @@ class TestOFPVendorStats(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.specific_data, self.c.specific_data)
-
+        assert self.specific_data == self.c.specific_data
     def test_parser(self):
         res = self.c.parser(self.specific_data, self.offset)
-        eq_(self.specific_data_after, res.specific_data)
-
-
+        assert self.specific_data_after == res.specific_data
 class TestOFPQueuePropNone(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPQueuePropNone
     """
@@ -2476,22 +2267,18 @@ class TestOFPQueuePropNone(unittest.TestCase):
     def test_init(self):
         cls = OFPQueuePropHeader._QUEUE_PROPERTIES[self.c.cls_prop_type]
 
-        eq_(self.property['val'], self.c.cls_prop_type)
-        eq_(self.property['val'], self.c.property)
-        eq_(self.property['val'], cls.cls_prop_type)
-
-        eq_(self.len['val'], self.c.cls_prop_len)
-        eq_(self.len['val'], self.c.len)
-        eq_(self.len['val'], cls.cls_prop_len)
-
+        assert self.property['val'] == self.c.cls_prop_type
+        assert self.property['val'] == self.c.property
+        assert self.property['val'] == cls.cls_prop_type
+        assert self.len['val'] == self.c.cls_prop_len
+        assert self.len['val'] == self.c.len
+        assert self.len['val'] == cls.cls_prop_len
     def test_parser(self):
         buf = self.property['buf'] \
             + self.len['buf'] \
             + self.zfill
 
-        ok_(self.c.parser(buf, 0))
-
-
+        assert self.c.parser(buf, 0)
 class TestOFPQueuePropMinRate(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPQueuePropMinRate
     """
@@ -2516,18 +2303,14 @@ class TestOFPQueuePropMinRate(unittest.TestCase):
     def test_init(self):
         cls = OFPQueuePropHeader._QUEUE_PROPERTIES[self.c.cls_prop_type]
 
-        eq_(self.rate['val'], self.c.cls_prop_type)
-        eq_(self.rate['val'], self.c.rate)
-        eq_(self.rate['val'], cls.cls_prop_type)
-
-        eq_(self.len['val'], self.c.cls_prop_len)
-        eq_(self.len['val'], cls.cls_prop_len)
-
+        assert self.rate['val'] == self.c.cls_prop_type
+        assert self.rate['val'] == self.c.rate
+        assert self.rate['val'] == cls.cls_prop_type
+        assert self.len['val'] == self.c.cls_prop_len
+        assert self.len['val'] == cls.cls_prop_len
     def test_parser(self):
         res = self.c.parser(self.buf, 0)
-        eq_(self.rate['val'], res.rate)
-
-
+        assert self.rate['val'] == res.rate
 class TestOFPPacketQueue(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPPacketQueue
     """
@@ -2553,14 +2336,12 @@ class TestOFPPacketQueue(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.queue_id['val'], self.c.queue_id)
-        eq_(self.len_['val'], self.c.len)
-
+        assert self.queue_id['val'] == self.c.queue_id
+        assert self.len_['val'] == self.c.len
     def test_parser(self):
         res = self.c.parser(self.buf, 0)
-        eq_(self.queue_id['val'], res.queue_id)
-        eq_(self.len_['val'], res.len)
-
+        assert self.queue_id['val'] == res.queue_id
+        assert self.len_['val'] == res.len
     def test_parser_append_prop(self):
         # OFP_QUEUE_PROP_HEADER_PACK_STR + OFP_QUEUE_PROP_MIN_RATE_PACK_STR
         # '!HH4xH6x'...type, len, zfill, rate, zfill
@@ -2584,16 +2365,13 @@ class TestOFPPacketQueue(unittest.TestCase):
 
         res = self.c.parser(buf, 0)
 
-        eq_(self.queue_id['val'], res.queue_id)
-        eq_(len_['val'], res.len)
-
+        assert self.queue_id['val'] == res.queue_id
+        assert len_['val'] == res.len
         append_cls = res.properties[0]
 
-        eq_(a_type['val'], append_cls.property)
-        eq_(a_len['val'], append_cls.len)
-        eq_(a_rate['val'], append_cls.rate)
-
-
+        assert a_type['val'] == append_cls.property
+        assert a_len['val'] == append_cls.len
+        assert a_rate['val'] == append_cls.rate
 class TestOFPHello(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPHello
     """
@@ -2621,12 +2399,11 @@ class TestOFPHello(unittest.TestCase):
         res = OFPHello.parser(object, version, msg_type, msg_len, xid,
                               bytearray(buf))
 
-        eq_(version, res.version)
-        eq_(msg_type, res.msg_type)
-        eq_(msg_len, res.msg_len)
-        eq_(xid, res.xid)
-        eq_(six.binary_type(buf), six.binary_type(res.buf))
-
+        assert version == res.version
+        assert msg_type == res.msg_type
+        assert msg_len == res.msg_len
+        assert xid == res.xid
+        assert six.binary_type(buf) == six.binary_type(res.buf)
     def test_serialize(self):
 
         class Datapath(object):
@@ -2635,11 +2412,9 @@ class TestOFPHello(unittest.TestCase):
 
         c = OFPHello(Datapath)
         c.serialize()
-        eq_(ofproto.OFP_VERSION, c.version)
-        eq_(ofproto.OFPT_HELLO, c.msg_type)
-        eq_(0, c.xid)
-
-
+        assert ofproto.OFP_VERSION == c.version
+        assert ofproto.OFPT_HELLO == c.msg_type
+        assert 0 == c.xid
 class TestOFPErrorMsg(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPErrorMsg
     """
@@ -2678,14 +2453,13 @@ class TestOFPErrorMsg(unittest.TestCase):
                                  xid['val'],
                                  buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(type['val'], res.type)
-        eq_(code['val'], res.code)
-        eq_(data, res.data)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert type['val'] == res.type
+        assert code['val'] == res.code
+        assert data == res.data
     def test_serialize(self):
         class Datapath(object):
             ofproto = ofproto  # copy to class attribute
@@ -2702,25 +2476,22 @@ class TestOFPErrorMsg(unittest.TestCase):
 
         c.serialize()
 
-        eq_(ofproto.OFP_VERSION, c.version)
-        eq_(ofproto.OFPT_ERROR, c.msg_type)
-        eq_(0, c.xid)
-
+        assert ofproto.OFP_VERSION == c.version
+        assert ofproto.OFPT_ERROR == c.msg_type
+        assert 0 == c.xid
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.OFP_ERROR_MSG_PACK_STR.replace('!', '') \
             + str(len(data)) + 's'
 
         res = struct.unpack(fmt, six.binary_type(c.buf))
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_ERROR, res[1])
-        eq_(len(c.buf), res[2])
-        eq_(0, res[3])
-        eq_(type, res[4])
-        eq_(code, res[5])
-        eq_(data, res[6])
-
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_ERROR == res[1]
+        assert len(c.buf) == res[2]
+        assert 0 == res[3]
+        assert type == res[4]
+        assert code == res[5]
+        assert data == res[6]
 class TestOFPEchoRequest(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPEchoRequest
     """
@@ -2755,12 +2526,11 @@ class TestOFPEchoRequest(unittest.TestCase):
                                     xid['val'],
                                     buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(data, res.data)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert data == res.data
     def test_serialize(self):
         class Datapath(object):
             ofproto = ofproto  # copy to class attribute
@@ -2773,22 +2543,19 @@ class TestOFPEchoRequest(unittest.TestCase):
 
         c.serialize()
 
-        eq_(ofproto.OFP_VERSION, c.version)
-        eq_(ofproto.OFPT_ECHO_REQUEST, c.msg_type)
-        eq_(0, c.xid)
-
+        assert ofproto.OFP_VERSION == c.version
+        assert ofproto.OFPT_ECHO_REQUEST == c.msg_type
+        assert 0 == c.xid
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + str(len(data)) + 's'
 
         res = struct.unpack(fmt, six.binary_type(c.buf))
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_ECHO_REQUEST, res[1])
-        eq_(len(c.buf), res[2])
-        eq_(0, res[3])
-        eq_(data, res[4])
-
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_ECHO_REQUEST == res[1]
+        assert len(c.buf) == res[2]
+        assert 0 == res[3]
+        assert data == res[4]
 class TestOFPEchoReply(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPEchoReply
     """
@@ -2823,12 +2590,11 @@ class TestOFPEchoReply(unittest.TestCase):
                                   xid['val'],
                                   buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(data, res.data)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert data == res.data
     def test_serialize(self):
         class Datapath(object):
             ofproto = ofproto  # copy to class attribute
@@ -2841,22 +2607,19 @@ class TestOFPEchoReply(unittest.TestCase):
 
         c.serialize()
 
-        eq_(ofproto.OFP_VERSION, c.version)
-        eq_(ofproto.OFPT_ECHO_REPLY, c.msg_type)
-        eq_(0, c.xid)
-
+        assert ofproto.OFP_VERSION == c.version
+        assert ofproto.OFPT_ECHO_REPLY == c.msg_type
+        assert 0 == c.xid
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + str(len(data)) + 's'
 
         res = struct.unpack(fmt, six.binary_type(c.buf))
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_ECHO_REPLY, res[1])
-        eq_(len(c.buf), res[2])
-        eq_(0, res[3])
-        eq_(data, res[4])
-
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_ECHO_REPLY == res[1]
+        assert len(c.buf) == res[2]
+        assert 0 == res[3]
+        assert data == res[4]
 class TestOFPVendor(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPVendor
     """
@@ -2893,13 +2656,12 @@ class TestOFPVendor(unittest.TestCase):
                                xid['val'],
                                buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(vendor['val'], res.vendor)
-        eq_(data, res.data)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert vendor['val'] == res.vendor
+        assert data == res.data
     def test_serialize(self):
         class Datapath(object):
             ofproto = ofproto  # copy to class attribute
@@ -2914,25 +2676,22 @@ class TestOFPVendor(unittest.TestCase):
 
         c.serialize()
 
-        eq_(ofproto.OFP_VERSION, c.version)
-        eq_(ofproto.OFPT_VENDOR, c.msg_type)
-        eq_(0, c.xid)
-        eq_(vendor['val'], c.vendor)
-
+        assert ofproto.OFP_VERSION == c.version
+        assert ofproto.OFPT_VENDOR == c.msg_type
+        assert 0 == c.xid
+        assert vendor['val'] == c.vendor
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.OFP_VENDOR_HEADER_PACK_STR.replace('!', '') \
             + str(len(data)) + 's'
 
         res = struct.unpack(fmt, six.binary_type(c.buf))
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_VENDOR, res[1])
-        eq_(len(c.buf), res[2])
-        eq_(0, res[3])
-        eq_(vendor['val'], res[4])
-        eq_(data, res[5])
-
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_VENDOR == res[1]
+        assert len(c.buf) == res[2]
+        assert 0 == res[3]
+        assert vendor['val'] == res[4]
+        assert data == res[5]
 # class TestNXTRequest(unittest.TestCase):
 class TestNiciraHeader(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NiciraHeader
@@ -2948,8 +2707,7 @@ class TestNiciraHeader(unittest.TestCase):
         subtype = ofproto.NXT_FLOW_MOD_TABLE_ID
 
         c = NiciraHeader(object, subtype)
-        eq_(subtype, c.subtype)
-
+        assert subtype == c.subtype
     def test_parser(self):
         # Not used.
         pass
@@ -2967,26 +2725,23 @@ class TestNiciraHeader(unittest.TestCase):
 
         c.serialize()
 
-        eq_(ofproto.OFP_VERSION, c.version)
-        eq_(ofproto.OFPT_VENDOR, c.msg_type)
-        eq_(0, c.xid)
-        eq_(ofproto_common.NX_EXPERIMENTER_ID, c.vendor)
-
+        assert ofproto.OFP_VERSION == c.version
+        assert ofproto.OFPT_VENDOR == c.msg_type
+        assert 0 == c.xid
+        assert ofproto_common.NX_EXPERIMENTER_ID == c.vendor
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.NICIRA_HEADER_PACK_STR.replace('!', '') \
             + str(len(data)) + 's'
 
         res = struct.unpack(fmt, six.binary_type(c.buf))
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_VENDOR, res[1])
-        eq_(len(c.buf), res[2])
-        eq_(0, res[3])
-        eq_(ofproto_common.NX_EXPERIMENTER_ID, res[4])
-        eq_(subtype, res[5])
-        eq_(data, res[6])
-
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_VENDOR == res[1]
+        assert len(c.buf) == res[2]
+        assert 0 == res[3]
+        assert ofproto_common.NX_EXPERIMENTER_ID == res[4]
+        assert subtype == res[5]
+        assert data == res[6]
 class TestNXTSetFlowFormat(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXTSetFlowFormat
     """
@@ -3001,8 +2756,7 @@ class TestNXTSetFlowFormat(unittest.TestCase):
         flow_format = {'buf': b'\xdc\x6b\xf5\x24', 'val': 3698062628}
 
         c = NXTSetFlowFormat(object, flow_format['val'])
-        eq_(flow_format['val'], c.format)
-
+        assert flow_format['val'] == c.format
     def test_parser(self):
         # Not used.
         pass
@@ -3017,26 +2771,23 @@ class TestNXTSetFlowFormat(unittest.TestCase):
         c = NXTSetFlowFormat(Datapath, flow_format['val'])
         c.serialize()
 
-        eq_(ofproto.OFP_VERSION, c.version)
-        eq_(ofproto.OFPT_VENDOR, c.msg_type)
-        eq_(0, c.xid)
-        eq_(ofproto_common.NX_EXPERIMENTER_ID, c.vendor)
-
+        assert ofproto.OFP_VERSION == c.version
+        assert ofproto.OFPT_VENDOR == c.msg_type
+        assert 0 == c.xid
+        assert ofproto_common.NX_EXPERIMENTER_ID == c.vendor
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.NICIRA_HEADER_PACK_STR.replace('!', '') \
             + ofproto.NX_SET_FLOW_FORMAT_PACK_STR.replace('!', '')
 
         res = struct.unpack(fmt, six.binary_type(c.buf))
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_VENDOR, res[1])
-        eq_(len(c.buf), res[2])
-        eq_(0, res[3])
-        eq_(ofproto_common.NX_EXPERIMENTER_ID, res[4])
-        eq_(ofproto.NXT_SET_FLOW_FORMAT, res[5])
-        eq_(flow_format['val'], res[6])
-
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_VENDOR == res[1]
+        assert len(c.buf) == res[2]
+        assert 0 == res[3]
+        assert ofproto_common.NX_EXPERIMENTER_ID == res[4]
+        assert ofproto.NXT_SET_FLOW_FORMAT == res[5]
+        assert flow_format['val'] == res[6]
 class TestNXTFlowMod(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXTFlowMod
     """
@@ -3091,24 +2842,22 @@ class TestNXTFlowMod(unittest.TestCase):
     def test_init(self):
         c = self._get_obj()
 
-        eq_(self.cookie['val'], c.cookie)
-        eq_(self.command['val'], c.command)
-        eq_(self.idle_timeout['val'], c.idle_timeout)
-        eq_(self.hard_timeout['val'], c.hard_timeout)
-        eq_(self.priority['val'], c.priority)
-        eq_(self.buffer_id['val'], c.buffer_id)
-        eq_(self.out_port['val'], c.out_port)
-        eq_(self.flags['val'], c.flags)
-        eq_(self.rule.__hash__(), c.rule.__hash__())
-
+        assert self.cookie['val'] == c.cookie
+        assert self.command['val'] == c.command
+        assert self.idle_timeout['val'] == c.idle_timeout
+        assert self.hard_timeout['val'] == c.hard_timeout
+        assert self.priority['val'] == c.priority
+        assert self.buffer_id['val'] == c.buffer_id
+        assert self.out_port['val'] == c.out_port
+        assert self.flags['val'] == c.flags
+        assert self.rule.__hash__() == c.rule.__hash__()
     def test_init_append_actions(self):
         c = self._get_obj(True)
 
         action = c.actions[0]
-        eq_(ofproto.OFPAT_OUTPUT, action.type)
-        eq_(ofproto.OFP_ACTION_OUTPUT_SIZE, action.len)
-        eq_(self.port['val'], action.port)
-
+        assert ofproto.OFPAT_OUTPUT == action.type
+        assert ofproto.OFP_ACTION_OUTPUT_SIZE == action.len
+        assert self.port['val'] == action.port
     def test_parser(self):
         # Not used.
         pass
@@ -3117,41 +2866,38 @@ class TestNXTFlowMod(unittest.TestCase):
         c = self._get_obj()
         c.serialize()
 
-        eq_(ofproto.OFP_VERSION, c.version)
-        eq_(ofproto.OFPT_VENDOR, c.msg_type)
-        eq_(0, c.xid)
-        eq_(ofproto_common.NX_EXPERIMENTER_ID, c.vendor)
-
+        assert ofproto.OFP_VERSION == c.version
+        assert ofproto.OFPT_VENDOR == c.msg_type
+        assert 0 == c.xid
+        assert ofproto_common.NX_EXPERIMENTER_ID == c.vendor
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.NICIRA_HEADER_PACK_STR.replace('!', '') \
             + ofproto.NX_FLOW_MOD_PACK_STR.replace('!', '')
 
         res = struct.unpack(fmt, six.binary_type(c.buf))
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_VENDOR, res[1])
-        eq_(len(c.buf), res[2])
-        eq_(0, res[3])
-        eq_(ofproto_common.NX_EXPERIMENTER_ID, res[4])
-        eq_(ofproto.NXT_FLOW_MOD, res[5])
-        eq_(self.cookie['val'], res[6])
-        eq_(self.command['val'], res[7])
-        eq_(self.idle_timeout['val'], res[8])
-        eq_(self.hard_timeout['val'], res[9])
-        eq_(self.priority['val'], res[10])
-        eq_(self.buffer_id['val'], res[11])
-        eq_(self.out_port['val'], res[12])
-        eq_(self.flags['val'], res[13])
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_VENDOR == res[1]
+        assert len(c.buf) == res[2]
+        assert 0 == res[3]
+        assert ofproto_common.NX_EXPERIMENTER_ID == res[4]
+        assert ofproto.NXT_FLOW_MOD == res[5]
+        assert self.cookie['val'] == res[6]
+        assert self.command['val'] == res[7]
+        assert self.idle_timeout['val'] == res[8]
+        assert self.hard_timeout['val'] == res[9]
+        assert self.priority['val'] == res[10]
+        assert self.buffer_id['val'] == res[11]
+        assert self.out_port['val'] == res[12]
+        assert self.flags['val'] == res[13]
     def test_serialize_append_actions(self):
         c = self._get_obj(True)
         c.serialize()
 
-        eq_(ofproto.OFP_VERSION, c.version)
-        eq_(ofproto.OFPT_VENDOR, c.msg_type)
-        eq_(0, c.xid)
-        eq_(ofproto_common.NX_EXPERIMENTER_ID, c.vendor)
-
+        assert ofproto.OFP_VERSION == c.version
+        assert ofproto.OFPT_VENDOR == c.msg_type
+        assert 0 == c.xid
+        assert ofproto_common.NX_EXPERIMENTER_ID == c.vendor
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.NICIRA_HEADER_PACK_STR.replace('!', '') \
@@ -3159,29 +2905,26 @@ class TestNXTFlowMod(unittest.TestCase):
             + ofproto.OFP_ACTION_OUTPUT_PACK_STR.replace('!', '')
 
         res = struct.unpack(fmt, six.binary_type(c.buf))
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_VENDOR, res[1])
-        eq_(len(c.buf), res[2])
-        eq_(0, res[3])
-        eq_(ofproto_common.NX_EXPERIMENTER_ID, res[4])
-        eq_(ofproto.NXT_FLOW_MOD, res[5])
-        eq_(self.cookie['val'], res[6])
-        eq_(self.command['val'], res[7])
-        eq_(self.idle_timeout['val'], res[8])
-        eq_(self.hard_timeout['val'], res[9])
-        eq_(self.priority['val'], res[10])
-        eq_(self.buffer_id['val'], res[11])
-        eq_(self.out_port['val'], res[12])
-        eq_(self.flags['val'], res[13])
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_VENDOR == res[1]
+        assert len(c.buf) == res[2]
+        assert 0 == res[3]
+        assert ofproto_common.NX_EXPERIMENTER_ID == res[4]
+        assert ofproto.NXT_FLOW_MOD == res[5]
+        assert self.cookie['val'] == res[6]
+        assert self.command['val'] == res[7]
+        assert self.idle_timeout['val'] == res[8]
+        assert self.hard_timeout['val'] == res[9]
+        assert self.priority['val'] == res[10]
+        assert self.buffer_id['val'] == res[11]
+        assert self.out_port['val'] == res[12]
+        assert self.flags['val'] == res[13]
         # action
-        eq_(0, res[14])
-        eq_(ofproto.OFPAT_OUTPUT, res[15])
-        eq_(ofproto.OFP_ACTION_OUTPUT_SIZE, res[16])
-        eq_(self.port['val'], res[17])
-        eq_(0xffe5, res[18])
-
-
+        assert 0 == res[14]
+        assert ofproto.OFPAT_OUTPUT == res[15]
+        assert ofproto.OFP_ACTION_OUTPUT_SIZE == res[16]
+        assert self.port['val'] == res[17]
+        assert 0xffe5 == res[18]
 class TestNXTRoleRequest(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXTRoleRequest
     """
@@ -3203,8 +2946,7 @@ class TestNXTRoleRequest(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.role['val'], self.c.role)
-
+        assert self.role['val'] == self.c.role
     def test_parser(self):
         # Not used.
         pass
@@ -3212,11 +2954,10 @@ class TestNXTRoleRequest(unittest.TestCase):
     def test_serialize(self):
         self.c.serialize()
 
-        eq_(ofproto.OFP_VERSION, self.c.version)
-        eq_(ofproto.OFPT_VENDOR, self.c.msg_type)
-        eq_(0, self.c.xid)
-        eq_(ofproto_common.NX_EXPERIMENTER_ID, self.c.vendor)
-
+        assert ofproto.OFP_VERSION == self.c.version
+        assert ofproto.OFPT_VENDOR == self.c.msg_type
+        assert 0 == self.c.xid
+        assert ofproto_common.NX_EXPERIMENTER_ID == self.c.vendor
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.NICIRA_HEADER_PACK_STR.replace('!', '') \
@@ -3224,15 +2965,13 @@ class TestNXTRoleRequest(unittest.TestCase):
 
         res = struct.unpack(fmt, six.binary_type(self.c.buf))
 
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_VENDOR, res[1])
-        eq_(len(self.c.buf), res[2])
-        eq_(0, res[3])
-        eq_(ofproto_common.NX_EXPERIMENTER_ID, res[4])
-        eq_(ofproto.NXT_ROLE_REQUEST, res[5])
-        eq_(self.role['val'], res[6])
-
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_VENDOR == res[1]
+        assert len(self.c.buf) == res[2]
+        assert 0 == res[3]
+        assert ofproto_common.NX_EXPERIMENTER_ID == res[4]
+        assert ofproto.NXT_ROLE_REQUEST == res[5]
+        assert self.role['val'] == res[6]
 class TestNXTFlowModTableId(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.NXTFlowModTableId
     """
@@ -3255,8 +2994,7 @@ class TestNXTFlowModTableId(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.set_['val'], self.c.set)
-
+        assert self.set_['val'] == self.c.set
     def test_parser(self):
         # Not used.
         pass
@@ -3264,26 +3002,23 @@ class TestNXTFlowModTableId(unittest.TestCase):
     def test_serialize(self):
         self.c.serialize()
 
-        eq_(ofproto.OFP_VERSION, self.c.version)
-        eq_(ofproto.OFPT_VENDOR, self.c.msg_type)
-        eq_(0, self.c.xid)
-        eq_(ofproto_common.NX_EXPERIMENTER_ID, self.c.vendor)
-
+        assert ofproto.OFP_VERSION == self.c.version
+        assert ofproto.OFPT_VENDOR == self.c.msg_type
+        assert 0 == self.c.xid
+        assert ofproto_common.NX_EXPERIMENTER_ID == self.c.vendor
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.NICIRA_HEADER_PACK_STR.replace('!', '') \
             + ofproto.NX_FLOW_MOD_TABLE_ID_PACK_STR.replace('!', '')
 
         res = struct.unpack(fmt, six.binary_type(self.c.buf))
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_VENDOR, res[1])
-        eq_(len(self.c.buf), res[2])
-        eq_(0, res[3])
-        eq_(ofproto_common.NX_EXPERIMENTER_ID, res[4])
-        eq_(ofproto.NXT_FLOW_MOD_TABLE_ID, res[5])
-        eq_(self.set_['val'], res[6])
-
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_VENDOR == res[1]
+        assert len(self.c.buf) == res[2]
+        assert 0 == res[3]
+        assert ofproto_common.NX_EXPERIMENTER_ID == res[4]
+        assert ofproto.NXT_FLOW_MOD_TABLE_ID == res[5]
+        assert self.set_['val'] == res[6]
 class TestOFPSwitchFeatures(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPSwitchFeatures
     """
@@ -3362,28 +3097,26 @@ class TestOFPSwitchFeatures(unittest.TestCase):
                                        xid['val'],
                                        buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(datapath_id['val'], res.datapath_id)
-        eq_(n_buffers['val'], res.n_buffers)
-        eq_(n_tables['val'], res.n_tables)
-        eq_(capabilities['val'], res.capabilities)
-        eq_(actions['val'], res.actions)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert datapath_id['val'] == res.datapath_id
+        assert n_buffers['val'] == res.n_buffers
+        assert n_tables['val'] == res.n_tables
+        assert capabilities['val'] == res.capabilities
+        assert actions['val'] == res.actions
         # port
         port = res.ports[port_no['val']]
-        eq_(port_no['val'], port.port_no)
-        eq_(hw_addr, hw_addr)
-        eq_(name, port.name)
-        eq_(config['val'], port.config)
-        eq_(state['val'], port.state)
-        eq_(curr['val'], port.curr)
-        eq_(advertised['val'], port.advertised)
-        eq_(supported['val'], port.supported)
-        eq_(peer['val'], port.peer)
-
+        assert port_no['val'] == port.port_no
+        assert hw_addr == hw_addr
+        assert name == port.name
+        assert config['val'] == port.config
+        assert state['val'] == port.state
+        assert curr['val'] == port.curr
+        assert advertised['val'] == port.advertised
+        assert supported['val'] == port.supported
+        assert peer['val'] == port.peer
     def test_serialize(self):
         # Not used.
         pass
@@ -3454,24 +3187,22 @@ class TestOFPPortStatus(unittest.TestCase):
                                    xid['val'],
                                    buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(reason['val'], res.reason)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert reason['val'] == res.reason
         # desc
         desc = res.desc
-        eq_(port_no['val'], desc.port_no)
-        eq_(hw_addr, desc.hw_addr)
-        eq_(name, desc.name)
-        eq_(config['val'], desc.config)
-        eq_(state['val'], desc.state)
-        eq_(curr['val'], desc.curr)
-        eq_(advertised['val'], desc.advertised)
-        eq_(supported['val'], desc.supported)
-        eq_(peer['val'], desc.peer)
-
+        assert port_no['val'] == desc.port_no
+        assert hw_addr == desc.hw_addr
+        assert name == desc.name
+        assert config['val'] == desc.config
+        assert state['val'] == desc.state
+        assert curr['val'] == desc.curr
+        assert advertised['val'] == desc.advertised
+        assert supported['val'] == desc.supported
+        assert peer['val'] == desc.peer
     def test_serialize(self):
         # Not used.
         pass
@@ -3534,24 +3265,21 @@ class TestOFPPacketIn(unittest.TestCase):
                                  xid['val'],
                                  buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(buffer_id['val'], res.buffer_id)
-        eq_(total_len['val'], res.total_len)
-        eq_(in_port['val'], res.in_port)
-        eq_(reason['val'], res.reason)
-        eq_(data[0:16], res.data)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert buffer_id['val'] == res.buffer_id
+        assert total_len['val'] == res.total_len
+        assert in_port['val'] == res.in_port
+        assert reason['val'] == res.reason
+        assert data[0:16] == res.data
         return True
 
     def test_parser(self):
-        ok_(self._test_parser())
-
+        assert self._test_parser()
     def test_parser_padding(self):
-        ok_(self._test_parser(True))
-
+        assert self._test_parser(True)
     def test_serialize(self):
         # Not used.
         pass
@@ -3602,13 +3330,12 @@ class TestOFPGetConfigReply(unittest.TestCase):
                                        xid['val'],
                                        buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(flags['val'], res.flags)
-        eq_(miss_send_len['val'], res.miss_send_len)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert flags['val'] == res.flags
+        assert miss_send_len['val'] == res.miss_send_len
     def test_serialize(self):
         # Not used.
         pass
@@ -3652,11 +3379,10 @@ class TestOFPBarrierReply(unittest.TestCase):
                                      xid['val'],
                                      buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
     def test_serialize(self):
         # Not used.
         pass
@@ -3765,35 +3491,33 @@ class TestOFPFlowRemoved(unittest.TestCase):
                                     xid['val'],
                                     buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(cookie['val'], res.cookie)
-        eq_(priority['val'], res.priority)
-        eq_(reason['val'], res.reason)
-        eq_(duration_sec['val'], res.duration_sec)
-        eq_(duration_nsec['val'], res.duration_nsec)
-        eq_(idle_timeout['val'], res.idle_timeout)
-        eq_(packet_count['val'], res.packet_count)
-        eq_(byte_count['val'], res.byte_count)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert cookie['val'] == res.cookie
+        assert priority['val'] == res.priority
+        assert reason['val'] == res.reason
+        assert duration_sec['val'] == res.duration_sec
+        assert duration_nsec['val'] == res.duration_nsec
+        assert idle_timeout['val'] == res.idle_timeout
+        assert packet_count['val'] == res.packet_count
+        assert byte_count['val'] == res.byte_count
         # match
         match = res.match
-        eq_(wildcards['val'], match.wildcards)
-        eq_(in_port['val'], match.in_port)
-        eq_(dl_src, match.dl_src)
-        eq_(dl_dst, match.dl_dst)
-        eq_(dl_vlan['val'], match.dl_vlan)
-        eq_(dl_vlan_pcp['val'], match.dl_vlan_pcp)
-        eq_(dl_type['val'], match.dl_type)
-        eq_(nw_tos['val'], match.nw_tos)
-        eq_(nw_proto['val'], match.nw_proto)
-        eq_(nw_src['val'], match.nw_src)
-        eq_(nw_dst['val'], match.nw_dst)
-        eq_(tp_src['val'], match.tp_src)
-        eq_(tp_dst['val'], match.tp_dst)
-
+        assert wildcards['val'] == match.wildcards
+        assert in_port['val'] == match.in_port
+        assert dl_src == match.dl_src
+        assert dl_dst == match.dl_dst
+        assert dl_vlan['val'] == match.dl_vlan
+        assert dl_vlan_pcp['val'] == match.dl_vlan_pcp
+        assert dl_type['val'] == match.dl_type
+        assert nw_tos['val'] == match.nw_tos
+        assert nw_proto['val'] == match.nw_proto
+        assert nw_src['val'] == match.nw_src
+        assert nw_dst['val'] == match.nw_dst
+        assert tp_src['val'] == match.tp_src
+        assert tp_dst['val'] == match.tp_dst
     def test_serialize(self):
         # Not used.
         pass
@@ -3858,17 +3582,15 @@ class TestOFPQueueGetConfigReply(unittest.TestCase):
                                             xid['val'],
                                             buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(port['val'], res.port)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert port['val'] == res.port
         # queue
         queue = res.queues[0]
-        eq_(queue_id['val'], queue.queue_id)
-        eq_(len_['val'], queue.len)
-
+        assert queue_id['val'] == queue.queue_id
+        assert len_['val'] == queue.len
     def test_serialize(self):
         # Not used.
         pass
@@ -3937,21 +3659,19 @@ class TestOFPDescStatsReply(unittest.TestCase):
                                        xid['val'],
                                        buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(type_['val'], res.type)
-        eq_(flags['val'], res.flags)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert type_['val'] == res.type
+        assert flags['val'] == res.flags
         # body
         body = res.body
-        eq_(mfr_desc, body.mfr_desc)
-        eq_(hw_desc, body.hw_desc)
-        eq_(sw_desc, body.sw_desc)
-        eq_(serial_num, body.serial_num)
-        eq_(dp_desc, body.dp_desc)
-
+        assert mfr_desc == body.mfr_desc
+        assert hw_desc == body.hw_desc
+        assert sw_desc == body.sw_desc
+        assert serial_num == body.serial_num
+        assert dp_desc == body.dp_desc
     def test_serialize(self):
         # Not used.
         pass
@@ -4075,33 +3795,30 @@ class TestOFPFlowStatsReply(unittest.TestCase):
                                        xid['val'],
                                        buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(type_['val'], res.type)
-        eq_(flags['val'], res.flags)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert type_['val'] == res.type
+        assert flags['val'] == res.flags
         # body
         body = res.body[0]
-        eq_(length['val'], body.length)
-        eq_(table_id['val'], body.table_id)
-        eq_(duration_sec['val'], body.duration_sec)
-        eq_(duration_nsec['val'], body.duration_nsec)
-        eq_(priority['val'], body.priority)
-        eq_(idle_timeout['val'], body.idle_timeout)
-        eq_(hard_timeout['val'], body.hard_timeout)
-        eq_(cookie['val'], body.cookie)
-        eq_(packet_count['val'], body.packet_count)
-        eq_(byte_count['val'], body.byte_count)
-
+        assert length['val'] == body.length
+        assert table_id['val'] == body.table_id
+        assert duration_sec['val'] == body.duration_sec
+        assert duration_nsec['val'] == body.duration_nsec
+        assert priority['val'] == body.priority
+        assert idle_timeout['val'] == body.idle_timeout
+        assert hard_timeout['val'] == body.hard_timeout
+        assert cookie['val'] == body.cookie
+        assert packet_count['val'] == body.packet_count
+        assert byte_count['val'] == body.byte_count
         # action
         action = body.actions[0]
-        eq_(type['val'], action.type)
-        eq_(len['val'], action.len)
-        eq_(port['val'], action.port)
-        eq_(max_len['val'], action.max_len)
-
+        assert type['val'] == action.type
+        assert len['val'] == action.len
+        assert port['val'] == action.port
+        assert max_len['val'] == action.max_len
     def test_serialize(self):
         # Not used.
         pass
@@ -4169,19 +3886,17 @@ class TestOFPAggregateStatsReply(unittest.TestCase):
                                             xid['val'],
                                             buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(type_['val'], res.type)
-        eq_(flags['val'], res.flags)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert type_['val'] == res.type
+        assert flags['val'] == res.flags
         # body
         body = res.body[0]
-        eq_(packet_count['val'], body.packet_count)
-        eq_(byte_count['val'], body.byte_count)
-        eq_(flow_count['val'], body.flow_count)
-
+        assert packet_count['val'] == body.packet_count
+        assert byte_count['val'] == body.byte_count
+        assert flow_count['val'] == body.flow_count
     def test_serialize(self):
         # Not used.
         pass
@@ -4258,23 +3973,21 @@ class TestOFPTableStatsReply(unittest.TestCase):
                                         xid['val'],
                                         buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(type_['val'], res.type)
-        eq_(flags['val'], res.flags)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert type_['val'] == res.type
+        assert flags['val'] == res.flags
         # body
         body = res.body[0]
-        eq_(table_id['val'], body.table_id)
-        eq_(name, body.name)
-        eq_(wildcards['val'], body.wildcards)
-        eq_(max_entries['val'], body.max_entries)
-        eq_(active_count['val'], body.active_count)
-        eq_(lookup_count['val'], body.lookup_count)
-        eq_(matched_count['val'], body.matched_count)
-
+        assert table_id['val'] == body.table_id
+        assert name == body.name
+        assert wildcards['val'] == body.wildcards
+        assert max_entries['val'] == body.max_entries
+        assert active_count['val'] == body.active_count
+        assert lookup_count['val'] == body.lookup_count
+        assert matched_count['val'] == body.matched_count
     def test_serialize(self):
         # Not used.
         pass
@@ -4375,29 +4088,27 @@ class TestOFPPortStatsReply(unittest.TestCase):
                                        xid['val'],
                                        buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(type_['val'], res.type)
-        eq_(flags['val'], res.flags)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert type_['val'] == res.type
+        assert flags['val'] == res.flags
         # body
         body = res.body[0]
-        eq_(port_no['val'], body.port_no)
-        eq_(rx_packets['val'], body.rx_packets)
-        eq_(tx_packets['val'], body.tx_packets)
-        eq_(rx_bytes['val'], body.rx_bytes)
-        eq_(tx_bytes['val'], body.tx_bytes)
-        eq_(rx_dropped['val'], body.rx_dropped)
-        eq_(tx_dropped['val'], body.tx_dropped)
-        eq_(rx_errors['val'], body.rx_errors)
-        eq_(tx_errors['val'], body.tx_errors)
-        eq_(rx_frame_err['val'], body.rx_frame_err)
-        eq_(rx_over_err['val'], body.rx_over_err)
-        eq_(rx_crc_err['val'], body.rx_crc_err)
-        eq_(collisions['val'], body.collisions)
-
+        assert port_no['val'] == body.port_no
+        assert rx_packets['val'] == body.rx_packets
+        assert tx_packets['val'] == body.tx_packets
+        assert rx_bytes['val'] == body.rx_bytes
+        assert tx_bytes['val'] == body.tx_bytes
+        assert rx_dropped['val'] == body.rx_dropped
+        assert tx_dropped['val'] == body.tx_dropped
+        assert rx_errors['val'] == body.rx_errors
+        assert tx_errors['val'] == body.tx_errors
+        assert rx_frame_err['val'] == body.rx_frame_err
+        assert rx_over_err['val'] == body.rx_over_err
+        assert rx_crc_err['val'] == body.rx_crc_err
+        assert collisions['val'] == body.collisions
     def test_serialize(self):
         # Not used.
         pass
@@ -4470,21 +4181,19 @@ class TestOFPQueueStatsReply(unittest.TestCase):
                                         xid['val'],
                                         buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(type_['val'], res.type)
-        eq_(flags['val'], res.flags)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert type_['val'] == res.type
+        assert flags['val'] == res.flags
         # body
         body = res.body[0]
-        eq_(port_no['val'], body.port_no)
-        eq_(queue_id['val'], body.queue_id)
-        eq_(tx_bytes['val'], body.tx_bytes)
-        eq_(tx_packets['val'], body.tx_packets)
-        eq_(tx_errors['val'], body.tx_errors)
-
+        assert port_no['val'] == body.port_no
+        assert queue_id['val'] == body.queue_id
+        assert tx_bytes['val'] == body.tx_bytes
+        assert tx_packets['val'] == body.tx_packets
+        assert tx_errors['val'] == body.tx_errors
     def test_serialize(self):
         # Not used.
         pass
@@ -4542,17 +4251,15 @@ class TestOFPVendorStatsReply(unittest.TestCase):
                                          xid['val'],
                                          buf)
 
-        eq_(version['val'], res.version)
-        eq_(msg_type['val'], res.msg_type)
-        eq_(msg_len['val'], res.msg_len)
-        eq_(xid['val'], res.xid)
-        eq_(type_['val'], res.type)
-        eq_(flags['val'], res.flags)
-
+        assert version['val'] == res.version
+        assert msg_type['val'] == res.msg_type
+        assert msg_len['val'] == res.msg_len
+        assert xid['val'] == res.xid
+        assert type_['val'] == res.type
+        assert flags['val'] == res.flags
         # body
         body = res.body[0]
-        eq_(specific_data, body)
-
+        assert specific_data == body
     def test_serialize(self):
         # Not used.
         pass
@@ -4584,19 +4291,16 @@ class TestOFPFeaturesRequest(unittest.TestCase):
     def test_serialize(self):
         self.c.serialize()
 
-        eq_(ofproto.OFP_VERSION, self.c.version)
-        eq_(ofproto.OFPT_FEATURES_REQUEST, self.c.msg_type)
-        eq_(0, self.c.xid)
-
+        assert ofproto.OFP_VERSION == self.c.version
+        assert ofproto.OFPT_FEATURES_REQUEST == self.c.msg_type
+        assert 0 == self.c.xid
         fmt = ofproto.OFP_HEADER_PACK_STR
 
         res = struct.unpack(fmt, six.binary_type(self.c.buf))
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_FEATURES_REQUEST, res[1])
-        eq_(len(self.c.buf), res[2])
-        eq_(0, res[3])
-
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_FEATURES_REQUEST == res[1]
+        assert len(self.c.buf) == res[2]
+        assert 0 == res[3]
 class TestOFPGetConfigRequest(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPGetConfigRequest
     """
@@ -4623,19 +4327,16 @@ class TestOFPGetConfigRequest(unittest.TestCase):
     def test_serialize(self):
         self.c.serialize()
 
-        eq_(ofproto.OFP_VERSION, self.c.version)
-        eq_(ofproto.OFPT_GET_CONFIG_REQUEST, self.c.msg_type)
-        eq_(0, self.c.xid)
-
+        assert ofproto.OFP_VERSION == self.c.version
+        assert ofproto.OFPT_GET_CONFIG_REQUEST == self.c.msg_type
+        assert 0 == self.c.xid
         fmt = ofproto.OFP_HEADER_PACK_STR
 
         res = struct.unpack(fmt, six.binary_type(self.c.buf))
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_GET_CONFIG_REQUEST, res[1])
-        eq_(len(self.c.buf), res[2])
-        eq_(0, res[3])
-
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_GET_CONFIG_REQUEST == res[1]
+        assert len(self.c.buf) == res[2]
+        assert 0 == res[3]
 class TestOFPSetConfig(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPSetConfig
     """
@@ -4660,9 +4361,8 @@ class TestOFPSetConfig(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.flags['val'], self.c.flags)
-        eq_(self.miss_send_len['val'], self.c.miss_send_len)
-
+        assert self.flags['val'] == self.c.flags
+        assert self.miss_send_len['val'] == self.c.miss_send_len
     def test_parser(self):
         # Not used.
         pass
@@ -4670,23 +4370,20 @@ class TestOFPSetConfig(unittest.TestCase):
     def test_serialize(self):
         self.c.serialize()
 
-        eq_(ofproto.OFP_VERSION, self.c.version)
-        eq_(ofproto.OFPT_SET_CONFIG, self.c.msg_type)
-        eq_(0, self.c.xid)
-
+        assert ofproto.OFP_VERSION == self.c.version
+        assert ofproto.OFPT_SET_CONFIG == self.c.msg_type
+        assert 0 == self.c.xid
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.OFP_SWITCH_CONFIG_PACK_STR.replace('!', '')
 
         res = struct.unpack(fmt, six.binary_type(self.c.buf))
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_SET_CONFIG, res[1])
-        eq_(len(self.c.buf), res[2])
-        eq_(0, res[3])
-        eq_(self.flags['val'], res[4])
-        eq_(self.miss_send_len['val'], res[5])
-
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_SET_CONFIG == res[1]
+        assert len(self.c.buf) == res[2]
+        assert 0 == res[3]
+        assert self.flags['val'] == res[4]
+        assert self.miss_send_len['val'] == res[5]
 class TestOFPPacketOut(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPPacketOut
     """
@@ -4719,10 +4416,9 @@ class TestOFPPacketOut(unittest.TestCase):
 
         c = self._get_obj(buffer_id, in_port, data)
 
-        eq_(buffer_id, c.buffer_id)
-        eq_(in_port, c.in_port)
-        eq_(data, c.data)
-
+        assert buffer_id == c.buffer_id
+        assert in_port == c.in_port
+        assert data == c.data
     def test_parser(self):
         # Not used.
         pass
@@ -4735,10 +4431,9 @@ class TestOFPPacketOut(unittest.TestCase):
         c = self._get_obj(buffer_id, in_port, data)
         c.serialize()
 
-        eq_(ofproto.OFP_VERSION, c.version)
-        eq_(ofproto.OFPT_PACKET_OUT, c.msg_type)
-        eq_(0, c.xid)
-
+        assert ofproto.OFP_VERSION == c.version
+        assert ofproto.OFPT_PACKET_OUT == c.msg_type
+        assert 0 == c.xid
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.OFP_PACKET_OUT_PACK_STR.replace('!', '') \
@@ -4748,33 +4443,28 @@ class TestOFPPacketOut(unittest.TestCase):
         res = struct.unpack(fmt, six.binary_type(c.buf))
 
         # OFP_HEADER_PACK_STR
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_PACKET_OUT, res[1])
-        eq_(len(c.buf), res[2])
-        eq_(0, res[3])
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_PACKET_OUT == res[1]
+        assert len(c.buf) == res[2]
+        assert 0 == res[3]
         # OFP_PACKET_OUT_PACK_STR
-        eq_(buffer_id, res[4])
-        eq_(in_port, res[5])
-        eq_(ofproto.OFP_ACTION_OUTPUT_SIZE, res[6])
-
+        assert buffer_id == res[4]
+        assert in_port == res[5]
+        assert ofproto.OFP_ACTION_OUTPUT_SIZE == res[6]
         # OFP_ACTION_OUTPUT_PACK_STR
-        eq_(ofproto.OFPAT_OUTPUT, res[7])
-        eq_(ofproto.OFP_ACTION_OUTPUT_SIZE, res[8])
-        eq_(self.port, res[9])
-        eq_(0, res[10])
-
+        assert ofproto.OFPAT_OUTPUT == res[7]
+        assert ofproto.OFP_ACTION_OUTPUT_SIZE == res[8]
+        assert self.port == res[9]
+        assert 0 == res[10]
         # data
-        eq_(data, res[11])
-
-    @raises(AssertionError)
+        assert data == res[11]
     def test_serialize_check_buffer_id(self):
-        buffer_id = 0xffffff00
-        in_port = 0xaa92
-        data = 'Message'
-
-        c = self._get_obj(buffer_id, in_port, data)
-        c.serialize()
+        with pytest.raises(AssertionError):
+            buffer_id = 0xffffff00
+            in_port = 0xaa92
+            data = 'Message'
+            c = self._get_obj(buffer_id, in_port, data)
+            c.serialize()
 
 
 class TestOFPFlowMod(unittest.TestCase):
@@ -4859,21 +4549,19 @@ class TestOFPFlowMod(unittest.TestCase):
     def test_init(self):
         c = self._get_obj()
 
-        eq_(self.cookie['val'], c.cookie)
-        eq_(self.command['val'], c.command)
-        eq_(self.idle_timeout['val'], c.idle_timeout)
-        eq_(self.hard_timeout['val'], c.hard_timeout)
-        eq_(self.priority['val'], c.priority)
-        eq_(self.buffer_id['val'], c.buffer_id)
-        eq_(self.out_port['val'], c.out_port)
-        eq_(self.flags['val'], c.flags)
-
+        assert self.cookie['val'] == c.cookie
+        assert self.command['val'] == c.command
+        assert self.idle_timeout['val'] == c.idle_timeout
+        assert self.hard_timeout['val'] == c.hard_timeout
+        assert self.priority['val'] == c.priority
+        assert self.buffer_id['val'] == c.buffer_id
+        assert self.out_port['val'] == c.out_port
+        assert self.flags['val'] == c.flags
     def test_init_actions(self):
         c = self._get_obj(self.actions)
         action = c.actions[0]
 
-        eq_(self.port, action.port)
-
+        assert self.port == action.port
     def test_parser(self):
         # Not used.
         pass
@@ -4882,10 +4570,9 @@ class TestOFPFlowMod(unittest.TestCase):
         c = self._get_obj(self.actions)
         c.serialize()
 
-        eq_(ofproto.OFP_VERSION, c.version)
-        eq_(ofproto.OFPT_FLOW_MOD, c.msg_type)
-        eq_(0, c.xid)
-
+        assert ofproto.OFP_VERSION == c.version
+        assert ofproto.OFPT_FLOW_MOD == c.msg_type
+        assert 0 == c.xid
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.OFP_MATCH_PACK_STR.replace('!', '') \
@@ -4895,43 +4582,38 @@ class TestOFPFlowMod(unittest.TestCase):
         res = struct.unpack(fmt, six.binary_type(c.buf))
 
         # OFP_HEADER_PACK_STR
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_FLOW_MOD, res[1])
-        eq_(len(c.buf), res[2])
-        eq_(0, res[3])
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_FLOW_MOD == res[1]
+        assert len(c.buf) == res[2]
+        assert 0 == res[3]
         # OFP_MATCH_PACK_STR
-        eq_(self.wildcards['val'], res[4])
-        eq_(self.in_port['val'], res[5])
-        eq_(self.dl_src, res[6])
-        eq_(self.dl_dst, res[7])
-        eq_(self.dl_vlan['val'], res[8])
-        eq_(self.dl_vlan_pcp['val'], res[9])
-        eq_(self.dl_type['val'], res[10])
-        eq_(self.nw_tos['val'], res[11])
-        eq_(self.nw_proto['val'], res[12])
-        eq_(self.nw_src['val'], res[13])
-        eq_(self.nw_dst['val'], res[14])
-        eq_(self.tp_src['val'], res[15])
-        eq_(self.tp_dst['val'], res[16])
-
+        assert self.wildcards['val'] == res[4]
+        assert self.in_port['val'] == res[5]
+        assert self.dl_src == res[6]
+        assert self.dl_dst == res[7]
+        assert self.dl_vlan['val'] == res[8]
+        assert self.dl_vlan_pcp['val'] == res[9]
+        assert self.dl_type['val'] == res[10]
+        assert self.nw_tos['val'] == res[11]
+        assert self.nw_proto['val'] == res[12]
+        assert self.nw_src['val'] == res[13]
+        assert self.nw_dst['val'] == res[14]
+        assert self.tp_src['val'] == res[15]
+        assert self.tp_dst['val'] == res[16]
         # OFP_FLOW_MOD_PACK_STR0
-        eq_(self.cookie['val'], res[17])
-        eq_(self.command['val'], res[18])
-        eq_(self.idle_timeout['val'], res[19])
-        eq_(self.hard_timeout['val'], res[20])
-        eq_(self.priority['val'], res[21])
-        eq_(self.buffer_id['val'], res[22])
-        eq_(self.out_port['val'], res[23])
-        eq_(self.flags['val'], res[24])
-
+        assert self.cookie['val'] == res[17]
+        assert self.command['val'] == res[18]
+        assert self.idle_timeout['val'] == res[19]
+        assert self.hard_timeout['val'] == res[20]
+        assert self.priority['val'] == res[21]
+        assert self.buffer_id['val'] == res[22]
+        assert self.out_port['val'] == res[23]
+        assert self.flags['val'] == res[24]
         # OFP_ACTION_OUTPUT_PACK_STR
-        eq_(ofproto.OFPAT_OUTPUT, res[25])
-        eq_(ofproto.OFP_ACTION_OUTPUT_SIZE, res[26])
-        eq_(self.port, res[27])
-        eq_(1000, res[28])
-
-
+        assert ofproto.OFPAT_OUTPUT == res[25]
+        assert ofproto.OFP_ACTION_OUTPUT_SIZE == res[26]
+        assert self.port == res[27]
+        assert 1000 == res[28]
 class TestOFPBarrierRequest(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPBarrierRequest
     """
@@ -4958,19 +4640,16 @@ class TestOFPBarrierRequest(unittest.TestCase):
     def test_serialize(self):
         self.c.serialize()
 
-        eq_(ofproto.OFP_VERSION, self.c.version)
-        eq_(ofproto.OFPT_BARRIER_REQUEST, self.c.msg_type)
-        eq_(0, self.c.xid)
-
+        assert ofproto.OFP_VERSION == self.c.version
+        assert ofproto.OFPT_BARRIER_REQUEST == self.c.msg_type
+        assert 0 == self.c.xid
         fmt = ofproto.OFP_HEADER_PACK_STR
 
         res = struct.unpack(fmt, six.binary_type(self.c.buf))
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_BARRIER_REQUEST, res[1])
-        eq_(len(self.c.buf), res[2])
-        eq_(0, res[3])
-
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_BARRIER_REQUEST == res[1]
+        assert len(self.c.buf) == res[2]
+        assert 0 == res[3]
 class TestOFPQueueGetConfigRequest(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPQueueGetConfigRequest
     """
@@ -4994,8 +4673,7 @@ class TestOFPQueueGetConfigRequest(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.port['val'], self.c.port)
-
+        assert self.port['val'] == self.c.port
     def test_parser(self):
         # Not used.
         pass
@@ -5003,22 +4681,19 @@ class TestOFPQueueGetConfigRequest(unittest.TestCase):
     def test_serialize(self):
         self.c.serialize()
 
-        eq_(ofproto.OFP_VERSION, self.c.version)
-        eq_(ofproto.OFPT_QUEUE_GET_CONFIG_REQUEST, self.c.msg_type)
-        eq_(0, self.c.xid)
-
+        assert ofproto.OFP_VERSION == self.c.version
+        assert ofproto.OFPT_QUEUE_GET_CONFIG_REQUEST == self.c.msg_type
+        assert 0 == self.c.xid
         a = ofproto.OFP_HEADER_PACK_STR.replace('!', '')
         b = ofproto.OFP_QUEUE_GET_CONFIG_REQUEST_PACK_STR.replace('!', '')
         fmt = '!' + a + b
 
         res = struct.unpack(fmt, six.binary_type(self.c.buf))
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_QUEUE_GET_CONFIG_REQUEST, res[1])
-        eq_(len(self.c.buf), res[2])
-        eq_(0, res[3])
-        eq_(self.port['val'], res[4])
-
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_QUEUE_GET_CONFIG_REQUEST == res[1]
+        assert len(self.c.buf) == res[2]
+        assert 0 == res[3]
+        assert self.port['val'] == res[4]
 class TestOFPDescStatsRequest(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPDescStatsRequest
     """
@@ -5038,9 +4713,8 @@ class TestOFPDescStatsRequest(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(ofproto.OFPST_DESC, self.c.type)
-        eq_(self.flags['val'], self.c.flags)
-
+        assert ofproto.OFPST_DESC == self.c.type
+        assert self.flags['val'] == self.c.flags
     def test_parser(self):
         # Not used.
         pass
@@ -5048,10 +4722,9 @@ class TestOFPDescStatsRequest(unittest.TestCase):
     def test_serialize(self):
         self.c.serialize()
 
-        eq_(ofproto.OFP_VERSION, self.c.version)
-        eq_(ofproto.OFPT_STATS_REQUEST, self.c.msg_type)
-        eq_(0, self.c.xid)
-
+        assert ofproto.OFP_VERSION == self.c.version
+        assert ofproto.OFPT_STATS_REQUEST == self.c.msg_type
+        assert 0 == self.c.xid
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.OFP_STATS_MSG_PACK_STR.replace('!', '')
@@ -5059,16 +4732,13 @@ class TestOFPDescStatsRequest(unittest.TestCase):
         res = struct.unpack(fmt, six.binary_type(self.c.buf))
 
         # OFP_HEADER_PACK_STR
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_STATS_REQUEST, res[1])
-        eq_(len(self.c.buf), res[2])
-        eq_(0, res[3])
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_STATS_REQUEST == res[1]
+        assert len(self.c.buf) == res[2]
+        assert 0 == res[3]
         # OFP_STATS_MSG_PACK_STR
-        eq_(ofproto.OFPST_DESC, res[4])
-        eq_(self.flags['val'], res[5])
-
-
+        assert ofproto.OFPST_DESC == res[4]
+        assert self.flags['val'] == res[5]
 class TestOFPFlowStatsRequest(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPFlowStatsRequest
     """
@@ -5132,15 +4802,13 @@ class TestOFPFlowStatsRequest(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(ofproto.OFPST_FLOW, self.c.type)
-        eq_(self.flags['val'], self.c.flags)
-        eq_(self.table_id['val'], self.c.table_id)
-        eq_(self.out_port['val'], self.c.out_port)
-
+        assert ofproto.OFPST_FLOW == self.c.type
+        assert self.flags['val'] == self.c.flags
+        assert self.table_id['val'] == self.c.table_id
+        assert self.out_port['val'] == self.c.out_port
         # match
         match = self.c.match
-        eq_(self.match.__hash__(), match.__hash__())
-
+        assert self.match.__hash__() == match.__hash__()
     def test_parser(self):
         # Not used.
         pass
@@ -5148,10 +4816,9 @@ class TestOFPFlowStatsRequest(unittest.TestCase):
     def test_serialize(self):
         self.c.serialize()
 
-        eq_(ofproto.OFP_VERSION, self.c.version)
-        eq_(ofproto.OFPT_STATS_REQUEST, self.c.msg_type)
-        eq_(0, self.c.xid)
-
+        assert ofproto.OFP_VERSION == self.c.version
+        assert ofproto.OFPT_STATS_REQUEST == self.c.msg_type
+        assert 0 == self.c.xid
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.OFP_STATS_MSG_PACK_STR.replace('!', '') \
@@ -5161,35 +4828,30 @@ class TestOFPFlowStatsRequest(unittest.TestCase):
         res = struct.unpack(fmt, six.binary_type(self.c.buf))
 
         # OFP_HEADER_PACK_STR
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_STATS_REQUEST, res[1])
-        eq_(len(self.c.buf), res[2])
-        eq_(0, res[3])
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_STATS_REQUEST == res[1]
+        assert len(self.c.buf) == res[2]
+        assert 0 == res[3]
         # OFP_STATS_MSG_PACK_STR
-        eq_(ofproto.OFPST_FLOW, res[4])
-        eq_(self.flags['val'], res[5])
-
+        assert ofproto.OFPST_FLOW == res[4]
+        assert self.flags['val'] == res[5]
         # OFP_MATCH_PACK_STR
-        eq_(self.wildcards['val'], res[6])
-        eq_(self.in_port['val'], res[7])
-        eq_(self.dl_src, res[8])
-        eq_(self.dl_dst, res[9])
-        eq_(self.dl_vlan['val'], res[10])
-        eq_(self.dl_vlan_pcp['val'], res[11])
-        eq_(self.dl_type['val'], res[12])
-        eq_(self.nw_tos['val'], res[13])
-        eq_(self.nw_proto['val'], res[14])
-        eq_(self.nw_src['val'], res[15])
-        eq_(self.nw_dst['val'], res[16])
-        eq_(self.tp_src['val'], res[17])
-        eq_(self.tp_dst['val'], res[18])
-
+        assert self.wildcards['val'] == res[6]
+        assert self.in_port['val'] == res[7]
+        assert self.dl_src == res[8]
+        assert self.dl_dst == res[9]
+        assert self.dl_vlan['val'] == res[10]
+        assert self.dl_vlan_pcp['val'] == res[11]
+        assert self.dl_type['val'] == res[12]
+        assert self.nw_tos['val'] == res[13]
+        assert self.nw_proto['val'] == res[14]
+        assert self.nw_src['val'] == res[15]
+        assert self.nw_dst['val'] == res[16]
+        assert self.tp_src['val'] == res[17]
+        assert self.tp_dst['val'] == res[18]
         # OFP_FLOW_STATS_REQUEST_ID_PORT_STR
-        eq_(self.table_id['val'], res[19])
-        eq_(self.out_port['val'], res[20])
-
-
+        assert self.table_id['val'] == res[19]
+        assert self.out_port['val'] == res[20]
 class TestOFPAggregateStatsRequest(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPAggregateStatsRequest
     """
@@ -5253,15 +4915,13 @@ class TestOFPAggregateStatsRequest(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(ofproto.OFPST_AGGREGATE, self.c.type)
-        eq_(self.flags['val'], self.c.flags)
-        eq_(self.table_id['val'], self.c.table_id)
-        eq_(self.out_port['val'], self.c.out_port)
-
+        assert ofproto.OFPST_AGGREGATE == self.c.type
+        assert self.flags['val'] == self.c.flags
+        assert self.table_id['val'] == self.c.table_id
+        assert self.out_port['val'] == self.c.out_port
         # match
         match = self.c.match
-        eq_(self.match.__hash__(), match.__hash__())
-
+        assert self.match.__hash__() == match.__hash__()
     def test_parser(self):
         # Not used.
         pass
@@ -5269,10 +4929,9 @@ class TestOFPAggregateStatsRequest(unittest.TestCase):
     def test_serialize(self):
         self.c.serialize()
 
-        eq_(ofproto.OFP_VERSION, self.c.version)
-        eq_(ofproto.OFPT_STATS_REQUEST, self.c.msg_type)
-        eq_(0, self.c.xid)
-
+        assert ofproto.OFP_VERSION == self.c.version
+        assert ofproto.OFPT_STATS_REQUEST == self.c.msg_type
+        assert 0 == self.c.xid
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.OFP_STATS_MSG_PACK_STR.replace('!', '') \
@@ -5282,35 +4941,30 @@ class TestOFPAggregateStatsRequest(unittest.TestCase):
         res = struct.unpack(fmt, six.binary_type(self.c.buf))
 
         # OFP_HEADER_PACK_STR
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_STATS_REQUEST, res[1])
-        eq_(len(self.c.buf), res[2])
-        eq_(0, res[3])
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_STATS_REQUEST == res[1]
+        assert len(self.c.buf) == res[2]
+        assert 0 == res[3]
         # OFP_STATS_MSG_PACK_STR
-        eq_(ofproto.OFPST_AGGREGATE, res[4])
-        eq_(self.flags['val'], res[5])
-
+        assert ofproto.OFPST_AGGREGATE == res[4]
+        assert self.flags['val'] == res[5]
         # OFP_MATCH_PACK_STR
-        eq_(self.wildcards['val'], res[6])
-        eq_(self.in_port['val'], res[7])
-        eq_(self.dl_src, res[8])
-        eq_(self.dl_dst, res[9])
-        eq_(self.dl_vlan['val'], res[10])
-        eq_(self.dl_vlan_pcp['val'], res[11])
-        eq_(self.dl_type['val'], res[12])
-        eq_(self.nw_tos['val'], res[13])
-        eq_(self.nw_proto['val'], res[14])
-        eq_(self.nw_src['val'], res[15])
-        eq_(self.nw_dst['val'], res[16])
-        eq_(self.tp_src['val'], res[17])
-        eq_(self.tp_dst['val'], res[18])
-
+        assert self.wildcards['val'] == res[6]
+        assert self.in_port['val'] == res[7]
+        assert self.dl_src == res[8]
+        assert self.dl_dst == res[9]
+        assert self.dl_vlan['val'] == res[10]
+        assert self.dl_vlan_pcp['val'] == res[11]
+        assert self.dl_type['val'] == res[12]
+        assert self.nw_tos['val'] == res[13]
+        assert self.nw_proto['val'] == res[14]
+        assert self.nw_src['val'] == res[15]
+        assert self.nw_dst['val'] == res[16]
+        assert self.tp_src['val'] == res[17]
+        assert self.tp_dst['val'] == res[18]
         # OFP_FLOW_STATS_REQUEST_ID_PORT_STR
-        eq_(self.table_id['val'], res[19])
-        eq_(self.out_port['val'], res[20])
-
-
+        assert self.table_id['val'] == res[19]
+        assert self.out_port['val'] == res[20]
 class TestOFPTableStatsRequest(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPTableStatsRequest
     """
@@ -5330,9 +4984,8 @@ class TestOFPTableStatsRequest(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(ofproto.OFPST_TABLE, self.c.type)
-        eq_(self.flags['val'], self.c.flags)
-
+        assert ofproto.OFPST_TABLE == self.c.type
+        assert self.flags['val'] == self.c.flags
     def test_parser(self):
         # Not used.
         pass
@@ -5340,10 +4993,9 @@ class TestOFPTableStatsRequest(unittest.TestCase):
     def test_serialize(self):
         self.c.serialize()
 
-        eq_(ofproto.OFP_VERSION, self.c.version)
-        eq_(ofproto.OFPT_STATS_REQUEST, self.c.msg_type)
-        eq_(0, self.c.xid)
-
+        assert ofproto.OFP_VERSION == self.c.version
+        assert ofproto.OFPT_STATS_REQUEST == self.c.msg_type
+        assert 0 == self.c.xid
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.OFP_STATS_MSG_PACK_STR.replace('!', '')
@@ -5351,16 +5003,13 @@ class TestOFPTableStatsRequest(unittest.TestCase):
         res = struct.unpack(fmt, six.binary_type(self.c.buf))
 
         # OFP_HEADER_PACK_STR
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_STATS_REQUEST, res[1])
-        eq_(len(self.c.buf), res[2])
-        eq_(0, res[3])
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_STATS_REQUEST == res[1]
+        assert len(self.c.buf) == res[2]
+        assert 0 == res[3]
         # OFP_STATS_MSG_PACK_STR
-        eq_(ofproto.OFPST_TABLE, res[4])
-        eq_(self.flags['val'], res[5])
-
-
+        assert ofproto.OFPST_TABLE == res[4]
+        assert self.flags['val'] == res[5]
 class TestOFPPortStatsRequest(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPPortStatsRequest
     """
@@ -5386,10 +5035,9 @@ class TestOFPPortStatsRequest(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(ofproto.OFPST_PORT, self.c.type)
-        eq_(self.flags['val'], self.c.flags)
-        eq_(self.port_no['val'], self.c.port_no)
-
+        assert ofproto.OFPST_PORT == self.c.type
+        assert self.flags['val'] == self.c.flags
+        assert self.port_no['val'] == self.c.port_no
     def test_parser(self):
         # Not used.
         pass
@@ -5397,10 +5045,9 @@ class TestOFPPortStatsRequest(unittest.TestCase):
     def test_serialize(self):
         self.c.serialize()
 
-        eq_(ofproto.OFP_VERSION, self.c.version)
-        eq_(ofproto.OFPT_STATS_REQUEST, self.c.msg_type)
-        eq_(0, self.c.xid)
-
+        assert ofproto.OFP_VERSION == self.c.version
+        assert ofproto.OFPT_STATS_REQUEST == self.c.msg_type
+        assert 0 == self.c.xid
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.OFP_STATS_MSG_PACK_STR.replace('!', '') \
@@ -5409,19 +5056,15 @@ class TestOFPPortStatsRequest(unittest.TestCase):
         res = struct.unpack(fmt, six.binary_type(self.c.buf))
 
         # OFP_HEADER_PACK_STR
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_STATS_REQUEST, res[1])
-        eq_(len(self.c.buf), res[2])
-        eq_(0, res[3])
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_STATS_REQUEST == res[1]
+        assert len(self.c.buf) == res[2]
+        assert 0 == res[3]
         # OFP_STATS_MSG_PACK_STR
-        eq_(ofproto.OFPST_PORT, res[4])
-        eq_(self.flags['val'], res[5])
-
+        assert ofproto.OFPST_PORT == res[4]
+        assert self.flags['val'] == res[5]
         # OFP_PORT_STATS_REQUEST_PACK_STR
-        eq_(self.port_no['val'], res[6])
-
-
+        assert self.port_no['val'] == res[6]
 class TestOFPQueueStatsRequest(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPQueueStatsRequest
     """
@@ -5449,11 +5092,10 @@ class TestOFPQueueStatsRequest(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(ofproto.OFPST_QUEUE, self.c.type)
-        eq_(self.flags['val'], self.c.flags)
-        eq_(self.port_no['val'], self.c.port_no)
-        eq_(self.queue_id['val'], self.c.queue_id)
-
+        assert ofproto.OFPST_QUEUE == self.c.type
+        assert self.flags['val'] == self.c.flags
+        assert self.port_no['val'] == self.c.port_no
+        assert self.queue_id['val'] == self.c.queue_id
     def test_parser(self):
         # Not used.
         pass
@@ -5461,10 +5103,9 @@ class TestOFPQueueStatsRequest(unittest.TestCase):
     def test_serialize(self):
         self.c.serialize()
 
-        eq_(ofproto.OFP_VERSION, self.c.version)
-        eq_(ofproto.OFPT_STATS_REQUEST, self.c.msg_type)
-        eq_(0, self.c.xid)
-
+        assert ofproto.OFP_VERSION == self.c.version
+        assert ofproto.OFPT_STATS_REQUEST == self.c.msg_type
+        assert 0 == self.c.xid
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.OFP_STATS_MSG_PACK_STR.replace('!', '') \
@@ -5473,20 +5114,16 @@ class TestOFPQueueStatsRequest(unittest.TestCase):
         res = struct.unpack(fmt, six.binary_type(self.c.buf))
 
         # OFP_HEADER_PACK_STR
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_STATS_REQUEST, res[1])
-        eq_(len(self.c.buf), res[2])
-        eq_(0, res[3])
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_STATS_REQUEST == res[1]
+        assert len(self.c.buf) == res[2]
+        assert 0 == res[3]
         # OFP_STATS_MSG_PACK_STR
-        eq_(ofproto.OFPST_QUEUE, res[4])
-        eq_(self.flags['val'], res[5])
-
+        assert ofproto.OFPST_QUEUE == res[4]
+        assert self.flags['val'] == res[5]
         # OFP_QUEUE_STATS_REQUEST_PACK_STR
-        eq_(self.port_no['val'], res[6])
-        eq_(self.queue_id['val'], res[7])
-
-
+        assert self.port_no['val'] == res[6]
+        assert self.queue_id['val'] == res[7]
 class TestOFPVendorStatsRequest(unittest.TestCase):
     """ Test case for ofproto_v1_0_parser.OFPVendorStatsRequest
     """
@@ -5515,11 +5152,10 @@ class TestOFPVendorStatsRequest(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(ofproto.OFPST_VENDOR, self.c.type)
-        eq_(self.flags['val'], self.c.flags)
-        eq_(self.vendor['val'], self.c.vendor)
-        eq_(self.specific_data, self.c.specific_data)
-
+        assert ofproto.OFPST_VENDOR == self.c.type
+        assert self.flags['val'] == self.c.flags
+        assert self.vendor['val'] == self.c.vendor
+        assert self.specific_data == self.c.specific_data
     def test_parser(self):
         # Not used.
         pass
@@ -5527,10 +5163,9 @@ class TestOFPVendorStatsRequest(unittest.TestCase):
     def test_serialize(self):
         self.c.serialize()
 
-        eq_(ofproto.OFP_VERSION, self.c.version)
-        eq_(ofproto.OFPT_STATS_REQUEST, self.c.msg_type)
-        eq_(0, self.c.xid)
-
+        assert ofproto.OFP_VERSION == self.c.version
+        assert ofproto.OFPT_STATS_REQUEST == self.c.msg_type
+        assert 0 == self.c.xid
         fmt = '!' \
             + ofproto.OFP_HEADER_PACK_STR.replace('!', '') \
             + ofproto.OFP_STATS_MSG_PACK_STR.replace('!', '') \
@@ -5540,17 +5175,14 @@ class TestOFPVendorStatsRequest(unittest.TestCase):
         res = struct.unpack(fmt, six.binary_type(self.c.buf))
 
         # OFP_HEADER_PACK_STR
-        eq_(ofproto.OFP_VERSION, res[0])
-        eq_(ofproto.OFPT_STATS_REQUEST, res[1])
-        eq_(len(self.c.buf), res[2])
-        eq_(0, res[3])
-
+        assert ofproto.OFP_VERSION == res[0]
+        assert ofproto.OFPT_STATS_REQUEST == res[1]
+        assert len(self.c.buf) == res[2]
+        assert 0 == res[3]
         # OFP_STATS_MSG_PACK_STR
-        eq_(ofproto.OFPST_VENDOR, res[4])
-        eq_(self.flags['val'], res[5])
-
+        assert ofproto.OFPST_VENDOR == res[4]
+        assert self.flags['val'] == res[5]
         # OFP_VENDOR_STATS_MSG_PACK_STR
-        eq_(self.vendor['val'], res[6])
-
+        assert self.vendor['val'] == res[6]
         # specific_data
-        eq_(self.specific_data, res[7])
+        assert self.specific_data == res[7]

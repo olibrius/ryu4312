@@ -16,7 +16,7 @@
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 
 import unittest
-from nose.tools import *
+import pytest
 
 import binascii
 import inspect
@@ -420,45 +420,37 @@ class Test_tester(unittest.TestCase):
         self.tests[SAMPLE_DESC]._normalize_test_json(Test_tester.test_json_4)
 
         # action/00_OUTPUT.json
-        eq_(Test_tester.test_json_1["prerequisite"][0]["OFPFlowMod"][
+        assert Test_tester.test_json_1["prerequisite"][0]["OFPFlowMod"][
             "instructions"][0]["OFPInstructionActions"][
-            "actions"][0]["OFPActionOutput"]["port"],
-            CONF['test-switch']['target_send_port_1'])
+            "actions"][0]["OFPActionOutput"]["port"] == CONF['test-switch']['target_send_port_1']
 
         # group/00_ALL.json
-        eq_(Test_tester.test_json_2["prerequisite"][1]["OFPFlowMod"][
-            "match"]["OFPMatch"]["oxm_fields"][0]["OXMTlv"]["value"],
-            CONF['test-switch']['target_recv_port'])
-        eq_(Test_tester.test_json_2["prerequisite"][0]["OFPGroupMod"][
+        assert Test_tester.test_json_2["prerequisite"][1]["OFPFlowMod"][
+            "match"]["OFPMatch"]["oxm_fields"][0]["OXMTlv"]["value"] == CONF['test-switch']['target_recv_port']
+        assert Test_tester.test_json_2["prerequisite"][0]["OFPGroupMod"][
             "buckets"][0]["OFPBucket"]["actions"][0]["OFPActionOutput"][
-            "port"], CONF['test-switch']['target_send_port_1'])
-        eq_(Test_tester.test_json_2["prerequisite"][0]["OFPGroupMod"][
+            "port"] == CONF['test-switch']['target_send_port_1']
+        assert Test_tester.test_json_2["prerequisite"][0]["OFPGroupMod"][
             "buckets"][1]["OFPBucket"]["actions"][0]["OFPActionOutput"][
-            "port"], CONF['test-switch']['target_send_port_2'])
-        eq_(Test_tester.test_json_2["tests"][0]["egress"]["throughput"][
-            0]["OFPMatch"]["oxm_fields"][0]["OXMTlv"]["value"],
-            CONF['test-switch']['tester_recv_port_1'])
-        eq_(Test_tester.test_json_2["tests"][0]["egress"]["throughput"][
-            1]["OFPMatch"]["oxm_fields"][0]["OXMTlv"]["value"],
-            CONF['test-switch']['tester_recv_port_2'])
+            "port"] == CONF['test-switch']['target_send_port_2']
+        assert Test_tester.test_json_2["tests"][0]["egress"]["throughput"][
+            0]["OFPMatch"]["oxm_fields"][0]["OXMTlv"]["value"] == CONF['test-switch']['tester_recv_port_1']
+        assert Test_tester.test_json_2["tests"][0]["egress"]["throughput"][
+            1]["OFPMatch"]["oxm_fields"][0]["OXMTlv"]["value"] == CONF['test-switch']['tester_recv_port_2']
 
         # match/00_IN_PORT.json
-        eq_(Test_tester.test_json_3["prerequisite"][0]["OFPFlowMod"][
-            "match"]["OFPMatch"]["oxm_fields"][0]["OXMTlv"]["value"],
-            CONF['test-switch']['target_recv_port'])
-        eq_(Test_tester.test_json_3["prerequisite"][0]["OFPFlowMod"][
+        assert Test_tester.test_json_3["prerequisite"][0]["OFPFlowMod"][
+            "match"]["OFPMatch"]["oxm_fields"][0]["OXMTlv"]["value"] == CONF['test-switch']['target_recv_port']
+        assert Test_tester.test_json_3["prerequisite"][0]["OFPFlowMod"][
             "instructions"][0]["OFPInstructionActions"]["actions"][0][
-            "OFPActionOutput"]["port"], CONF['test-switch'][
-            'target_send_port_1'])
+            "OFPActionOutput"]["port"] == CONF['test-switch'][
+            'target_send_port_1']
 
         # meter/01_DROP_00_KBPS_00_1M.json
-        eq_(Test_tester.test_json_4["prerequisite"][1]["OFPFlowMod"][
-            "match"]["OFPMatch"]["oxm_fields"][0]["OXMTlv"]["value"],
-            CONF['test-switch']['target_recv_port'])
-        eq_(Test_tester.test_json_4["prerequisite"][1]["OFPFlowMod"][
+        assert Test_tester.test_json_4["prerequisite"][1]["OFPFlowMod"][
+            "match"]["OFPMatch"]["oxm_fields"][0]["OXMTlv"]["value"] == CONF['test-switch']['target_recv_port']
+        assert Test_tester.test_json_4["prerequisite"][1]["OFPFlowMod"][
             "instructions"][1]["OFPInstructionActions"]["actions"][0][
-            "OFPActionOutput"]["port"],
-            CONF['test-switch']['target_send_port_1'])
-        eq_(Test_tester.test_json_4["tests"][0]["egress"]["throughput"][
-            0]["OFPMatch"]["oxm_fields"][0]["OXMTlv"]["value"],
-            CONF['test-switch']['tester_recv_port_1'])
+            "OFPActionOutput"]["port"] == CONF['test-switch']['target_send_port_1']
+        assert Test_tester.test_json_4["tests"][0]["egress"]["throughput"][
+            0]["OFPMatch"]["oxm_fields"][0]["OXMTlv"]["value"] == CONF['test-switch']['tester_recv_port_1']

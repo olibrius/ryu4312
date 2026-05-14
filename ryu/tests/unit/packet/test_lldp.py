@@ -20,7 +20,7 @@ import logging
 import six
 import struct
 import inspect
-from nose.tools import ok_, eq_, nottest
+import pytest
 
 from ryu.ofproto import ether
 from ryu.lib.packet import packet
@@ -48,42 +48,42 @@ class TestLLDPMandatoryTLV(unittest.TestCase):
 
     def test_get_tlv_type(self):
         buf = b'\x02\x07\x04\x00\x04\x96\x1f\xa7\x26'
-        eq_(lldp.LLDPBasicTLV.get_type(buf), lldp.LLDP_TLV_CHASSIS_ID)
+        assert lldp.LLDPBasicTLV.get_type(buf) == lldp.LLDP_TLV_CHASSIS_ID
 
     def test_parse_without_ethernet(self):
         buf = self.data[ethernet.ethernet._MIN_LEN:]
         (lldp_pkt, cls, rest_buf) = lldp.lldp.parser(buf)
-        eq_(len(rest_buf), 0)
+        assert len(rest_buf) == 0
 
         tlvs = lldp_pkt.tlvs
-        eq_(tlvs[0].tlv_type, lldp.LLDP_TLV_CHASSIS_ID)
-        eq_(tlvs[0].len, 7)
-        eq_(tlvs[0].subtype, lldp.ChassisID.SUB_MAC_ADDRESS)
-        eq_(tlvs[0].chassis_id, b'\x00\x04\x96\x1f\xa7\x26')
-        eq_(tlvs[1].tlv_type, lldp.LLDP_TLV_PORT_ID)
-        eq_(tlvs[1].len, 4)
-        eq_(tlvs[1].subtype, lldp.PortID.SUB_INTERFACE_NAME)
-        eq_(tlvs[1].port_id, b'1/3')
-        eq_(tlvs[2].tlv_type, lldp.LLDP_TLV_TTL)
-        eq_(tlvs[2].len, 2)
-        eq_(tlvs[2].ttl, 120)
-        eq_(tlvs[3].tlv_type, lldp.LLDP_TLV_END)
+        assert tlvs[0].tlv_type == lldp.LLDP_TLV_CHASSIS_ID
+        assert tlvs[0].len == 7
+        assert tlvs[0].subtype == lldp.ChassisID.SUB_MAC_ADDRESS
+        assert tlvs[0].chassis_id == b'\x00\x04\x96\x1f\xa7\x26'
+        assert tlvs[1].tlv_type == lldp.LLDP_TLV_PORT_ID
+        assert tlvs[1].len == 4
+        assert tlvs[1].subtype == lldp.PortID.SUB_INTERFACE_NAME
+        assert tlvs[1].port_id == b'1/3'
+        assert tlvs[2].tlv_type == lldp.LLDP_TLV_TTL
+        assert tlvs[2].len == 2
+        assert tlvs[2].ttl == 120
+        assert tlvs[3].tlv_type == lldp.LLDP_TLV_END
 
     def test_parse(self):
         buf = self.data
         pkt = packet.Packet(buf)
         i = iter(pkt)
 
-        eq_(type(next(i)), ethernet.ethernet)
-        eq_(type(next(i)), lldp.lldp)
+        assert type(next(i)) == ethernet.ethernet
+        assert type(next(i)) == lldp.lldp
 
     def test_tlv(self):
         tlv = lldp.ChassisID(subtype=lldp.ChassisID.SUB_MAC_ADDRESS,
                              chassis_id=b'\x00\x04\x96\x1f\xa7\x26')
-        eq_(tlv.tlv_type, lldp.LLDP_TLV_CHASSIS_ID)
-        eq_(tlv.len, 7)
+        assert tlv.tlv_type == lldp.LLDP_TLV_CHASSIS_ID
+        assert tlv.len == 7
         (typelen, ) = struct.unpack('!H', b'\x02\x07')
-        eq_(tlv.typelen, typelen)
+        assert tlv.typelen == typelen
 
     def test_serialize_without_ethernet(self):
         tlv_chassis_id = lldp.ChassisID(subtype=lldp.ChassisID.SUB_MAC_ADDRESS,
@@ -95,8 +95,7 @@ class TestLLDPMandatoryTLV(unittest.TestCase):
         tlvs = (tlv_chassis_id, tlv_port_id, tlv_ttl, tlv_end)
         lldp_pkt = lldp.lldp(tlvs)
 
-        eq_(lldp_pkt.serialize(None, None),
-            self.data[ethernet.ethernet._MIN_LEN:])
+        assert lldp_pkt.serialize(None, None) == self.data[ethernet.ethernet._MIN_LEN:]
 
     def test_serialize(self):
         pkt = packet.Packet()
@@ -118,7 +117,7 @@ class TestLLDPMandatoryTLV(unittest.TestCase):
         lldp_pkt = lldp.lldp(tlvs)
         pkt.add_protocol(lldp_pkt)
 
-        eq_(len(pkt.protocols), 2)
+        assert len(pkt.protocols) == 2
 
         pkt.serialize()
 
@@ -128,9 +127,9 @@ class TestLLDPMandatoryTLV(unittest.TestCase):
         data_len = len(self.data)
         pkt_data_lldp = pkt.data[:data_len]
         pkt_data_pad = pkt.data[data_len:]
-        eq_(b'\x00' * (60 - data_len), pkt_data_pad)
+        assert b'\x00' * (60 - data_len) == pkt_data_pad
 
-        eq_(self.data, pkt_data_lldp)
+        assert self.data == pkt_data_lldp
 
     def test_to_string(self):
         chassis_id = lldp.ChassisID(subtype=lldp.ChassisID.SUB_MAC_ADDRESS,
@@ -185,8 +184,8 @@ class TestLLDPMandatoryTLV(unittest.TestCase):
         lldp_str = _lldp_str % (lldp.lldp.__name__,
                                 tlvs_str)
 
-        eq_(str(lldp_pkt), lldp_str)
-        eq_(repr(lldp_pkt), lldp_str)
+        assert str(lldp_pkt) == lldp_str
+        assert repr(lldp_pkt) == lldp_str
 
     def test_json(self):
         chassis_id = lldp.ChassisID(subtype=lldp.ChassisID.SUB_MAC_ADDRESS,
@@ -199,7 +198,7 @@ class TestLLDPMandatoryTLV(unittest.TestCase):
         lldp1 = lldp.lldp(tlvs)
         jsondict = lldp1.to_jsondict()
         lldp2 = lldp.lldp.from_jsondict(jsondict['lldp'])
-        eq_(str(lldp1), str(lldp2))
+        assert str(lldp1) == str(lldp2)
 
 
 class TestLLDPOptionalTLV(unittest.TestCase):
@@ -250,49 +249,46 @@ class TestLLDPOptionalTLV(unittest.TestCase):
         pkt = packet.Packet(buf)
         i = iter(pkt)
 
-        eq_(type(next(i)), ethernet.ethernet)
+        assert type(next(i)) == ethernet.ethernet
         lldp_pkt = next(i)
-        eq_(type(lldp_pkt), lldp.lldp)
+        assert type(lldp_pkt) == lldp.lldp
 
         tlvs = lldp_pkt.tlvs
 
         # Port Description
-        eq_(tlvs[3].tlv_type, lldp.LLDP_TLV_PORT_DESCRIPTION)
-        eq_(tlvs[3].port_description, b'Summit300-48-Port 1001\x00')
+        assert tlvs[3].tlv_type == lldp.LLDP_TLV_PORT_DESCRIPTION
+        assert tlvs[3].port_description == b'Summit300-48-Port 1001\x00'
 
         # System Name
-        eq_(tlvs[4].tlv_type, lldp.LLDP_TLV_SYSTEM_NAME)
-        eq_(tlvs[4].system_name, b'Summit300-48\x00')
+        assert tlvs[4].tlv_type == lldp.LLDP_TLV_SYSTEM_NAME
+        assert tlvs[4].system_name == b'Summit300-48\x00'
 
         # System Description
 
-        eq_(tlvs[5].tlv_type, lldp.LLDP_TLV_SYSTEM_DESCRIPTION)
-        eq_(tlvs[5].system_description,
-            b'Summit300-48 - Version 7.4e.1 (Build 5) '
+        assert tlvs[5].tlv_type == lldp.LLDP_TLV_SYSTEM_DESCRIPTION
+        assert tlvs[5].system_description == (b'Summit300-48 - Version 7.4e.1 (Build 5) '
             + b'by Release_Master 05/27/05 04:53:11\x00')
 
         # SystemCapabilities
-        eq_(tlvs[6].tlv_type, lldp.LLDP_TLV_SYSTEM_CAPABILITIES)
-        eq_(tlvs[6].system_cap & lldp.SystemCapabilities.CAP_MAC_BRIDGE,
-            lldp.SystemCapabilities.CAP_MAC_BRIDGE)
-        eq_(tlvs[6].enabled_cap & lldp.SystemCapabilities.CAP_MAC_BRIDGE,
-            lldp.SystemCapabilities.CAP_MAC_BRIDGE)
-        eq_(tlvs[6].system_cap & lldp.SystemCapabilities.CAP_TELEPHONE, 0)
-        eq_(tlvs[6].enabled_cap & lldp.SystemCapabilities.CAP_TELEPHONE, 0)
+        assert tlvs[6].tlv_type == lldp.LLDP_TLV_SYSTEM_CAPABILITIES
+        assert tlvs[6].system_cap & lldp.SystemCapabilities.CAP_MAC_BRIDGE == lldp.SystemCapabilities.CAP_MAC_BRIDGE
+        assert tlvs[6].enabled_cap & lldp.SystemCapabilities.CAP_MAC_BRIDGE == lldp.SystemCapabilities.CAP_MAC_BRIDGE
+        assert tlvs[6].system_cap & lldp.SystemCapabilities.CAP_TELEPHONE == 0
+        assert tlvs[6].enabled_cap & lldp.SystemCapabilities.CAP_TELEPHONE == 0
 
         # Management Address
-        eq_(tlvs[7].tlv_type, lldp.LLDP_TLV_MANAGEMENT_ADDRESS)
-        eq_(tlvs[7].addr_len, 7)
-        eq_(tlvs[7].addr, b'\x00\x01\x30\xf9\xad\xa0')
-        eq_(tlvs[7].intf_num, 1001)
+        assert tlvs[7].tlv_type == lldp.LLDP_TLV_MANAGEMENT_ADDRESS
+        assert tlvs[7].addr_len == 7
+        assert tlvs[7].addr == b'\x00\x01\x30\xf9\xad\xa0'
+        assert tlvs[7].intf_num == 1001
 
         # Organizationally Specific
-        eq_(tlvs[8].tlv_type, lldp.LLDP_TLV_ORGANIZATIONALLY_SPECIFIC)
-        eq_(tlvs[8].oui, b'\x00\x12\x0f')  # IEEE 802.3
-        eq_(tlvs[8].subtype, 0x02)  # Power Via MDI
+        assert tlvs[8].tlv_type == lldp.LLDP_TLV_ORGANIZATIONALLY_SPECIFIC
+        assert tlvs[8].oui == b'\x00\x12\x0f'
+        assert tlvs[8].subtype == 0x02
 
         # End
-        eq_(tlvs[16].tlv_type, lldp.LLDP_TLV_END)
+        assert tlvs[16].tlv_type == lldp.LLDP_TLV_END
 
     def test_parse_corrupted(self):
         buf = self.data
@@ -336,13 +332,13 @@ class TestLLDPOptionalTLV(unittest.TestCase):
         lldp_pkt = lldp.lldp(tlvs)
         pkt.add_protocol(lldp_pkt)
 
-        eq_(len(pkt.protocols), 2)
+        assert len(pkt.protocols) == 2
 
         pkt.serialize()
 
         # self.data has many organizationally specific TLVs
         data = six.binary_type(pkt.data[:-2])
-        eq_(data, self.data[:len(data)])
+        assert data == self.data[:len(data)]
 
     def test_to_string(self):
         chassis_id = lldp.ChassisID(subtype=lldp.ChassisID.SUB_MAC_ADDRESS,
@@ -494,8 +490,8 @@ class TestLLDPOptionalTLV(unittest.TestCase):
         lldp_str = _lldp_str % (lldp.lldp.__name__,
                                 tlvs_str)
 
-        eq_(str(lldp_pkt), lldp_str)
-        eq_(repr(lldp_pkt), lldp_str)
+        assert str(lldp_pkt) == lldp_str
+        assert repr(lldp_pkt) == lldp_str
 
     def test_json(self):
         chassis_id = lldp.ChassisID(subtype=lldp.ChassisID.SUB_MAC_ADDRESS,
@@ -524,4 +520,4 @@ class TestLLDPOptionalTLV(unittest.TestCase):
         lldp1 = lldp.lldp(tlvs)
         jsondict = lldp1.to_jsondict()
         lldp2 = lldp.lldp.from_jsondict(jsondict['lldp'])
-        eq_(str(lldp1), str(lldp2))
+        assert str(lldp1) == str(lldp2)

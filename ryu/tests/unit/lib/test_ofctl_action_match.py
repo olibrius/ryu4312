@@ -21,7 +21,7 @@ import netaddr
 import functools
 import inspect
 
-from nose.tools import *
+import pytest
 
 from ryu.lib import addrconv
 from ryu.lib import ofctl_v1_0
@@ -165,29 +165,29 @@ class Test_ofctl(unittest.TestCase):
         else:
             cls = None
         if act_type == 'GOTO_TABLE':
-            ok_(isinstance(inst, cls))
-            eq_(inst.table_id, act["table_id"])
+            assert isinstance(inst, cls)
+            assert inst.table_id == act["table_id"]
         elif act_type == 'WRITE_METADATA':
-            ok_(isinstance(inst, cls))
-            eq_(inst.metadata, act["metadata"])
-            eq_(inst.metadata_mask, act["metadata_mask"])
+            assert isinstance(inst, cls)
+            assert inst.metadata == act["metadata"]
+            assert inst.metadata_mask == act["metadata_mask"]
         elif act_type == 'METER':
-            ok_(isinstance(inst, cls))
-            eq_(inst.meter_id, act["meter_id"])
+            assert isinstance(inst, cls)
+            assert inst.meter_id == act["meter_id"]
         elif act_type == 'WRITE_ACTIONS':
-            ok_(isinstance(inst, cls))
-            eq_(inst.type, test._ofproto.OFPIT_WRITE_ACTIONS)
+            assert isinstance(inst, cls)
+            assert inst.type == test._ofproto.OFPIT_WRITE_ACTIONS
             self._equal_str_to_act(inst.actions[0],
                                    act["actions"][0],
                                    act["actions"][0]["type"],
                                    test)
         elif act_type == 'CLEAR_ACTIONS':
-            ok_(isinstance(inst, cls))
-            eq_(inst.type, test._ofproto.OFPIT_CLEAR_ACTIONS)
+            assert isinstance(inst, cls)
+            assert inst.type == test._ofproto.OFPIT_CLEAR_ACTIONS
         else:
             # APPLY_ACTIONS or Uknown Action Type
-            ok_(isinstance(inst, test._parser.OFPInstructionActions))
-            eq_(inst.type, test._ofproto.OFPIT_APPLY_ACTIONS)
+            assert isinstance(inst, test._parser.OFPInstructionActions)
+            assert inst.type == test._ofproto.OFPIT_APPLY_ACTIONS
             self._equal_str_to_act(inst.actions[0], act,
                                    act_type, test)
 
@@ -196,48 +196,46 @@ class Test_ofctl(unittest.TestCase):
             cls = test.supported_action[act_type]
         else:
             cls = None
-        ok_(isinstance(action, cls))
+        assert isinstance(action, cls)
         if act_type == 'OUTPUT':
-            eq_(action.port, act["port"])
+            assert action.port == act["port"]
         elif act_type == 'SET_VLAN_VID':
-            eq_(action.vlan_vid, act["vlan_vid"])
+            assert action.vlan_vid == act["vlan_vid"]
         elif act_type == 'SET_VLAN_PCP':
-            eq_(action.vlan_pcp, act["vlan_pcp"])
+            assert action.vlan_pcp == act["vlan_pcp"]
         elif act_type == 'SET_DL_SRC':
-            eq_(addrconv.mac.bin_to_text(action.dl_addr),
-                act["dl_src"])
+            assert addrconv.mac.bin_to_text(action.dl_addr) == act["dl_src"]
         elif act_type == 'SET_DL_DST':
-            eq_(addrconv.mac.bin_to_text(action.dl_addr),
-                act["dl_dst"])
+            assert addrconv.mac.bin_to_text(action.dl_addr) == act["dl_dst"]
         elif act_type == 'SET_NW_SRC':
             ip = netaddr.ip.IPAddress(action.nw_addr)
-            eq_(str(ip), act["nw_src"])
+            assert str(ip) == act["nw_src"]
         elif act_type == 'SET_NW_DST':
             ip = netaddr.ip.IPAddress(action.nw_addr)
-            eq_(str(ip), act["nw_dst"])
+            assert str(ip) == act["nw_dst"]
         elif act_type == 'SET_NW_TOS':
-            eq_(action.tos, act["nw_tos"])
+            assert action.tos == act["nw_tos"]
         elif act_type == 'SET_TP_SRC':
-            eq_(action.tp, act["tp_src"])
+            assert action.tp == act["tp_src"]
         elif act_type == 'SET_TP_DST':
-            eq_(action.tp, act["tp_dst"])
+            assert action.tp == act["tp_dst"]
         elif act_type == 'ENQUEUE':
-            eq_(action.queue_id, act["queue_id"])
-            eq_(action.port, act["port"])
+            assert action.queue_id == act["queue_id"]
+            assert action.port == act["port"]
         elif act_type == 'SET_MPLS_TTL':
-            eq_(action.mpls_ttl, act["mpls_ttl"])
+            assert action.mpls_ttl == act["mpls_ttl"]
         elif act_type in ['PUSH_VLAN', 'PUSH_MPLS',
                           'POP_MPLS', 'PUSH_PBB']:
-            eq_(action.ethertype, act["ethertype"])
+            assert action.ethertype == act["ethertype"]
         elif act_type == 'SET_QUEUE':
-            eq_(action.queue_id, act["queue_id"])
+            assert action.queue_id == act["queue_id"]
         elif act_type == 'GROUP':
-            eq_(action.group_id, act["group_id"])
+            assert action.group_id == act["group_id"]
         elif act_type == 'SET_NW_TTL':
-            eq_(action.nw_ttl, act["nw_ttl"])
+            assert action.nw_ttl == act["nw_ttl"]
         elif act_type == 'SET_FIELD':
-            eq_(action.key, act['field'])
-            eq_(action.value, act['value'])
+            assert action.key == act['field']
+            assert action.value == act['value']
         elif act_type in ['STRIP_VLAN', 'COPY_TTL_OUT',
                           'COPY_TTL_IN', 'DEC_MPLS_TTL',
                           'POP_VLAN', 'DEC_NW_TTL', 'POP_PBB']:
@@ -253,15 +251,15 @@ class Test_ofctl(unittest.TestCase):
             self._equal_act_to_str(act_str, act, act_type, test)
         else:
             inst_str_list = inst_str[0].split(':', 1)
-            eq_(inst_str_list[0], act_type)
+            assert inst_str_list[0] == act_type
             if act_type == 'GOTO_TABLE':
-                eq_(int(inst_str_list[1]), act["table_id"])
+                assert int(inst_str_list[1]) == act["table_id"]
             elif act_type == 'WRITE_METADATA':
                 met = inst_str_list[1].split('/')
-                eq_(int(met[0], 16), act["metadata"])
-                eq_(int(met[1], 16), act["metadata_mask"])
+                assert int(met[0], 16) == act["metadata"]
+                assert int(met[1], 16) == act["metadata_mask"]
             elif act_type == 'METER':
-                eq_(int(inst_str_list[1]), act["meter_id"])
+                assert int(inst_str_list[1]) == act["meter_id"]
             elif act_type == 'CLEAR_ACTIONS':
                 pass
             else:
@@ -271,51 +269,51 @@ class Test_ofctl(unittest.TestCase):
 
     def _equal_act_to_str(self, act_str, act, act_type, test):
         act_str_list = act_str[0].split(':', 1)
-        eq_(act_str_list[0], act_type)
+        assert act_str_list[0] == act_type
         if act_type == 'OUTPUT':
-            eq_(int(act_str_list[1]), act["port"])
+            assert int(act_str_list[1]) == act["port"]
         elif act_type == 'SET_VLAN_VID':
-            eq_(int(act_str_list[1]), act["vlan_vid"])
+            assert int(act_str_list[1]) == act["vlan_vid"]
         elif act_type == 'SET_VLAN_PCP':
-            eq_(int(act_str_list[1]), act["vlan_pcp"])
+            assert int(act_str_list[1]) == act["vlan_pcp"]
         elif act_type == 'SET_DL_SRC':
-            eq_(act_str_list[1], act["dl_src"])
+            assert act_str_list[1] == act["dl_src"]
         elif act_type == 'SET_DL_DST':
-            eq_(act_str_list[1], act["dl_dst"])
+            assert act_str_list[1] == act["dl_dst"]
         elif act_type == 'SET_NW_SRC':
-            eq_(act_str_list[1], act["nw_src"])
+            assert act_str_list[1] == act["nw_src"]
         elif act_type == 'SET_NW_DST':
-            eq_(act_str_list[1], act["nw_dst"])
+            assert act_str_list[1] == act["nw_dst"]
         elif act_type == 'SET_NW_TOS':
-            eq_(int(act_str_list[1]), act["nw_tos"])
+            assert int(act_str_list[1]) == act["nw_tos"]
         elif act_type == 'SET_TP_SRC':
-            eq_(int(act_str_list[1]), act["tp_src"])
+            assert int(act_str_list[1]) == act["tp_src"]
         elif act_type == 'SET_TP_DST':
-            eq_(int(act_str_list[1]), act["tp_dst"])
+            assert int(act_str_list[1]) == act["tp_dst"]
         elif act_type == 'ENQUEUE':
             enq = act_str_list[1].split(':')
-            eq_(int(enq[0], 10), act["port"])
-            eq_(int(enq[1], 10), act["queue_id"])
+            assert int(enq[0], 10) == act["port"]
+            assert int(enq[1], 10) == act["queue_id"]
         elif act_type == 'SET_MPLS_TTL':
-            eq_(int(act_str_list[1]), act["mpls_ttl"])
+            assert int(act_str_list[1]) == act["mpls_ttl"]
         elif act_type == 'PUSH_VLAN':
-            eq_(int(act_str_list[1]), act["ethertype"])
+            assert int(act_str_list[1]) == act["ethertype"]
         elif act_type == 'PUSH_MPLS':
-            eq_(int(act_str_list[1]), act["ethertype"])
+            assert int(act_str_list[1]) == act["ethertype"]
         elif act_type == 'POP_MPLS':
-            eq_(int(act_str_list[1]), act["ethertype"])
+            assert int(act_str_list[1]) == act["ethertype"]
         elif act_type == 'SET_QUEUE':
-            eq_(int(act_str_list[1]), act["queue_id"])
+            assert int(act_str_list[1]) == act["queue_id"]
         elif act_type == 'GROUP':
-            eq_(int(act_str_list[1]), act["group_id"])
+            assert int(act_str_list[1]) == act["group_id"]
         elif act_type == 'SET_NW_TTL':
-            eq_(int(act_str_list[1]), act["nw_ttl"])
+            assert int(act_str_list[1]) == act["nw_ttl"]
         elif act_type == 'SET_FIELD':
             field, value = act_str_list[1].split(':')
-            eq_(field.strip(' {'), act["field"])
-            eq_(int(value.strip('} ')), act["value"])
+            assert field.strip(' {') == act["field"]
+            assert int(value.strip('} ')) == act["value"]
         elif act_type == 'PUSH_PBB':
-            eq_(int(act_str_list[1]), act["ethertype"])
+            assert int(act_str_list[1]) == act["ethertype"]
         elif act_type in ['STRIP_VLAN', 'COPY_TTL_OUT',
                           'COPY_TTL_IN', 'DEC_MPLS_TTL',
                           'POP_VLAN', 'DEC_NW_TTL', 'POP_PBB']:
@@ -333,27 +331,27 @@ class Test_ofctl(unittest.TestCase):
                 # with mask
                 for i in range(0, len(mask)):
                     if mask[i] == 'f':
-                        eq_(eth[i], field_value[0][i])
-                eq_(mask, field_value[1])
+                        assert eth[i] == field_value[0][i]
+                assert mask == field_value[1]
             else:
                 # without mask
-                eq_(eth, field_value)
+                assert eth == field_value
             return
         elif key in ['dl_src', 'dl_dst']:
             eth, mask = _to_match_eth(value)
             field_value = addrconv.mac.bin_to_text(field_value)
-            eq_(eth, field_value)
+            assert eth == field_value
             return
         elif key in ['ipv4_src', 'ipv4_dst', 'arp_spa', 'arp_tpa']:
             # IPv4 address
             ipv4, mask = _to_match_ip(value)
             if mask is not None:
                 # with mask
-                eq_(ipv4, field_value[0])
-                eq_(mask, field_value[1])
+                assert ipv4 == field_value[0]
+                assert mask == field_value[1]
             else:
                 # without mask
-                eq_(ipv4, field_value)
+                assert ipv4 == field_value
             return
         elif key in ['nw_src', 'nw_dst']:
             # IPv4 address
@@ -361,40 +359,40 @@ class Test_ofctl(unittest.TestCase):
             field_value = _to_match_ip(field_value)
             if mask is not None:
                 # with mask
-                eq_(ipv4, field_value[0])
-                eq_(mask, field_value[1])
+                assert ipv4 == field_value[0]
+                assert mask == field_value[1]
             else:
                 # without mask
-                eq_(ipv4, field_value[0])
+                assert ipv4 == field_value[0]
             return
         elif key in ['ipv6_src', 'ipv6_dst']:
             # IPv6 address
             ipv6, mask = _to_match_ip(value)
             if mask is not None:
                 # with mask
-                eq_(ipv6, field_value[0])
-                eq_(mask, field_value[1])
+                assert ipv6 == field_value[0]
+                assert mask == field_value[1]
             else:
                 # without mask
-                eq_(ipv6, field_value)
+                assert ipv6 == field_value
             return
         elif key == 'vlan_vid':
             if test.ver == ofproto_v1_0.OFP_VERSION:
-                eq_(value, field_value)
+                assert value == field_value
             else:
-                eq_(test.expected_value['vlan_vid'][
-                    value]['to_match'], field_value)
+                assert test.expected_value['vlan_vid'][
+                    value]['to_match'] == field_value
             return
         else:
             if isinstance(value, str) and '/' in value:
                 # with mask
                 value, mask = _to_match_masked_int(value)
                 value &= mask
-                eq_(value, field_value[0])
-                eq_(mask, field_value[1])
+                assert value == field_value[0]
+                assert mask == field_value[1]
             else:
                 # without mask
-                eq_(_str_to_int(value), field_value)
+                assert _str_to_int(value) == field_value
             return
 
     def _equal_match_to_str(self, key, value, match_str, test):
@@ -407,11 +405,11 @@ class Test_ofctl(unittest.TestCase):
                 field_value = field_value.split('/')
                 for i in range(0, len(mask)):
                     if mask[i] == 'f':
-                        eq_(eth[i], field_value[0][i])
-                eq_(mask, field_value[1])
+                        assert eth[i] == field_value[0][i]
+                assert mask == field_value[1]
             else:
                 # without mask
-                eq_(eth, field_value)
+                assert eth == field_value
             return
         elif key in ['nw_src', 'nw_dst', 'arp_spa', 'arp_tpa']:
             # IPv4 address
@@ -420,21 +418,21 @@ class Test_ofctl(unittest.TestCase):
                 field_value = _to_match_ip(field_value)
                 if mask is not None:
                     # with mask
-                    eq_(ipv4, field_value[0])
-                    eq_(mask, field_value[1])
+                    assert ipv4 == field_value[0]
+                    assert mask == field_value[1]
                 else:
                     # without mask
-                    eq_(ipv4, field_value[0])
+                    assert ipv4 == field_value[0]
             else:
                 ipv4, mask = _to_match_ip(value)
                 if mask is not None:
                     # with mask
                     field_value = field_value.split('/')
-                    eq_(ipv4, field_value[0])
-                    eq_(mask, field_value[1])
+                    assert ipv4 == field_value[0]
+                    assert mask == field_value[1]
                 else:
                     # without mask
-                    eq_(ipv4, field_value)
+                    assert ipv4 == field_value
             return
         elif key in ['ipv6_src', 'ipv6_dst']:
             # IPv6 address
@@ -442,27 +440,27 @@ class Test_ofctl(unittest.TestCase):
             if mask is not None:
                 # with mask
                 field_value = field_value.split('/')
-                eq_(ipv6, field_value[0])
-                eq_(mask, field_value[1])
+                assert ipv6 == field_value[0]
+                assert mask == field_value[1]
             else:
                 # without mask
-                eq_(ipv6, field_value)
+                assert ipv6 == field_value
             return
         elif key == 'dl_vlan':
             if test.ver == ofproto_v1_0.OFP_VERSION:
-                eq_(value, field_value)
+                assert value == field_value
             else:
-                eq_(test.expected_value['vlan_vid'][
-                    value]['to_str'], field_value)
+                assert test.expected_value['vlan_vid'][
+                    value]['to_str'] == field_value
             return
         else:
             if isinstance(value, str) and '/' in value:
                 # with mask
                 value = _to_masked_int_str(value)
-                eq_(value, field_value)
+                assert value == field_value
             else:
                 # without mask
-                eq_(_str_to_int(value), field_value)
+                assert _str_to_int(value) == field_value
             return
 
     def _conv_key(self, test, key, attrs):

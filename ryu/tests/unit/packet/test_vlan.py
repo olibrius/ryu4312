@@ -19,7 +19,7 @@ import unittest
 import logging
 import struct
 from struct import *
-from nose.tools import *
+import pytest
 from ryu.ofproto import ether, inet
 from ryu.lib.packet.ethernet import ethernet
 from ryu.lib.packet.packet import Packet
@@ -57,20 +57,18 @@ class Test_vlan(unittest.TestCase):
                 return p
 
     def test_init(self):
-        eq_(self.pcp, self.v.pcp)
-        eq_(self.cfi, self.v.cfi)
-        eq_(self.vid, self.v.vid)
-        eq_(self.ethertype, self.v.ethertype)
-
+        assert self.pcp == self.v.pcp
+        assert self.cfi == self.v.cfi
+        assert self.vid == self.v.vid
+        assert self.ethertype == self.v.ethertype
     def test_parser(self):
         res, ptype, _ = self.v.parser(self.buf)
 
-        eq_(res.pcp, self.pcp)
-        eq_(res.cfi, self.cfi)
-        eq_(res.vid, self.vid)
-        eq_(res.ethertype, self.ethertype)
-        eq_(ptype, ipv4)
-
+        assert res.pcp == self.pcp
+        assert res.cfi == self.cfi
+        assert res.vid == self.vid
+        assert res.ethertype == self.ethertype
+        assert ptype == ipv4
     def test_serialize(self):
         data = bytearray()
         prev = None
@@ -79,9 +77,8 @@ class Test_vlan(unittest.TestCase):
         fmt = vlan._PACK_STR
         res = struct.unpack(fmt, buf)
 
-        eq_(res[0], self.tci)
-        eq_(res[1], self.ethertype)
-
+        assert res[0] == self.tci
+        assert res[1] == self.ethertype
     def _build_vlan(self):
         src_mac = '00:07:0d:af:f4:54'
         dst_mac = '00:00:00:00:00:00'
@@ -117,32 +114,26 @@ class Test_vlan(unittest.TestCase):
         p = self._build_vlan()
 
         e = self.find_protocol(p, "ethernet")
-        ok_(e)
-        eq_(e.ethertype, ether.ETH_TYPE_8021Q)
-
+        assert e
+        assert e.ethertype == ether.ETH_TYPE_8021Q
         v = self.find_protocol(p, "vlan")
-        ok_(v)
-        eq_(v.ethertype, ether.ETH_TYPE_IP)
-
+        assert v
+        assert v.ethertype == ether.ETH_TYPE_IP
         ip = self.find_protocol(p, "ipv4")
-        ok_(ip)
-
-        eq_(v.pcp, self.pcp)
-        eq_(v.cfi, self.cfi)
-        eq_(v.vid, self.vid)
-        eq_(v.ethertype, self.ethertype)
-
-    @raises(Exception)
+        assert ip
+        assert v.pcp == self.pcp
+        assert v.cfi == self.cfi
+        assert v.vid == self.vid
+        assert v.ethertype == self.ethertype
     def test_malformed_vlan(self):
-        m_short_buf = self.buf[1:vlan._MIN_LEN]
-        vlan.parser(m_short_buf)
+        with pytest.raises(Exception):
+            m_short_buf = self.buf[1:vlan._MIN_LEN]
+            vlan.parser(m_short_buf)
 
     def test_json(self):
         jsondict = self.v.to_jsondict()
         v = vlan.from_jsondict(jsondict['vlan'])
-        eq_(str(self.v), str(v))
-
-
+        assert str(self.v) == str(v)
 class Test_svlan(unittest.TestCase):
 
     pcp = 0
@@ -167,20 +158,18 @@ class Test_svlan(unittest.TestCase):
                 return p
 
     def test_init(self):
-        eq_(self.pcp, self.sv.pcp)
-        eq_(self.cfi, self.sv.cfi)
-        eq_(self.vid, self.sv.vid)
-        eq_(self.ethertype, self.sv.ethertype)
-
+        assert self.pcp == self.sv.pcp
+        assert self.cfi == self.sv.cfi
+        assert self.vid == self.sv.vid
+        assert self.ethertype == self.sv.ethertype
     def test_parser(self):
         res, ptype, _ = self.sv.parser(self.buf)
 
-        eq_(res.pcp, self.pcp)
-        eq_(res.cfi, self.cfi)
-        eq_(res.vid, self.vid)
-        eq_(res.ethertype, self.ethertype)
-        eq_(ptype, vlan)
-
+        assert res.pcp == self.pcp
+        assert res.cfi == self.cfi
+        assert res.vid == self.vid
+        assert res.ethertype == self.ethertype
+        assert ptype == vlan
     def test_serialize(self):
         data = bytearray()
         prev = None
@@ -189,9 +178,8 @@ class Test_svlan(unittest.TestCase):
         fmt = svlan._PACK_STR
         res = struct.unpack(fmt, buf)
 
-        eq_(res[0], self.tci)
-        eq_(res[1], self.ethertype)
-
+        assert res[0] == self.tci
+        assert res[1] == self.ethertype
     def _build_svlan(self):
         src_mac = '00:07:0d:af:f4:54'
         dst_mac = '00:00:00:00:00:00'
@@ -235,31 +223,26 @@ class Test_svlan(unittest.TestCase):
         p = self._build_svlan()
 
         e = self.find_protocol(p, "ethernet")
-        ok_(e)
-        eq_(e.ethertype, ether.ETH_TYPE_8021AD)
-
+        assert e
+        assert e.ethertype == ether.ETH_TYPE_8021AD
         sv = self.find_protocol(p, "svlan")
-        ok_(sv)
-        eq_(sv.ethertype, ether.ETH_TYPE_8021Q)
-
+        assert sv
+        assert sv.ethertype == ether.ETH_TYPE_8021Q
         v = self.find_protocol(p, "vlan")
-        ok_(v)
-        eq_(v.ethertype, ether.ETH_TYPE_IP)
-
+        assert v
+        assert v.ethertype == ether.ETH_TYPE_IP
         ip = self.find_protocol(p, "ipv4")
-        ok_(ip)
-
-        eq_(sv.pcp, self.pcp)
-        eq_(sv.cfi, self.cfi)
-        eq_(sv.vid, self.vid)
-        eq_(sv.ethertype, self.ethertype)
-
-    @raises(Exception)
+        assert ip
+        assert sv.pcp == self.pcp
+        assert sv.cfi == self.cfi
+        assert sv.vid == self.vid
+        assert sv.ethertype == self.ethertype
     def test_malformed_svlan(self):
-        m_short_buf = self.buf[1:svlan._MIN_LEN]
-        svlan.parser(m_short_buf)
+        with pytest.raises(Exception):
+            m_short_buf = self.buf[1:svlan._MIN_LEN]
+            svlan.parser(m_short_buf)
 
     def test_json(self):
         jsondict = self.sv.to_jsondict()
         sv = svlan.from_jsondict(jsondict['svlan'])
-        eq_(str(self.sv), str(sv))
+        assert str(self.sv) == str(sv)

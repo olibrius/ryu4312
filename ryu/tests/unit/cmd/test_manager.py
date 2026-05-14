@@ -14,17 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys
 import unittest
-import mock
-from nose.tools import eq_, raises
-
-try:
-    # Python 3
-    from imp import reload
-except ImportError:
-    # Python 2
-    pass
+from importlib import reload
+from unittest import mock
 
 from ryu.cmd.manager import main
 
@@ -42,15 +34,15 @@ class Test_Manager(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @raises(SystemExit)
     @mock.patch('sys.argv', new=['ryu-manager', '--version'])
     def test_version(self):
-        main()
+        with self.assertRaises(SystemExit):
+            main()
 
-    @raises(SystemExit)
     @mock.patch('sys.argv', new=['ryu-manager', '--help'])
     def test_help(self):
-        main()
+        with self.assertRaises(SystemExit):
+            main()
 
     @staticmethod
     def _reset_globals():

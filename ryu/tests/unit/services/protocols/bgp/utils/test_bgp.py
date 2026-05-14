@@ -17,7 +17,7 @@
 import logging
 import unittest
 
-from nose.tools import eq_, raises
+import pytest
 
 from ryu.lib.packet.bgp import (
     BGPFlowSpecTrafficRateCommunity,
@@ -46,8 +46,7 @@ class Test_Utils_BGP(unittest.TestCase):
         communities = create_v4flowspec_actions(actions)
         expected_communities.sort(key=lambda x: x.subtype)
         communities.sort(key=lambda x: x.subtype)
-        eq_(str(expected_communities), str(communities))
-
+        assert str(expected_communities) == str(communities)
     def test_create_v4flowspec_actions_all_actions(self):
         actions = {
             'traffic_rate': {
@@ -78,22 +77,21 @@ class Test_Utils_BGP(unittest.TestCase):
         expected_communities = []
         self._test_create_v4flowspec_actions(actions, expected_communities)
 
-    @raises(ValueError)
     def test_create_v4flowspec_actions_not_exist_actions(self):
-        actions = {
-            'traffic_test': {
-                'test': 10,
-            },
-        }
-        expected_communities = []
-        self._test_create_v4flowspec_actions(actions, expected_communities)
+        with pytest.raises(ValueError):
+            actions = {
+                'traffic_test': {
+                    'test': 10,
+                },
+            }
+            expected_communities = []
+            self._test_create_v4flowspec_actions(actions, expected_communities)
 
     def _test_create_v6flowspec_actions(self, actions, expected_communities):
         communities = create_v6flowspec_actions(actions)
         expected_communities.sort(key=lambda x: x.subtype)
         communities.sort(key=lambda x: x.subtype)
-        eq_(str(expected_communities), str(communities))
-
+        assert str(expected_communities) == str(communities)
     def test_create_v6flowspec_actions_all_actions(self):
         actions = {
             'traffic_rate': {
@@ -124,22 +122,21 @@ class Test_Utils_BGP(unittest.TestCase):
         expected_communities = []
         self._test_create_v6flowspec_actions(actions, expected_communities)
 
-    @raises(ValueError)
     def test_create_v6flowspec_actions_not_exist_actions(self):
-        actions = {
-            'traffic_test': {
-                'test': 10,
-            },
-        }
-        expected_communities = []
-        self._test_create_v6flowspec_actions(actions, expected_communities)
+        with pytest.raises(ValueError):
+            actions = {
+                'traffic_test': {
+                    'test': 10,
+                },
+            }
+            expected_communities = []
+            self._test_create_v6flowspec_actions(actions, expected_communities)
 
     def _test_create_l2vpnflowspec_actions(self, actions, expected_communities):
         communities = create_l2vpnflowspec_actions(actions)
         expected_communities.sort(key=lambda x: x.subtype)
         communities.sort(key=lambda x: x.subtype)
-        eq_(str(expected_communities), str(communities))
-
+        assert str(expected_communities) == str(communities)
     def test_create_l2vpnflowspec_actions_all_actions(self):
         actions = {
             'traffic_rate': {
@@ -200,12 +197,12 @@ class Test_Utils_BGP(unittest.TestCase):
         expected_communities = []
         self._test_create_l2vpnflowspec_actions(actions, expected_communities)
 
-    @raises(ValueError)
     def test_create_l2vpnflowspec_actions_not_exist_actions(self):
-        actions = {
-            'traffic_test': {
-                'test': 10,
-            },
-        }
-        expected_communities = []
-        self._test_create_l2vpnflowspec_actions(actions, expected_communities)
+        with pytest.raises(ValueError):
+            actions = {
+                'traffic_test': {
+                    'test': 10,
+                },
+            }
+            expected_communities = []
+            self._test_create_l2vpnflowspec_actions(actions, expected_communities)

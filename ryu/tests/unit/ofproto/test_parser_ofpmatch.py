@@ -25,8 +25,6 @@ except ImportError:
 
 import six
 import unittest
-from nose.tools import eq_
-from nose.tools import ok_
 
 from ryu.ofproto import ofproto_v1_2
 from ryu.ofproto import ofproto_v1_3
@@ -65,18 +63,16 @@ class Test_Parser_OFPMatch(unittest.TestCase):
         match.serialize(b, 0)
         match2 = match.parser(six.binary_type(b), 0)
         for k, v in d.items():
-            ok_(k in match)
-            ok_(k in match2)
-            eq_(match[k], v)
-            eq_(match2[k], v)
+            assert k in match
+            assert k in match2
+            assert match[k] == v
+            assert match2[k] == v
         for k, v in match.iteritems():
-            ok_(k in d)
-            eq_(d[k], v)
+            assert k in d
+            assert d[k] == v
         for k, v in match2.iteritems():
-            ok_(k in d)
-            eq_(d[k], v)
-
-
+            assert k in d
+            assert d[k] == v
 def _add_tests():
     import functools
     import itertools
@@ -277,10 +273,7 @@ def _add_tests():
 
                         def _run(self, name, ofpp, d, domask):
                             print('processing %s ...' % name)
-                            if six.PY3:
-                                self._test(self, name, ofpp, d, domask)
-                            else:
-                                self._test(name, ofpp, d, domask)
+                            self._test(name, ofpp, d, domask)
                         print('adding %s ...' % method_name)
                         f = functools.partial(_run, name=method_name,
                                               ofpp=ofpp, d=d, domask=domask)

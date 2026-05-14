@@ -19,7 +19,6 @@ from __future__ import print_function
 import base64
 import six
 import unittest
-from nose.tools import eq_
 
 from ryu.lib import stringify
 
@@ -49,14 +48,13 @@ class Test_stringify(unittest.TestCase):
         else:
             b64encode = base64.b64encode
         j = {'C1': {'a': 'QUFB', 'c': 'Q0ND'}}
-        eq_(j['C1']['a'], b64encode(b'AAA'))
-        eq_(j['C1']['c'], b64encode(b'CCC'))
+        assert j['C1']['a'] == b64encode(b'AAA')
+        assert j['C1']['c'] == b64encode(b'CCC')
         c = C1(a=b'AAA', c=b'CCC')
         c2 = C1.from_jsondict(j['C1'])
-        eq_(c.__class__, c2.__class__)
-        eq_(c.__dict__, c2.__dict__)
-        eq_(j, c.to_jsondict())
-
+        assert c.__class__ == c2.__class__
+        assert c.__dict__ == c2.__dict__
+        assert j == c.to_jsondict()
     def test_jsondict2(self):
 
         def my_encode(x):
@@ -66,10 +64,10 @@ class Test_stringify(unittest.TestCase):
             return x.upper()
 
         j = {'C1': {'a': 'aaa', 'c': 'ccc'}}
-        eq_(j['C1']['a'], my_encode('AAA'))
-        eq_(j['C1']['c'], my_encode('CCC'))
+        assert j['C1']['a'] == my_encode('AAA')
+        assert j['C1']['c'] == my_encode('CCC')
         c = C1(a='AAA', c='CCC')
         c2 = C1.from_jsondict(j['C1'], decode_string=my_decode)
-        eq_(c.__class__, c2.__class__)
-        eq_(c.__dict__, c2.__dict__)
-        eq_(j, c.to_jsondict(encode_string=my_encode))
+        assert c.__class__ == c2.__class__
+        assert c.__dict__ == c2.__dict__
+        assert j == c.to_jsondict(encode_string=my_encode)

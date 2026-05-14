@@ -13,21 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from distutils.spawn import find_executable
+from shutil import which as find_executable
 import logging
 import subprocess
 import unittest
 
-from nose.tools import eq_
-from nose.tools import ok_
 
 from ryu.lib.hub import sleep
 from ryu.lib.ovs import vsctl
 
-try:
-    import mock  # Python 2
-except ImportError:
-    from unittest import mock  # Python 3
+from unittest import mock
 
 
 LOG = logging.getLogger(__name__)
@@ -51,18 +46,13 @@ class TestUtils(unittest.TestCase):
 
     @mock.patch('os.path.isfile', mock.MagicMock(return_value=True))
     def test_valid_ovsdb_addr_with_unix(self):
-        ok_(vsctl.valid_ovsdb_addr('unix:/var/run/openvswitch/db.sock'))
-
+        assert vsctl.valid_ovsdb_addr('unix:/var/run/openvswitch/db.sock')
     def test_valid_ovsdb_addr_with_ipv4(self):
-        ok_(vsctl.valid_ovsdb_addr('tcp:127.0.0.1:6640'))
-
+        assert vsctl.valid_ovsdb_addr('tcp:127.0.0.1:6640')
     def test_valid_ovsdb_addr_with_ipv6(self):
-        ok_(vsctl.valid_ovsdb_addr('ssl:[::1]:6640'))
-
+        assert vsctl.valid_ovsdb_addr('ssl:[::1]:6640')
     def test_valid_ovsdb_addr_with_invalid_type(self):
-        eq_(vsctl.valid_ovsdb_addr('invalid:127.0.0.1:6640'), False)
-
-
+        assert vsctl.valid_ovsdb_addr('invalid:127.0.0.1:6640') == False
 def _run(command):
     popen = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
     popen.wait()
@@ -156,14 +146,12 @@ class TestVSCtl(unittest.TestCase):
         command = vsctl.VSCtlCommand('init')
         self._run_commands([command])
 
-        ok_(command.result is None)
-
+        assert command.result is None
     def test_00_02_show(self):
         command = vsctl.VSCtlCommand('show')
         self._run_commands([command])
 
-        ok_(command.result is not None)
-
+        assert command.result is not None
     # 01: Bridge commands
 
     def test_01_01_add_br_bridge(self):
@@ -172,8 +160,7 @@ class TestVSCtl(unittest.TestCase):
         self._run_commands([command])
 
         result = self._docker_exec_mn('ovs-vsctl list-br')
-        ok_(bridge in result)
-
+        assert bridge in result
     def test_01_02_add_br_parent_vlan(self):
         bridge = 'sub-s1-100'
         parent = 's1'
@@ -182,14 +169,13 @@ class TestVSCtl(unittest.TestCase):
         self._run_commands([command])
 
         result = self._docker_exec_mn('ovs-vsctl list-br')
-        ok_(bridge in result)
+        assert bridge in result
         result = self._docker_exec_mn(
             'ovs-vsctl br-to-parent %s' % bridge)
-        eq_(parent, result[0])
+        assert parent == result[0]
         result = self._docker_exec_mn(
             'ovs-vsctl br-to-vlan %s' % bridge)
-        eq_(vlan, result[0])
-
+        assert vlan == result[0]
     def test_01_03_del_br(self):
         bridge = 's1'
         child = 'sub-s1-100'
@@ -198,9 +184,8 @@ class TestVSCtl(unittest.TestCase):
         self._run_commands([command])
 
         result = self._docker_exec_mn('ovs-vsctl list-br')
-        ok_(bridge not in result)
-        ok_(child not in result)
-
+        assert bridge not in result
+        assert child not in result
     def test_01_04_list_br(self):
         bridge = 's1'
         child = 'sub-s1-100'
@@ -212,33 +197,29 @@ class TestVSCtl(unittest.TestCase):
         command = vsctl.VSCtlCommand('list-br')
         self._run_commands([command])
 
-        ok_(bridge in command.result)
-        ok_(child in command.result)
-
+        assert bridge in command.result
+        assert child in command.result
     def test_01_05_br_exists(self):
         bridge = 's1'
 
         command = vsctl.VSCtlCommand('br-exists', (bridge, ))
         self._run_commands([command])
 
-        eq_(True, command.result)
-
+        assert True == command.result
     def test_01_06_br_to_vlan(self):
         bridge = 's1'
 
         command = vsctl.VSCtlCommand('br-to-vlan', (bridge, ))
         self._run_commands([command])
 
-        eq_(0, command.result)
-
+        assert 0 == command.result
     def test_01_06_br_to_vlan_fake_bridge(self):
         bridge = 'sub-s1-100'
 
         command = vsctl.VSCtlCommand('br-to-vlan', (bridge, ))
         self._run_commands([command])
 
-        eq_(100, command.result)
-
+        assert 100 == command.result
     def test_01_07_br_to_parent(self):
         bridge = 's1'
         parent = bridge
@@ -247,8 +228,7 @@ class TestVSCtl(unittest.TestCase):
         self._run_commands([command])
 
         # result = <ryu.lib.ovs.vsctl.VSCtlBridge object>
-        eq_(parent, command.result.name)
-
+        assert parent == command.result.name
     def test_01_07_br_to_parent_fake_bridge(self):
         bridge = 'sub-s1-100'
         parent = 's1'
@@ -257,8 +237,7 @@ class TestVSCtl(unittest.TestCase):
         self._run_commands([command])
 
         # result = <ryu.lib.ovs.vsctl.VSCtlBridge object>
-        eq_(parent, command.result.name)
-
+        assert parent == command.result.name
     def test_01_08_br_set_external_id_add(self):
         bridge = 's1'
         key = 'ext_id_key'
@@ -270,8 +249,7 @@ class TestVSCtl(unittest.TestCase):
 
         result = self._docker_exec_mn(
             'ovs-vsctl br-get-external-id %s %s' % (bridge, key))
-        eq_(value, result[0])
-
+        assert value == result[0]
     def test_01_09_br_get_external_id_value(self):
         bridge = 's1'
         key = 'ext_id_key'
@@ -281,8 +259,7 @@ class TestVSCtl(unittest.TestCase):
             'br-get-external-id', (bridge, key))
         self._run_commands([command])
 
-        eq_(value, command.result)
-
+        assert value == command.result
     def test_01_10_br_get_external_id_dict(self):
         bridge = 's1'
         key = 'ext_id_key'
@@ -292,8 +269,7 @@ class TestVSCtl(unittest.TestCase):
             'br-get-external-id', (bridge,))
         self._run_commands([command])
 
-        eq_({key: value}, command.result)
-
+        assert {key: value} == command.result
     def test_01_11_br_set_external_id_clear(self):
         bridge = 's1'
         key = 'ext_id_key'
@@ -304,8 +280,7 @@ class TestVSCtl(unittest.TestCase):
 
         result = self._docker_exec_mn(
             'ovs-vsctl br-get-external-id %s %s' % (bridge, key))
-        eq_([], result)
-
+        assert [] == result
         # Clean up
         self._docker_exec_mn('mn --clean')
 
@@ -328,9 +303,8 @@ class TestVSCtl(unittest.TestCase):
         command = vsctl.VSCtlCommand('list-ports', (bridge,))
         self._run_commands([command])
 
-        ok_(interface_1 in command.result)
-        ok_(interface_2 in command.result)
-
+        assert interface_1 in command.result
+        assert interface_2 in command.result
     def test_02_02_add_port(self):
         bridge = 's1'
         interface_1 = 's1-eth1'
@@ -342,8 +316,7 @@ class TestVSCtl(unittest.TestCase):
 
         result = self._docker_exec_mn(
             'ovs-vsctl port-to-br %s' % interface_1)
-        eq_(bridge, result[0])
-
+        assert bridge == result[0]
     def test_02_03_add_bond(self):
         bridge = 's1'
         interface_1 = 's1-eth1'
@@ -359,8 +332,7 @@ class TestVSCtl(unittest.TestCase):
 
         result = self._docker_exec_mn(
             'ovs-vsctl port-to-br %s' % port)
-        eq_(bridge, result[0])
-
+        assert bridge == result[0]
     def test_02_04_del_port(self):
         bridge = 's1'
         port = 's1-bond1'
@@ -370,8 +342,7 @@ class TestVSCtl(unittest.TestCase):
 
         result = self._docker_exec_mn(
             'ovs-vsctl list-ports %s' % bridge)
-        eq_([], result)
-
+        assert [] == result
     def test_02_05_port_to_br(self):
         bridge = 's1'
         port_1 = 's1-eth1'
@@ -385,8 +356,7 @@ class TestVSCtl(unittest.TestCase):
         command = vsctl.VSCtlCommand('port-to-br', (port_1,))
         self._run_commands([command])
 
-        eq_(bridge, command.result)
-
+        assert bridge == command.result
         # Clean up
         self._docker_exec_mn('mn --clean')
 
@@ -409,9 +379,8 @@ class TestVSCtl(unittest.TestCase):
         command = vsctl.VSCtlCommand('list-ifaces', (bridge,))
         self._run_commands([command])
 
-        ok_(interface_1 in command.result)
-        ok_(interface_2 in command.result)
-
+        assert interface_1 in command.result
+        assert interface_2 in command.result
     def test_03_02_ifaces_to_br(self):
         bridge = 's1'
         interface_1 = 's1-eth1'
@@ -419,8 +388,7 @@ class TestVSCtl(unittest.TestCase):
         command = vsctl.VSCtlCommand('iface-to-br', (interface_1,))
         self._run_commands([command])
 
-        eq_(bridge, command.result)
-
+        assert bridge == command.result
         # Clean up
         self._docker_exec_mn('mn --clean')
 
@@ -436,9 +404,8 @@ class TestVSCtl(unittest.TestCase):
         command = vsctl.VSCtlCommand('get-controller', (bridge,))
         self._run_commands([command])
 
-        eq_(1, len(command.result))
-        eq_(controller, command.result[0])
-
+        assert 1 == len(command.result)
+        assert controller == command.result[0]
     def test_04_02_del_controller(self):
         bridge = 's1'
 
@@ -447,8 +414,7 @@ class TestVSCtl(unittest.TestCase):
 
         result = self._docker_exec_mn(
             'ovs-vsctl get-controller %s' % bridge)
-        eq_([], result)
-
+        assert [] == result
     def test_04_03_set_controller(self):
         bridge = 's1'
         controller = 'tcp:127.0.0.1:6653'
@@ -458,8 +424,7 @@ class TestVSCtl(unittest.TestCase):
 
         result = self._docker_exec_mn(
             'ovs-vsctl get-controller %s' % bridge)
-        eq_(controller, result[0])
-
+        assert controller == result[0]
     def test_04_04_get_fail_mode(self):
         bridge = 's1'
         fai_mode = 'secure'
@@ -469,8 +434,7 @@ class TestVSCtl(unittest.TestCase):
         command = vsctl.VSCtlCommand('get-fail-mode', (bridge,))
         self._run_commands([command])
 
-        eq_(fai_mode, command.result)
-
+        assert fai_mode == command.result
     def test_04_05_del_fail_mode(self):
         bridge = 's1'
 
@@ -479,8 +443,7 @@ class TestVSCtl(unittest.TestCase):
 
         result = self._docker_exec_mn(
             'ovs-vsctl get-fail-mode %s' % bridge)
-        eq_([], result)
-
+        assert [] == result
     def test_04_06_set_fail_mode(self):
         bridge = 's1'
         fail_mode = 'secure'
@@ -490,8 +453,7 @@ class TestVSCtl(unittest.TestCase):
 
         result = self._docker_exec_mn(
             'ovs-vsctl get-fail-mode %s' % bridge)
-        eq_(fail_mode, result[0])
-
+        assert fail_mode == result[0]
         # Clean up
         self._docker_exec_mn('mn --clean')
 
@@ -527,10 +489,9 @@ class TestVSCtl(unittest.TestCase):
         command = vsctl.VSCtlCommand('list', (table,))
         self._run_commands([command])
 
-        eq_(1, len(command.result))
+        assert 1 == len(command.result)
         # command.result[0] = <ryu.lib.ovs.vsctl.VSCtlBridge object>
-        eq_(bridge, command.result[0].name)
-
+        assert bridge == command.result[0].name
     def test_08_02_find(self):
         table = 'Bridge'
         bridge = 's1'
@@ -538,10 +499,9 @@ class TestVSCtl(unittest.TestCase):
         command = vsctl.VSCtlCommand('find', (table, 'name=%s' % bridge))
         self._run_commands([command])
 
-        eq_(1, len(command.result))
+        assert 1 == len(command.result)
         # command.result[0] = <ovs.db.idl.Row object object> for Bridge
-        eq_(bridge, command.result[0].name)
-
+        assert bridge == command.result[0].name
     def test_08_02_find_complex(self):
         table = 'Bridge'
         bridge = 's1'
@@ -555,10 +515,9 @@ class TestVSCtl(unittest.TestCase):
                      'other_config:datapath-id=%s' % datapath_id))
         self._run_commands([command])
 
-        eq_(1, len(command.result))
+        assert 1 == len(command.result)
         # command.result[0] = <ovs.db.idl.Row object object> for Bridge
-        eq_(bridge, command.result[0].name)
-
+        assert bridge == command.result[0].name
     def test_08_03_get_01_value(self):
         table = 'Bridge'
         bridge = 's1'
@@ -569,8 +528,7 @@ class TestVSCtl(unittest.TestCase):
         self._run_commands([command])
 
         # command.result[0] is a list of return values
-        eq_(value, command.result[0][0])
-
+        assert value == command.result[0][0]
     def test_08_03_get_02_set(self):
         table = 'Bridge'
         bridge = 's1'
@@ -581,8 +539,7 @@ class TestVSCtl(unittest.TestCase):
         self._run_commands([command])
 
         # command.result[0] is a list
-        eq_(value, command.result[0])
-
+        assert value == command.result[0]
     def test_08_03_get_03_map(self):
         table = 'Bridge'
         bridge = 's1'
@@ -595,8 +552,7 @@ class TestVSCtl(unittest.TestCase):
         self._run_commands([command])
 
         # command.result[0] is a dict
-        eq_(value, command.result[0])
-
+        assert value == command.result[0]
     def test_08_03_get_04_map_value(self):
         table = 'Bridge'
         bridge = 's1'
@@ -610,8 +566,7 @@ class TestVSCtl(unittest.TestCase):
         self._run_commands([command])
 
         # command.result[0] is a dict
-        eq_(value, command.result[0])
-
+        assert value == command.result[0]
     def test_08_04_set_01_value(self):
         table = 'Bridge'
         bridge = 's1'
@@ -624,8 +579,7 @@ class TestVSCtl(unittest.TestCase):
 
         result = self._docker_exec_mn(
             'ovs-vsctl get %s %s %s' % (table, bridge, column))
-        eq_(value, result[0])
-
+        assert value == result[0]
     def test_08_04_set_02_set(self):
         table = 'Bridge'
         bridge = 's1'
@@ -639,8 +593,7 @@ class TestVSCtl(unittest.TestCase):
         result = self._docker_exec_mn(
             'ovs-vsctl get %s %s %s' % (table, bridge, column))
         expected_value = '["OpenFlow10", "OpenFlow12", "OpenFlow13"]'
-        eq_(expected_value, result[0])
-
+        assert expected_value == result[0]
     def test_08_04_set_03_map(self):
         table = 'Bridge'
         bridge = 's1'
@@ -655,8 +608,7 @@ class TestVSCtl(unittest.TestCase):
         result = self._docker_exec_mn(
             'ovs-vsctl get %s %s %s:%s' % (table, bridge, column, key))
         expected_value = '"0000000000000001"'
-        eq_(expected_value, result[0])
-
+        assert expected_value == result[0]
     def test_08_05_add_01_value(self):
         table = 'Port'
         bridge = 's1'
@@ -669,8 +621,7 @@ class TestVSCtl(unittest.TestCase):
 
         result = self._docker_exec_mn(
             'ovs-vsctl get %s %s %s' % (table, bridge, column))
-        eq_(value, result[0])
-
+        assert value == result[0]
     def test_08_05_add_02_set(self):
         table = 'Port'
         bridge = 's1'
@@ -684,8 +635,7 @@ class TestVSCtl(unittest.TestCase):
         result = self._docker_exec_mn(
             'ovs-vsctl get %s %s %s' % (table, bridge, column))
         expected_value = '[100, 200]'
-        eq_(expected_value, result[0])
-
+        assert expected_value == result[0]
     def test_08_05_add_03_map(self):
         table = 'Bridge'
         bridge = 's1'
@@ -700,8 +650,7 @@ class TestVSCtl(unittest.TestCase):
         result = self._docker_exec_mn(
             'ovs-vsctl get %s %s %s:%s' % (table, bridge, column, key))
         expected_value = '"0000000000000011"'
-        eq_(expected_value, result[0])
-
+        assert expected_value == result[0]
     def test_08_06_remove_01_value(self):
         table = 'Port'
         bridge = 's1'
@@ -717,8 +666,7 @@ class TestVSCtl(unittest.TestCase):
         result = self._docker_exec_mn(
             'ovs-vsctl get %s %s %s' % (table, bridge, column))
         expected_value = '[]'
-        eq_(expected_value, result[0])
-
+        assert expected_value == result[0]
     def test_08_06_remove_02_set(self):
         table = 'Port'
         bridge = 's1'
@@ -735,8 +683,7 @@ class TestVSCtl(unittest.TestCase):
         result = self._docker_exec_mn(
             'ovs-vsctl get %s %s %s' % (table, bridge, column))
         expected_value = '[300]'
-        eq_(expected_value, result[0])
-
+        assert expected_value == result[0]
     def test_08_06_remove_03_map(self):
         table = 'Port'
         bridge = 's1'
@@ -754,8 +701,7 @@ class TestVSCtl(unittest.TestCase):
         result = self._docker_exec_mn(
             'ovs-vsctl get %s %s %s' % (table, bridge, column))
         expected_value = '{}'
-        eq_(expected_value, result[0])
-
+        assert expected_value == result[0]
     def test_08_07_clear_01_value(self):
         table = 'Port'
         bridge = 's1'
@@ -771,8 +717,7 @@ class TestVSCtl(unittest.TestCase):
         result = self._docker_exec_mn(
             'ovs-vsctl get %s %s %s' % (table, bridge, column))
         expected_value = '[]'
-        eq_(expected_value, result[0])
-
+        assert expected_value == result[0]
     def test_08_07_clear_02_set(self):
         table = 'Port'
         bridge = 's1'
@@ -788,8 +733,7 @@ class TestVSCtl(unittest.TestCase):
         result = self._docker_exec_mn(
             'ovs-vsctl get %s %s %s' % (table, bridge, column))
         expected_value = '[]'
-        eq_(expected_value, result[0])
-
+        assert expected_value == result[0]
     def test_08_07_clear_03_map(self):
         table = 'Port'
         bridge = 's1'
@@ -807,7 +751,6 @@ class TestVSCtl(unittest.TestCase):
         result = self._docker_exec_mn(
             'ovs-vsctl get %s %s %s' % (table, bridge, column))
         expected_value = '{}'
-        eq_(expected_value, result[0])
-
+        assert expected_value == result[0]
         # Clean up
         self._docker_exec_mn('mn --clean')

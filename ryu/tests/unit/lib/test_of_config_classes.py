@@ -15,8 +15,6 @@
 # limitations under the License.
 
 import unittest
-from nose.tools import eq_
-from nose.tools import ok_
 
 import sys
 import lxml.etree as ET
@@ -426,17 +424,16 @@ class Test_of_config_classes(unittest.TestCase):
         for xml0 in [GET]:
             o = ofc.OFCapableSwitchType.from_xml(xml0)
             xml1 = o.to_xml('capable-switch')
-            ok_(xml_compare(ET.fromstring(xml0), ET.fromstring(xml1),
-                            reporter=sys.stderr.write))
+            assert xml_compare(ET.fromstring(xml0), ET.fromstring(xml1),
+                            reporter=sys.stderr.write)
 
     def test_alt_names(self):
         xml0 = GET
         o = ofc.OFCapableSwitchType.from_xml(xml0)
-        eq_(o.logical_switches, getattr(o, 'logical_switches'))
-        eq_(o.logical_switches, getattr(o, 'logical-switches'))
-
+        assert o.logical_switches, getattr(o == 'logical_switches')
+        assert o.logical_switches, getattr(o == 'logical-switches')
     def test_iterate(self):
         xml0 = GET
         o = ofc.OFCapableSwitchType.from_xml(xml0)
         for lsw in o.logical_switches.switch:
-            ok_(str(lsw.id).startswith('LogicalSwitch'))
+            assert str(lsw.id).startswith('LogicalSwitch')

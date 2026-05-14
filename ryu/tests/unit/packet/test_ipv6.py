@@ -20,7 +20,7 @@ import inspect
 import six
 import struct
 
-from nose.tools import *
+import pytest
 from ryu.lib import addrconv
 from ryu.lib import ip
 from ryu.lib.packet import ipv6
@@ -228,16 +228,15 @@ class Test_ipv6(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.version, self.ip.version)
-        eq_(self.traffic_class, self.ip.traffic_class)
-        eq_(self.flow_label, self.ip.flow_label)
-        eq_(self.payload_length, self.ip.payload_length)
-        eq_(self.nxt, self.ip.nxt)
-        eq_(self.hop_limit, self.ip.hop_limit)
-        eq_(self.src, self.ip.src)
-        eq_(self.dst, self.ip.dst)
-        eq_(str(self.ext_hdrs), str(self.ip.ext_hdrs))
-
+        assert self.version == self.ip.version
+        assert self.traffic_class == self.ip.traffic_class
+        assert self.flow_label == self.ip.flow_label
+        assert self.payload_length == self.ip.payload_length
+        assert self.nxt == self.ip.nxt
+        assert self.hop_limit == self.ip.hop_limit
+        assert self.src == self.ip.src
+        assert self.dst == self.ip.dst
+        assert str(self.ext_hdrs) == str(self.ip.ext_hdrs)
     def test_init_with_hop_opts(self):
         self.setUp_with_hop_opts()
         self.test_init()
@@ -269,16 +268,15 @@ class Test_ipv6(unittest.TestCase):
         else:
             res = _res
 
-        eq_(self.version, res.version)
-        eq_(self.traffic_class, res.traffic_class)
-        eq_(self.flow_label, res.flow_label)
-        eq_(self.payload_length, res.payload_length)
-        eq_(self.nxt, res.nxt)
-        eq_(self.hop_limit, res.hop_limit)
-        eq_(self.src, res.src)
-        eq_(self.dst, res.dst)
-        eq_(str(self.ext_hdrs), str(res.ext_hdrs))
-
+        assert self.version == res.version
+        assert self.traffic_class == res.traffic_class
+        assert self.flow_label == res.flow_label
+        assert self.payload_length == res.payload_length
+        assert self.nxt == res.nxt
+        assert self.hop_limit == res.hop_limit
+        assert self.src == res.src
+        assert self.dst == res.dst
+        assert str(self.ext_hdrs) == str(res.ext_hdrs)
     def test_parser_with_hop_opts(self):
         self.setUp_with_hop_opts()
         self.test_parser()
@@ -310,13 +308,12 @@ class Test_ipv6(unittest.TestCase):
 
         res = struct.unpack_from(ipv6.ipv6._PACK_STR, six.binary_type(buf))
 
-        eq_(self.v_tc_flow, res[0])
-        eq_(self.payload_length, res[1])
-        eq_(self.nxt, res[2])
-        eq_(self.hop_limit, res[3])
-        eq_(self.src, addrconv.ipv6.bin_to_text(res[4]))
-        eq_(self.dst, addrconv.ipv6.bin_to_text(res[5]))
-
+        assert self.v_tc_flow == res[0]
+        assert self.payload_length == res[1]
+        assert self.nxt == res[2]
+        assert self.hop_limit == res[3]
+        assert self.src == addrconv.ipv6.bin_to_text(res[4])
+        assert self.dst == addrconv.ipv6.bin_to_text(res[5])
     def test_serialize_with_hop_opts(self):
         self.setUp_with_hop_opts()
         self.test_serialize()
@@ -325,8 +322,7 @@ class Test_ipv6(unittest.TestCase):
         prev = None
         buf = self.ip.serialize(data, prev)
         hop_opts = ipv6.hop_opts.parser(six.binary_type(buf[ipv6.ipv6._MIN_LEN:]))
-        eq_(repr(self.hop_opts), repr(hop_opts))
-
+        assert repr(self.hop_opts) == repr(hop_opts)
     def test_serialize_with_dst_opts(self):
         self.setUp_with_dst_opts()
         self.test_serialize()
@@ -335,8 +331,7 @@ class Test_ipv6(unittest.TestCase):
         prev = None
         buf = self.ip.serialize(data, prev)
         dst_opts = ipv6.dst_opts.parser(six.binary_type(buf[ipv6.ipv6._MIN_LEN:]))
-        eq_(repr(self.dst_opts), repr(dst_opts))
-
+        assert repr(self.dst_opts) == repr(dst_opts)
     def test_serialize_with_routing_type3(self):
         self.setUp_with_routing_type3()
         self.test_serialize()
@@ -345,8 +340,7 @@ class Test_ipv6(unittest.TestCase):
         prev = None
         buf = self.ip.serialize(data, prev)
         routing = ipv6.routing.parser(six.binary_type(buf[ipv6.ipv6._MIN_LEN:]))
-        eq_(repr(self.routing), repr(routing))
-
+        assert repr(self.routing) == repr(routing)
     def test_serialize_with_fragment(self):
         self.setUp_with_fragment()
         self.test_serialize()
@@ -355,8 +349,7 @@ class Test_ipv6(unittest.TestCase):
         prev = None
         buf = self.ip.serialize(data, prev)
         fragment = ipv6.fragment.parser(six.binary_type(buf[ipv6.ipv6._MIN_LEN:]))
-        eq_(repr(self.fragment), repr(fragment))
-
+        assert repr(self.fragment) == repr(fragment)
     def test_serialize_with_auth(self):
         self.setUp_with_auth()
         self.test_serialize()
@@ -365,8 +358,7 @@ class Test_ipv6(unittest.TestCase):
         prev = None
         buf = self.ip.serialize(data, prev)
         auth = ipv6.auth.parser(six.binary_type(buf[ipv6.ipv6._MIN_LEN:]))
-        eq_(repr(self.auth), repr(auth))
-
+        assert repr(self.auth) == repr(auth)
     def test_serialize_with_multi_headers(self):
         self.setUp_with_multi_headers()
         self.test_serialize()
@@ -378,9 +370,8 @@ class Test_ipv6(unittest.TestCase):
         hop_opts = ipv6.hop_opts.parser(six.binary_type(buf[offset:]))
         offset += len(hop_opts)
         auth = ipv6.auth.parser(six.binary_type(buf[offset:]))
-        eq_(repr(self.hop_opts), repr(hop_opts))
-        eq_(repr(self.auth), repr(auth))
-
+        assert repr(self.hop_opts) == repr(hop_opts)
+        assert repr(self.auth) == repr(auth)
     def test_to_string(self):
         ipv6_values = {'version': self.version,
                        'traffic_class': self.traffic_class,
@@ -396,9 +387,8 @@ class Test_ipv6(unittest.TestCase):
                               if k in ipv6_values])
         ipv6_str = '%s(%s)' % (ipv6.ipv6.__name__, _ipv6_str)
 
-        eq_(str(self.ip), ipv6_str)
-        eq_(repr(self.ip), ipv6_str)
-
+        assert str(self.ip) == ipv6_str
+        assert repr(self.ip) == ipv6_str
     def test_to_string_with_hop_opts(self):
         self.setUp_with_hop_opts()
         self.test_to_string()
@@ -420,44 +410,36 @@ class Test_ipv6(unittest.TestCase):
         self.test_to_string()
 
     def test_len(self):
-        eq_(len(self.ip), 40)
-
+        assert len(self.ip) == 40
     def test_len_with_hop_opts(self):
         self.setUp_with_hop_opts()
-        eq_(len(self.ip), 40 + len(self.hop_opts))
-
+        assert len(self.ip) == 40 + len(self.hop_opts)
     def test_len_with_dst_opts(self):
         self.setUp_with_dst_opts()
-        eq_(len(self.ip), 40 + len(self.dst_opts))
-
+        assert len(self.ip) == 40 + len(self.dst_opts)
     def test_len_with_routing_type3(self):
         self.setUp_with_routing_type3()
-        eq_(len(self.ip), 40 + len(self.routing))
-
+        assert len(self.ip) == 40 + len(self.routing)
     def test_len_with_fragment(self):
         self.setUp_with_fragment()
-        eq_(len(self.ip), 40 + len(self.fragment))
-
+        assert len(self.ip) == 40 + len(self.fragment)
     def test_len_with_auth(self):
         self.setUp_with_auth()
-        eq_(len(self.ip), 40 + len(self.auth))
-
+        assert len(self.ip) == 40 + len(self.auth)
     def test_len_with_multi_headers(self):
         self.setUp_with_multi_headers()
-        eq_(len(self.ip), 40 + len(self.hop_opts) + len(self.auth))
-
+        assert len(self.ip) == 40 + len(self.hop_opts) + len(self.auth)
     def test_default_args(self):
         ip = ipv6.ipv6()
         buf = ip.serialize(bytearray(), None)
         res = struct.unpack(ipv6.ipv6._PACK_STR, six.binary_type(buf))
 
-        eq_(res[0], 6 << 28)
-        eq_(res[1], 0)
-        eq_(res[2], 6)
-        eq_(res[3], 255)
-        eq_(res[4], addrconv.ipv6.text_to_bin('10::10'))
-        eq_(res[5], addrconv.ipv6.text_to_bin('20::20'))
-
+        assert res[0] == 6 << 28
+        assert res[1] == 0
+        assert res[2] == 6
+        assert res[3] == 255
+        assert res[4] == addrconv.ipv6.text_to_bin('10::10')
+        assert res[5] == addrconv.ipv6.text_to_bin('20::20')
         # with extension header
         ip = ipv6.ipv6(
             nxt=0, ext_hdrs=[
@@ -467,19 +449,17 @@ class Test_ipv6(unittest.TestCase):
         buf = ip.serialize(bytearray(), None)
         res = struct.unpack(ipv6.ipv6._PACK_STR + '8s', six.binary_type(buf))
 
-        eq_(res[0], 6 << 28)
-        eq_(res[1], 8)
-        eq_(res[2], 0)
-        eq_(res[3], 255)
-        eq_(res[4], addrconv.ipv6.text_to_bin('10::10'))
-        eq_(res[5], addrconv.ipv6.text_to_bin('20::20'))
-        eq_(res[6], b'\x3a\x00\x05\x02\x00\x00\x01\x00')
-
+        assert res[0] == 6 << 28
+        assert res[1] == 8
+        assert res[2] == 0
+        assert res[3] == 255
+        assert res[4] == addrconv.ipv6.text_to_bin('10::10')
+        assert res[5] == addrconv.ipv6.text_to_bin('20::20')
+        assert res[6] == b'\x3a\x00\x05\x02\x00\x00\x01\x00'
     def test_json(self):
         jsondict = self.ip.to_jsondict()
         ip = ipv6.ipv6.from_jsondict(jsondict['ipv6'])
-        eq_(str(self.ip), str(ip))
-
+        assert str(self.ip) == str(ip)
     def test_json_with_hop_opts(self):
         self.setUp_with_hop_opts()
         self.test_json()
@@ -528,13 +508,12 @@ class Test_hop_opts(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.nxt, self.hop.nxt)
-        eq_(self.size, self.hop.size)
-        eq_(self.data, self.hop.data)
-
-    @raises(Exception)
+        assert self.nxt == self.hop.nxt
+        assert self.size == self.hop.size
+        assert self.data == self.hop.data
     def test_invalid_size(self):
-        ipv6.hop_opts(self.nxt, 1, self.data)
+        with pytest.raises(Exception):
+            ipv6.hop_opts(self.nxt, 1, self.data)
 
     def test_parser(self):
         _res = ipv6.hop_opts.parser(self.buf)
@@ -542,15 +521,14 @@ class Test_hop_opts(unittest.TestCase):
             res = _res[0]
         else:
             res = _res
-        eq_(self.nxt, res.nxt)
-        eq_(self.size, res.size)
-        eq_(str(self.data), str(res.data))
-
+        assert self.nxt == res.nxt
+        assert self.size == res.size
+        assert str(self.data) == str(res.data)
     def test_serialize(self):
         buf = self.hop.serialize()
         res = struct.unpack_from(self.form, six.binary_type(buf))
-        eq_(self.nxt, res[0])
-        eq_(self.size, res[1])
+        assert self.nxt == res[0]
+        assert self.size == res[1]
         offset = struct.calcsize(self.form)
         opt1 = ipv6.option.parser(six.binary_type(buf[offset:]))
         offset += len(opt1)
@@ -559,33 +537,29 @@ class Test_hop_opts(unittest.TestCase):
         opt3 = ipv6.option.parser(six.binary_type(buf[offset:]))
         offset += len(opt3)
         opt4 = ipv6.option.parser(six.binary_type(buf[offset:]))
-        eq_(5, opt1.type_)
-        eq_(2, opt1.len_)
-        eq_(b'\x00\x00', opt1.data)
-        eq_(1, opt2.type_)
-        eq_(0, opt2.len_)
-        eq_(None, opt2.data)
-        eq_(0xc2, opt3.type_)
-        eq_(4, opt3.len_)
-        eq_(b'\x00\x01\x00\x00', opt3.data)
-        eq_(1, opt4.type_)
-        eq_(0, opt4.len_)
-        eq_(None, opt4.data)
-
+        assert 5 == opt1.type_
+        assert 2 == opt1.len_
+        assert b'\x00\x00' == opt1.data
+        assert 1 == opt2.type_
+        assert 0 == opt2.len_
+        assert None == opt2.data
+        assert 0xc2 == opt3.type_
+        assert 4 == opt3.len_
+        assert b'\x00\x01\x00\x00' == opt3.data
+        assert 1 == opt4.type_
+        assert 0 == opt4.len_
+        assert None == opt4.data
     def test_len(self):
-        eq_(16, len(self.hop))
-
+        assert 16 == len(self.hop)
     def test_default_args(self):
         hdr = ipv6.hop_opts()
         buf = hdr.serialize()
         res = struct.unpack('!BB', six.binary_type(buf[:2]))
 
-        eq_(res[0], 6)
-        eq_(res[1], 0)
+        assert res[0] == 6
+        assert res[1] == 0
         opt = ipv6.option(type_=1, len_=4, data=b'\x00\x00\x00\x00')
-        eq_(six.binary_type(buf[2:]), opt.serialize())
-
-
+        assert six.binary_type(buf[2:]) == opt.serialize()
 class Test_dst_opts(unittest.TestCase):
 
     def setUp(self):
@@ -609,13 +583,12 @@ class Test_dst_opts(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.nxt, self.dst.nxt)
-        eq_(self.size, self.dst.size)
-        eq_(self.data, self.dst.data)
-
-    @raises(Exception)
+        assert self.nxt == self.dst.nxt
+        assert self.size == self.dst.size
+        assert self.data == self.dst.data
     def test_invalid_size(self):
-        ipv6.dst_opts(self.nxt, 1, self.data)
+        with pytest.raises(Exception):
+            ipv6.dst_opts(self.nxt, 1, self.data)
 
     def test_parser(self):
         _res = ipv6.dst_opts.parser(self.buf)
@@ -623,15 +596,14 @@ class Test_dst_opts(unittest.TestCase):
             res = _res[0]
         else:
             res = _res
-        eq_(self.nxt, res.nxt)
-        eq_(self.size, res.size)
-        eq_(str(self.data), str(res.data))
-
+        assert self.nxt == res.nxt
+        assert self.size == res.size
+        assert str(self.data) == str(res.data)
     def test_serialize(self):
         buf = self.dst.serialize()
         res = struct.unpack_from(self.form, six.binary_type(buf))
-        eq_(self.nxt, res[0])
-        eq_(self.size, res[1])
+        assert self.nxt == res[0]
+        assert self.size == res[1]
         offset = struct.calcsize(self.form)
         opt1 = ipv6.option.parser(six.binary_type(buf[offset:]))
         offset += len(opt1)
@@ -640,33 +612,29 @@ class Test_dst_opts(unittest.TestCase):
         opt3 = ipv6.option.parser(six.binary_type(buf[offset:]))
         offset += len(opt3)
         opt4 = ipv6.option.parser(six.binary_type(buf[offset:]))
-        eq_(5, opt1.type_)
-        eq_(2, opt1.len_)
-        eq_(b'\x00\x00', opt1.data)
-        eq_(1, opt2.type_)
-        eq_(0, opt2.len_)
-        eq_(None, opt2.data)
-        eq_(0xc2, opt3.type_)
-        eq_(4, opt3.len_)
-        eq_(b'\x00\x01\x00\x00', opt3.data)
-        eq_(1, opt4.type_)
-        eq_(0, opt4.len_)
-        eq_(None, opt4.data)
-
+        assert 5 == opt1.type_
+        assert 2 == opt1.len_
+        assert b'\x00\x00' == opt1.data
+        assert 1 == opt2.type_
+        assert 0 == opt2.len_
+        assert None == opt2.data
+        assert 0xc2 == opt3.type_
+        assert 4 == opt3.len_
+        assert b'\x00\x01\x00\x00' == opt3.data
+        assert 1 == opt4.type_
+        assert 0 == opt4.len_
+        assert None == opt4.data
     def test_len(self):
-        eq_(16, len(self.dst))
-
+        assert 16 == len(self.dst)
     def test_default_args(self):
         hdr = ipv6.dst_opts()
         buf = hdr.serialize()
         res = struct.unpack('!BB', six.binary_type(buf[:2]))
 
-        eq_(res[0], 6)
-        eq_(res[1], 0)
+        assert res[0] == 6
+        assert res[1] == 0
         opt = ipv6.option(type_=1, len_=4, data=b'\x00\x00\x00\x00')
-        eq_(six.binary_type(buf[2:]), opt.serialize())
-
-
+        assert six.binary_type(buf[2:]) == opt.serialize()
 class Test_option(unittest.TestCase):
 
     def setUp(self):
@@ -681,31 +649,26 @@ class Test_option(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.type_, self.opt.type_)
-        eq_(self.len_, self.opt.len_)
-        eq_(self.data, self.opt.data)
-
+        assert self.type_ == self.opt.type_
+        assert self.len_ == self.opt.len_
+        assert self.data == self.opt.data
     def test_parser(self):
         _res = ipv6.option.parser(self.buf)
         if type(_res) is tuple:
             res = _res[0]
         else:
             res = _res
-        eq_(self.type_, res.type_)
-        eq_(self.len_, res.len_)
-        eq_(self.data, res.data)
-
+        assert self.type_ == res.type_
+        assert self.len_ == res.len_
+        assert self.data == res.data
     def test_serialize(self):
         buf = self.opt.serialize()
         res = struct.unpack_from(self.form, buf)
-        eq_(self.type_, res[0])
-        eq_(self.len_, res[1])
-        eq_(self.data, res[2])
-
+        assert self.type_ == res[0]
+        assert self.len_ == res[1]
+        assert self.data == res[2]
     def test_len(self):
-        eq_(len(self.opt), 2 + self.len_)
-
-
+        assert len(self.opt) == 2 + self.len_
 class Test_option_pad1(Test_option):
 
     def setUp(self):
@@ -719,16 +682,13 @@ class Test_option_pad1(Test_option):
     def test_serialize(self):
         buf = self.opt.serialize()
         res = struct.unpack_from(self.form, buf)
-        eq_(self.type_, res[0])
-
+        assert self.type_ == res[0]
     def test_default_args(self):
         opt = ipv6.option()
         buf = opt.serialize()
         res = struct.unpack('!B', buf)
 
-        eq_(res[0], 0)
-
-
+        assert res[0] == 0
 class Test_option_padN(Test_option):
 
     def setUp(self):
@@ -742,10 +702,8 @@ class Test_option_padN(Test_option):
     def test_serialize(self):
         buf = self.opt.serialize()
         res = struct.unpack_from(self.form, buf)
-        eq_(self.type_, res[0])
-        eq_(self.len_, res[1])
-
-
+        assert self.type_ == res[0]
+        assert self.len_ == res[1]
 class Test_routing(unittest.TestCase):
 
     def setUp(self):
@@ -780,17 +738,16 @@ class Test_routing(unittest.TestCase):
             res = _res[0]
         else:
             res = _res
-        eq_(self.nxt, res.nxt)
-        eq_(self.size, res.size)
-        eq_(self.type_, res.type_)
-        eq_(self.seg, res.seg)
-        eq_(self.cmpi, res.cmpi)
-        eq_(self.cmpe, res.cmpe)
-        eq_(self.pad, res._pad)
-        eq_(self.adrs[0], res.adrs[0])
-        eq_(self.adrs[1], res.adrs[1])
-        eq_(self.adrs[2], res.adrs[2])
-
+        assert self.nxt == res.nxt
+        assert self.size == res.size
+        assert self.type_ == res.type_
+        assert self.seg == res.seg
+        assert self.cmpi == res.cmpi
+        assert self.cmpe == res.cmpe
+        assert self.pad == res._pad
+        assert self.adrs[0] == res.adrs[0]
+        assert self.adrs[1] == res.adrs[1]
+        assert self.adrs[2] == res.adrs[2]
     def test_not_implemented_type(self):
         not_implemented_buf = struct.pack(
             '!BBBBBB2x', 0, 6, ipv6.routing.ROUTING_TYPE_2, 0, 0, 0)
@@ -833,48 +790,45 @@ class Test_routing_type3(unittest.TestCase):
                                addrconv.ipv6.text_to_bin(self.adrs[2]))
 
     def test_init(self):
-        eq_(self.nxt, self.routing.nxt)
-        eq_(self.size, self.routing.size)
-        eq_(self.type_, self.routing.type_)
-        eq_(self.seg, self.routing.seg)
-        eq_(self.cmpi, self.routing.cmpi)
-        eq_(self.cmpe, self.routing.cmpe)
-        eq_(self.pad, self.routing._pad)
-        eq_(self.adrs[0], self.routing.adrs[0])
-        eq_(self.adrs[1], self.routing.adrs[1])
-        eq_(self.adrs[2], self.routing.adrs[2])
-
+        assert self.nxt == self.routing.nxt
+        assert self.size == self.routing.size
+        assert self.type_ == self.routing.type_
+        assert self.seg == self.routing.seg
+        assert self.cmpi == self.routing.cmpi
+        assert self.cmpe == self.routing.cmpe
+        assert self.pad == self.routing._pad
+        assert self.adrs[0] == self.routing.adrs[0]
+        assert self.adrs[1] == self.routing.adrs[1]
+        assert self.adrs[2] == self.routing.adrs[2]
     def test_parser(self):
         _res = ipv6.routing.parser(self.buf)
         if type(_res) is tuple:
             res = _res[0]
         else:
             res = _res
-        eq_(self.nxt, res.nxt)
-        eq_(self.size, res.size)
-        eq_(self.type_, res.type_)
-        eq_(self.seg, res.seg)
-        eq_(self.cmpi, res.cmpi)
-        eq_(self.cmpe, res.cmpe)
-        eq_(self.pad, res._pad)
-        eq_(self.adrs[0], res.adrs[0])
-        eq_(self.adrs[1], res.adrs[1])
-        eq_(self.adrs[2], res.adrs[2])
-
+        assert self.nxt == res.nxt
+        assert self.size == res.size
+        assert self.type_ == res.type_
+        assert self.seg == res.seg
+        assert self.cmpi == res.cmpi
+        assert self.cmpe == res.cmpe
+        assert self.pad == res._pad
+        assert self.adrs[0] == res.adrs[0]
+        assert self.adrs[1] == res.adrs[1]
+        assert self.adrs[2] == res.adrs[2]
     def test_serialize(self):
         buf = self.routing.serialize()
         res = struct.unpack_from(self.form, six.binary_type(buf))
-        eq_(self.nxt, res[0])
-        eq_(self.size, res[1])
-        eq_(self.type_, res[2])
-        eq_(self.seg, res[3])
-        eq_(self.cmpi, res[4] >> 4)
-        eq_(self.cmpe, res[4] & 0xf)
-        eq_(self.pad, res[5])
-        eq_(addrconv.ipv6.text_to_bin(self.adrs[0]), res[6])
-        eq_(addrconv.ipv6.text_to_bin(self.adrs[1]), res[7])
-        eq_(addrconv.ipv6.text_to_bin(self.adrs[2]), res[8])
-
+        assert self.nxt == res[0]
+        assert self.size == res[1]
+        assert self.type_ == res[2]
+        assert self.seg == res[3]
+        assert self.cmpi == res[4] >> 4
+        assert self.cmpe == res[4] & 0xf
+        assert self.pad == res[5]
+        assert addrconv.ipv6.text_to_bin(self.adrs[0]) == res[6]
+        assert addrconv.ipv6.text_to_bin(self.adrs[1]) == res[7]
+        assert addrconv.ipv6.text_to_bin(self.adrs[2]) == res[8]
     def test_parser_with_adrs_zero(self):
         nxt = 0
         size = 0
@@ -894,14 +848,13 @@ class Test_routing_type3(unittest.TestCase):
             res = _res[0]
         else:
             res = _res
-        eq_(nxt, res.nxt)
-        eq_(size, res.size)
-        eq_(type_, res.type_)
-        eq_(seg, res.seg)
-        eq_(cmpi, res.cmpi)
-        eq_(cmpe, res.cmpe)
-        eq_(pad, res._pad)
-
+        assert nxt == res.nxt
+        assert size == res.size
+        assert type_ == res.type_
+        assert seg == res.seg
+        assert cmpi == res.cmpi
+        assert cmpe == res.cmpe
+        assert pad == res._pad
     def test_serialize_with_adrs_zero(self):
         nxt = 0
         size = 0
@@ -918,14 +871,13 @@ class Test_routing_type3(unittest.TestCase):
         buf = routing.serialize()
         form = '!BBBBBB2x'
         res = struct.unpack_from(form, six.binary_type(buf))
-        eq_(nxt, res[0])
-        eq_(size, res[1])
-        eq_(type_, res[2])
-        eq_(seg, res[3])
-        eq_(cmpi, res[4] >> 4)
-        eq_(cmpe, res[4] & 0xf)
-        eq_(pad, res[5])
-
+        assert nxt == res[0]
+        assert size == res[1]
+        assert type_ == res[2]
+        assert seg == res[3]
+        assert cmpi == res[4] >> 4
+        assert cmpe == res[4] & 0xf
+        assert pad == res[5]
     def test_parser_with_compression(self):
         pass
         nxt = 0
@@ -952,17 +904,16 @@ class Test_routing_type3(unittest.TestCase):
             res = _res[0]
         else:
             res = _res
-        eq_(nxt, res.nxt)
-        eq_(size, res.size)
-        eq_(type_, res.type_)
-        eq_(seg, res.seg)
-        eq_(cmpi, res.cmpi)
-        eq_(cmpe, res.cmpe)
-        eq_(pad, res._pad)
-        eq_("::4567:89ab:cdef:1", res.adrs[0])
-        eq_("::4567:89ab:cdef:2", res.adrs[1])
-        eq_("::205.239.0.3", res.adrs[2])
-
+        assert nxt == res.nxt
+        assert size == res.size
+        assert type_ == res.type_
+        assert seg == res.seg
+        assert cmpi == res.cmpi
+        assert cmpe == res.cmpe
+        assert pad == res._pad
+        assert "::4567:89ab:cdef:1" == res.adrs[0]
+        assert "::4567:89ab:cdef:2" == res.adrs[1]
+        assert "::205.239.0.3" == res.adrs[2]
     def test_serialize_with_compression(self):
         nxt = 0
         size = 3
@@ -982,20 +933,18 @@ class Test_routing_type3(unittest.TestCase):
         buf = routing.serialize()
         form = '!BBBBBB2x8s8s8s'
         res = struct.unpack_from(form, six.binary_type(buf))
-        eq_(nxt, res[0])
-        eq_(size, res[1])
-        eq_(type_, res[2])
-        eq_(seg, res[3])
-        eq_(cmpi, res[4] >> 4)
-        eq_(cmpe, res[4] & 0xf)
-        eq_(pad, res[5])
-        eq_(addrconv.ipv6.text_to_bin(adrs[0])[slice_i], res[6])
-        eq_(addrconv.ipv6.text_to_bin(adrs[1])[slice_i], res[7])
-        eq_(addrconv.ipv6.text_to_bin(adrs[2])[slice_e], res[8])
-
+        assert nxt == res[0]
+        assert size == res[1]
+        assert type_ == res[2]
+        assert seg == res[3]
+        assert cmpi == res[4] >> 4
+        assert cmpe == res[4] & 0xf
+        assert pad == res[5]
+        assert addrconv.ipv6.text_to_bin(adrs[0])[slice_i] == res[6]
+        assert addrconv.ipv6.text_to_bin(adrs[1])[slice_i] == res[7]
+        assert addrconv.ipv6.text_to_bin(adrs[2])[slice_e] == res[8]
     def test_len(self):
-        eq_((6 + 1) * 8, len(self.routing))
-
+        assert (6 + 1) * 8 == len(self.routing)
     def test_default_args(self):
         hdr = ipv6.routing_type3()
         buf = hdr.serialize()
@@ -1003,14 +952,12 @@ class Test_routing_type3(unittest.TestCase):
         res = struct.unpack_from(ipv6.routing_type3._PACK_STR, six.binary_type(buf))
         LOG.info(res)
 
-        eq_(res[0], 6)
-        eq_(res[1], 0)
-        eq_(res[2], 3)
-        eq_(res[3], 0)
-        eq_(res[4], (0 << 4) | 0)
-        eq_(res[5], 0)
-
-
+        assert res[0] == 6
+        assert res[1] == 0
+        assert res[2] == 3
+        assert res[3] == 0
+        assert res[4] == (0 << 4) | 0
+        assert res[5] == 0
 class Test_fragment(unittest.TestCase):
 
     def setUp(self):
@@ -1026,42 +973,36 @@ class Test_fragment(unittest.TestCase):
         self.buf = struct.pack(self.form, self.nxt, self.off_m, self.id_)
 
     def test_init(self):
-        eq_(self.nxt, self.fragment.nxt)
-        eq_(self.offset, self.fragment.offset)
-        eq_(self.more, self.fragment.more)
-        eq_(self.id_, self.fragment.id_)
-
+        assert self.nxt == self.fragment.nxt
+        assert self.offset == self.fragment.offset
+        assert self.more == self.fragment.more
+        assert self.id_ == self.fragment.id_
     def test_parser(self):
         _res = ipv6.fragment.parser(self.buf)
         if type(_res) is tuple:
             res = _res[0]
         else:
             res = _res
-        eq_(self.nxt, res.nxt)
-        eq_(self.offset, res.offset)
-        eq_(self.more, res.more)
-        eq_(self.id_, res.id_)
-
+        assert self.nxt == res.nxt
+        assert self.offset == res.offset
+        assert self.more == res.more
+        assert self.id_ == res.id_
     def test_serialize(self):
         buf = self.fragment.serialize()
         res = struct.unpack_from(self.form, six.binary_type(buf))
-        eq_(self.nxt, res[0])
-        eq_(self.off_m, res[1])
-        eq_(self.id_, res[2])
-
+        assert self.nxt == res[0]
+        assert self.off_m == res[1]
+        assert self.id_ == res[2]
     def test_len(self):
-        eq_(8, len(self.fragment))
-
+        assert 8 == len(self.fragment)
     def test_default_args(self):
         hdr = ipv6.fragment()
         buf = hdr.serialize()
         res = struct.unpack_from(ipv6.fragment._PACK_STR, buf)
 
-        eq_(res[0], 6)
-        eq_(res[1], 0)
-        eq_(res[2], 0)
-
-
+        assert res[0] == 6
+        assert res[1] == 0
+        assert res[2] == 0
 class Test_auth(unittest.TestCase):
 
     def setUp(self):
@@ -1077,43 +1018,38 @@ class Test_auth(unittest.TestCase):
                                self.seq, self.data)
 
     def test_init(self):
-        eq_(self.nxt, self.auth.nxt)
-        eq_(self.size, self.auth.size)
-        eq_(self.spi, self.auth.spi)
-        eq_(self.seq, self.auth.seq)
-        eq_(self.data, self.auth.data)
-
+        assert self.nxt == self.auth.nxt
+        assert self.size == self.auth.size
+        assert self.spi == self.auth.spi
+        assert self.seq == self.auth.seq
+        assert self.data == self.auth.data
     def test_parser(self):
         _res = ipv6.auth.parser(self.buf)
         if type(_res) is tuple:
             res = _res[0]
         else:
             res = _res
-        eq_(self.nxt, res.nxt)
-        eq_(self.size, res.size)
-        eq_(self.spi, res.spi)
-        eq_(self.seq, res.seq)
-        eq_(self.data, res.data)
-
+        assert self.nxt == res.nxt
+        assert self.size == res.size
+        assert self.spi == res.spi
+        assert self.seq == res.seq
+        assert self.data == res.data
     def test_serialize(self):
         buf = self.auth.serialize()
         res = struct.unpack_from(self.form, six.binary_type(buf))
-        eq_(self.nxt, res[0])
-        eq_(self.size, res[1])
-        eq_(self.spi, res[2])
-        eq_(self.seq, res[3])
-        eq_(self.data, res[4])
-
+        assert self.nxt == res[0]
+        assert self.size == res[1]
+        assert self.spi == res[2]
+        assert self.seq == res[3]
+        assert self.data == res[4]
     def test_len(self):
-        eq_((4 + 2) * 4, len(self.auth))
-
+        assert (4 + 2) * 4 == len(self.auth)
     def test_len_re(self):
         size = 5
         auth = ipv6.auth(
             0, size, 256, 1,
             b'\x21\xd3\xa9\x5c\x5f\xfd\x4d\x18\x46\x22\xb9\xf8\xf8\xf8\xf8\xf8')
-        eq_((size + 2) * 4, len(auth))
-
+        assert (size + 2) * 4 == len(auth)
     def test_default_args(self):
         hdr = ipv6.auth()
         buf = hdr.serialize()
@@ -1121,8 +1057,8 @@ class Test_auth(unittest.TestCase):
         res = struct.unpack_from(ipv6.auth._PACK_STR, six.binary_type(buf))
         LOG.info(res)
 
-        eq_(res[0], 6)
-        eq_(res[1], 2)
-        eq_(res[2], 0)
-        eq_(res[3], 0)
-        eq_(buf[ipv6.auth._MIN_LEN:], b'\x00\x00\x00\x00')
+        assert res[0] == 6
+        assert res[1] == 2
+        assert res[2] == 0
+        assert res[3] == 0
+        assert buf[ipv6.auth._MIN_LEN:] == b'\x00\x00\x00\x00'
