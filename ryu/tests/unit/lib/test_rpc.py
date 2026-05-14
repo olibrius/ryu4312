@@ -19,7 +19,7 @@ import socket
 import struct
 import unittest
 
-from nose.tools import raises
+import pytest
 import six
 
 from ryu.lib import hub

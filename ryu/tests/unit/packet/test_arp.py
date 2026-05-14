@@ -19,7 +19,7 @@ import unittest
 import logging
 import struct
 from struct import *
-from nose.tools import *
+import pytest
 from ryu.ofproto import ether
 from ryu.lib.packet.ethernet import ethernet
 from ryu.lib.packet.packet import Packet
@@ -67,16 +67,15 @@ class Test_arp(unittest.TestCase):
                 return p
 
     def test_init(self):
-        eq_(self.hwtype, self.a.hwtype)
-        eq_(self.proto, self.a.proto)
-        eq_(self.hlen, self.a.hlen)
-        eq_(self.plen, self.a.plen)
-        eq_(self.opcode, self.a.opcode)
-        eq_(self.src_mac, self.a.src_mac)
-        eq_(self.src_ip, self.a.src_ip)
-        eq_(self.dst_mac, self.a.dst_mac)
-        eq_(self.dst_ip, self.a.dst_ip)
-
+        assert self.hwtype == self.a.hwtype
+        assert self.proto == self.a.proto
+        assert self.hlen == self.a.hlen
+        assert self.plen == self.a.plen
+        assert self.opcode == self.a.opcode
+        assert self.src_mac == self.a.src_mac
+        assert self.src_ip == self.a.src_ip
+        assert self.dst_mac == self.a.dst_mac
+        assert self.dst_ip == self.a.dst_ip
     def test_parser(self):
         _res = self.a.parser(self.buf)
         if type(_res) is tuple:
@@ -84,16 +83,15 @@ class Test_arp(unittest.TestCase):
         else:
             res = _res
 
-        eq_(res.hwtype, self.hwtype)
-        eq_(res.proto, self.proto)
-        eq_(res.hlen, self.hlen)
-        eq_(res.plen, self.plen)
-        eq_(res.opcode, self.opcode)
-        eq_(res.src_mac, self.src_mac)
-        eq_(res.src_ip, self.src_ip)
-        eq_(res.dst_mac, self.dst_mac)
-        eq_(res.dst_ip, self.dst_ip)
-
+        assert res.hwtype == self.hwtype
+        assert res.proto == self.proto
+        assert res.hlen == self.hlen
+        assert res.plen == self.plen
+        assert res.opcode == self.opcode
+        assert res.src_mac == self.src_mac
+        assert res.src_ip == self.src_ip
+        assert res.dst_mac == self.dst_mac
+        assert res.dst_ip == self.dst_ip
     def test_serialize(self):
         data = bytearray()
         prev = None
@@ -102,16 +100,15 @@ class Test_arp(unittest.TestCase):
         fmt = arp._PACK_STR
         res = struct.unpack(fmt, buf)
 
-        eq_(res[0], self.hwtype)
-        eq_(res[1], self.proto)
-        eq_(res[2], self.hlen)
-        eq_(res[3], self.plen)
-        eq_(res[4], self.opcode)
-        eq_(res[5], addrconv.mac.text_to_bin(self.src_mac))
-        eq_(res[6], addrconv.ipv4.text_to_bin(self.src_ip))
-        eq_(res[7], addrconv.mac.text_to_bin(self.dst_mac))
-        eq_(res[8], addrconv.ipv4.text_to_bin(self.dst_ip))
-
+        assert res[0] == self.hwtype
+        assert res[1] == self.proto
+        assert res[2] == self.hlen
+        assert res[3] == self.plen
+        assert res[4] == self.opcode
+        assert res[5] == addrconv.mac.text_to_bin(self.src_mac)
+        assert res[6] == addrconv.ipv4.text_to_bin(self.src_ip)
+        assert res[7] == addrconv.mac.text_to_bin(self.dst_mac)
+        assert res[8] == addrconv.ipv4.text_to_bin(self.dst_ip)
     def _build_arp(self, vlan_enabled):
         if vlan_enabled is True:
             ethertype = ether.ETH_TYPE_8021Q
@@ -132,46 +129,39 @@ class Test_arp(unittest.TestCase):
         p = self._build_arp(True)
 
         e = self.find_protocol(p, "ethernet")
-        ok_(e)
-        eq_(e.ethertype, ether.ETH_TYPE_8021Q)
-
+        assert e
+        assert e.ethertype == ether.ETH_TYPE_8021Q
         v = self.find_protocol(p, "vlan")
-        ok_(v)
-        eq_(v.ethertype, ether.ETH_TYPE_ARP)
-
+        assert v
+        assert v.ethertype == ether.ETH_TYPE_ARP
         a = self.find_protocol(p, "arp")
-        ok_(a)
-
-        eq_(a.hwtype, self.hwtype)
-        eq_(a.proto, self.proto)
-        eq_(a.hlen, self.hlen)
-        eq_(a.plen, self.plen)
-        eq_(a.opcode, self.opcode)
-        eq_(a.src_mac, self.src_mac)
-        eq_(a.src_ip, self.src_ip)
-        eq_(a.dst_mac, self.dst_mac)
-        eq_(a.dst_ip, self.dst_ip)
-
+        assert a
+        assert a.hwtype == self.hwtype
+        assert a.proto == self.proto
+        assert a.hlen == self.hlen
+        assert a.plen == self.plen
+        assert a.opcode == self.opcode
+        assert a.src_mac == self.src_mac
+        assert a.src_ip == self.src_ip
+        assert a.dst_mac == self.dst_mac
+        assert a.dst_ip == self.dst_ip
     def test_build_arp_novlan(self):
         p = self._build_arp(False)
 
         e = self.find_protocol(p, "ethernet")
-        ok_(e)
-        eq_(e.ethertype, ether.ETH_TYPE_ARP)
-
+        assert e
+        assert e.ethertype == ether.ETH_TYPE_ARP
         a = self.find_protocol(p, "arp")
-        ok_(a)
-
-        eq_(a.hwtype, self.hwtype)
-        eq_(a.proto, self.proto)
-        eq_(a.hlen, self.hlen)
-        eq_(a.plen, self.plen)
-        eq_(a.opcode, self.opcode)
-        eq_(a.src_mac, self.src_mac)
-        eq_(a.src_ip, self.src_ip)
-        eq_(a.dst_mac, self.dst_mac)
-        eq_(a.dst_ip, self.dst_ip)
-
+        assert a
+        assert a.hwtype == self.hwtype
+        assert a.proto == self.proto
+        assert a.hlen == self.hlen
+        assert a.plen == self.plen
+        assert a.opcode == self.opcode
+        assert a.src_mac == self.src_mac
+        assert a.src_ip == self.src_ip
+        assert a.dst_mac == self.dst_mac
+        assert a.dst_ip == self.dst_ip
     @raises(Exception)
     def test_malformed_arp(self):
         m_short_buf = self.buf[1:arp._MIN_LEN]
@@ -180,4 +170,4 @@ class Test_arp(unittest.TestCase):
     def test_json(self):
         jsondict = self.a.to_jsondict()
         a = arp.from_jsondict(jsondict['arp'])
-        eq_(str(self.a), str(a))
+        assert str(self.a) == str(a)

@@ -17,9 +17,7 @@ import logging
 import struct
 import unittest
 
-from nose.tools import eq_
-from nose.tools import ok_
-from nose.tools import raises
+import pytest
 from ryu.ofproto import ether
 from ryu.ofproto import inet
 from ryu.lib.packet import ethernet
@@ -49,29 +47,26 @@ class Test_itag(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.pcp, self.it.pcp)
-        eq_(self.dei, self.it.dei)
-        eq_(self.uca, self.it.uca)
-        eq_(self.sid, self.it.sid)
-
+        assert self.pcp == self.it.pcp
+        assert self.dei == self.it.dei
+        assert self.uca == self.it.uca
+        assert self.sid == self.it.sid
     def test_parser(self):
         _res = pbb.itag.parser(self.buf)
         if type(_res) is tuple:
             res = _res[0]
         else:
             res = _res
-        eq_(res.pcp, self.pcp)
-        eq_(res.dei, self.dei)
-        eq_(res.uca, self.uca)
-        eq_(res.sid, self.sid)
-
+        assert res.pcp == self.pcp
+        assert res.dei == self.dei
+        assert res.uca == self.uca
+        assert res.sid == self.sid
     def test_serialize(self):
         data = bytearray()
         prev = None
         buf = self.it.serialize(data, prev)
         res = struct.unpack(pbb.itag._PACK_STR, buf)
-        eq_(res[0], self.data)
-
+        assert res[0] == self.data
     def _build_itag(self):
         b_src_mac = '00:07:0d:af:f4:54'
         b_dst_mac = '00:00:00:00:00:00'
@@ -135,32 +130,26 @@ class Test_itag(unittest.TestCase):
         p = self._build_itag()
 
         e = p.get_protocols(ethernet.ethernet)
-        ok_(e)
-        ok_(isinstance(e, list))
-        eq_(e[0].ethertype, ether.ETH_TYPE_8021AD)
-        eq_(e[1].ethertype, ether.ETH_TYPE_8021AD)
-
+        assert e
+        assert isinstance(e, list)
+        assert e[0].ethertype == ether.ETH_TYPE_8021AD
+        assert e[1].ethertype == ether.ETH_TYPE_8021AD
         sv = p.get_protocols(vlan.svlan)
-        ok_(sv)
-        ok_(isinstance(sv, list))
-        eq_(sv[0].ethertype, ether.ETH_TYPE_8021Q)
-        eq_(sv[1].ethertype, ether.ETH_TYPE_8021Q)
-
+        assert sv
+        assert isinstance(sv, list)
+        assert sv[0].ethertype == ether.ETH_TYPE_8021Q
+        assert sv[1].ethertype == ether.ETH_TYPE_8021Q
         it = p.get_protocol(pbb.itag)
-        ok_(it)
-
+        assert it
         v = p.get_protocol(vlan.vlan)
-        ok_(v)
-        eq_(v.ethertype, ether.ETH_TYPE_IP)
-
+        assert v
+        assert v.ethertype == ether.ETH_TYPE_IP
         ip = p.get_protocol(ipv4.ipv4)
-        ok_(ip)
-
-        eq_(it.pcp, self.pcp)
-        eq_(it.dei, self.dei)
-        eq_(it.uca, self.uca)
-        eq_(it.sid, self.sid)
-
+        assert ip
+        assert it.pcp == self.pcp
+        assert it.dei == self.dei
+        assert it.uca == self.uca
+        assert it.sid == self.sid
     @raises(Exception)
     def test_malformed_itag(self):
         m_short_buf = self.buf[1:pbb.itag._MIN_LEN]
@@ -169,4 +158,4 @@ class Test_itag(unittest.TestCase):
     def test_json(self):
         jsondict = self.it.to_jsondict()
         it = pbb.itag.from_jsondict(jsondict['itag'])
-        eq_(str(self.it), str(it))
+        assert str(self.it) == str(it)

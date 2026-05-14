@@ -20,7 +20,7 @@ import logging
 from struct import pack, unpack_from
 import unittest
 
-from nose.tools import ok_, eq_, raises
+import pytest
 from ryu.ofproto import ether
 from ryu.lib.packet.ethernet import ethernet
 from ryu.lib.packet.packet import Packet
@@ -303,56 +303,45 @@ class Test_lacp(unittest.TestCase):
                 return p
 
     def test_init(self):
-        eq_(self.subtype, self.l._subtype)
-        eq_(self.version, self.l.version)
-        eq_(self.actor_tag, self.l._actor_tag)
-        eq_(self.actor_length, self.l._actor_length)
-        eq_(self.actor_system_priority, self.l.actor_system_priority)
-        eq_(self.actor_system, self.l.actor_system)
-        eq_(self.actor_key, self.l.actor_key)
-        eq_(self.actor_port_priority, self.l.actor_port_priority)
-        eq_(self.actor_port, self.l.actor_port)
-        eq_(self.actor_state_activity, self.l.actor_state_activity)
-        eq_(self.actor_state_timeout, self.l.actor_state_timeout)
-        eq_(self.actor_state_aggregation,
-            self.l.actor_state_aggregation)
-        eq_(self.actor_state_synchronization,
-            self.l.actor_state_synchronization)
-        eq_(self.actor_state_collecting,
-            self.l.actor_state_collecting)
-        eq_(self.actor_state_distributing,
-            self.l.actor_state_distributing)
-        eq_(self.actor_state_defaulted, self.l.actor_state_defaulted)
-        eq_(self.actor_state_expired, self.l.actor_state_expired)
-        eq_(self.actor_state, self.l._actor_state)
-        eq_(self.partner_tag, self.l._partner_tag)
-        eq_(self.partner_length, self.l._partner_length)
-        eq_(self.partner_system_priority,
-            self.l.partner_system_priority)
-        eq_(self.partner_system, self.l.partner_system)
-        eq_(self.partner_key, self.l.partner_key)
-        eq_(self.partner_port_priority, self.l.partner_port_priority)
-        eq_(self.partner_port, self.l.partner_port)
-        eq_(self.partner_state_activity, self.l.partner_state_activity)
-        eq_(self.partner_state_timeout, self.l.partner_state_timeout)
-        eq_(self.partner_state_aggregation,
-            self.l.partner_state_aggregation)
-        eq_(self.partner_state_synchronization,
-            self.l.partner_state_synchronization)
-        eq_(self.partner_state_collecting,
-            self.l.partner_state_collecting)
-        eq_(self.partner_state_distributing,
-            self.l.partner_state_distributing)
-        eq_(self.partner_state_defaulted,
-            self.l.partner_state_defaulted)
-        eq_(self.partner_state_expired, self.l.partner_state_expired)
-        eq_(self.partner_state, self.l._partner_state)
-        eq_(self.collector_tag, self.l._collector_tag)
-        eq_(self.collector_length, self.l._collector_length)
-        eq_(self.collector_max_delay, self.l.collector_max_delay)
-        eq_(self.terminator_tag, self.l._terminator_tag)
-        eq_(self.terminator_length, self.l._terminator_length)
-
+        assert self.subtype == self.l._subtype
+        assert self.version == self.l.version
+        assert self.actor_tag == self.l._actor_tag
+        assert self.actor_length == self.l._actor_length
+        assert self.actor_system_priority == self.l.actor_system_priority
+        assert self.actor_system == self.l.actor_system
+        assert self.actor_key == self.l.actor_key
+        assert self.actor_port_priority == self.l.actor_port_priority
+        assert self.actor_port == self.l.actor_port
+        assert self.actor_state_activity == self.l.actor_state_activity
+        assert self.actor_state_timeout == self.l.actor_state_timeout
+        assert self.actor_state_aggregation == self.l.actor_state_aggregation
+        assert self.actor_state_synchronization == self.l.actor_state_synchronization
+        assert self.actor_state_collecting == self.l.actor_state_collecting
+        assert self.actor_state_distributing == self.l.actor_state_distributing
+        assert self.actor_state_defaulted == self.l.actor_state_defaulted
+        assert self.actor_state_expired == self.l.actor_state_expired
+        assert self.actor_state == self.l._actor_state
+        assert self.partner_tag == self.l._partner_tag
+        assert self.partner_length == self.l._partner_length
+        assert self.partner_system_priority == self.l.partner_system_priority
+        assert self.partner_system == self.l.partner_system
+        assert self.partner_key == self.l.partner_key
+        assert self.partner_port_priority == self.l.partner_port_priority
+        assert self.partner_port == self.l.partner_port
+        assert self.partner_state_activity == self.l.partner_state_activity
+        assert self.partner_state_timeout == self.l.partner_state_timeout
+        assert self.partner_state_aggregation == self.l.partner_state_aggregation
+        assert self.partner_state_synchronization == self.l.partner_state_synchronization
+        assert self.partner_state_collecting == self.l.partner_state_collecting
+        assert self.partner_state_distributing == self.l.partner_state_distributing
+        assert self.partner_state_defaulted == self.l.partner_state_defaulted
+        assert self.partner_state_expired == self.l.partner_state_expired
+        assert self.partner_state == self.l._partner_state
+        assert self.collector_tag == self.l._collector_tag
+        assert self.collector_length == self.l._collector_length
+        assert self.collector_max_delay == self.l.collector_max_delay
+        assert self.terminator_tag == self.l._terminator_tag
+        assert self.terminator_length == self.l._terminator_length
     def test_parser(self):
         _res = self.l.parser(self.buf)
         if type(_res) is tuple:
@@ -360,50 +349,45 @@ class Test_lacp(unittest.TestCase):
         else:
             res = _res
 
-        eq_(res._subtype, self.subtype)
-        eq_(res.version, self.version)
-        eq_(res._actor_tag, self.actor_tag)
-        eq_(res._actor_length, self.actor_length)
-        eq_(res.actor_system_priority, self.actor_system_priority)
-        eq_(res.actor_system, self.actor_system)
-        eq_(res.actor_key, self.actor_key)
-        eq_(res.actor_port_priority, self.actor_port_priority)
-        eq_(res.actor_port, self.actor_port)
-        eq_(res.actor_state_activity, self.actor_state_activity)
-        eq_(res.actor_state_timeout, self.actor_state_timeout)
-        eq_(res.actor_state_aggregation, self.actor_state_aggregation)
-        eq_(res.actor_state_synchronization,
-            self.actor_state_synchronization)
-        eq_(res.actor_state_collecting, self.actor_state_collecting)
-        eq_(res.actor_state_distributing, self.actor_state_distributing)
-        eq_(res.actor_state_defaulted, self.actor_state_defaulted)
-        eq_(res.actor_state_expired, self.actor_state_expired)
-        eq_(res._actor_state, self.actor_state)
-        eq_(res._partner_tag, self.partner_tag)
-        eq_(res._partner_length, self.partner_length)
-        eq_(res.partner_system_priority, self.partner_system_priority)
-        eq_(res.partner_system, self.partner_system)
-        eq_(res.partner_key, self.partner_key)
-        eq_(res.partner_port_priority, self.partner_port_priority)
-        eq_(res.partner_port, self.partner_port)
-        eq_(res.partner_state_activity, self.partner_state_activity)
-        eq_(res.partner_state_timeout, self.partner_state_timeout)
-        eq_(res.partner_state_aggregation,
-            self.partner_state_aggregation)
-        eq_(res.partner_state_synchronization,
-            self.partner_state_synchronization)
-        eq_(res.partner_state_collecting, self.partner_state_collecting)
-        eq_(res.partner_state_distributing,
-            self.partner_state_distributing)
-        eq_(res.partner_state_defaulted, self.partner_state_defaulted)
-        eq_(res.partner_state_expired, self.partner_state_expired)
-        eq_(res._partner_state, self.partner_state)
-        eq_(res._collector_tag, self.collector_tag)
-        eq_(res._collector_length, self.collector_length)
-        eq_(res.collector_max_delay, self.collector_max_delay)
-        eq_(res._terminator_tag, self.terminator_tag)
-        eq_(res._terminator_length, self.terminator_length)
-
+        assert res._subtype == self.subtype
+        assert res.version == self.version
+        assert res._actor_tag == self.actor_tag
+        assert res._actor_length == self.actor_length
+        assert res.actor_system_priority == self.actor_system_priority
+        assert res.actor_system == self.actor_system
+        assert res.actor_key == self.actor_key
+        assert res.actor_port_priority == self.actor_port_priority
+        assert res.actor_port == self.actor_port
+        assert res.actor_state_activity == self.actor_state_activity
+        assert res.actor_state_timeout == self.actor_state_timeout
+        assert res.actor_state_aggregation == self.actor_state_aggregation
+        assert res.actor_state_synchronization == self.actor_state_synchronization
+        assert res.actor_state_collecting == self.actor_state_collecting
+        assert res.actor_state_distributing == self.actor_state_distributing
+        assert res.actor_state_defaulted == self.actor_state_defaulted
+        assert res.actor_state_expired == self.actor_state_expired
+        assert res._actor_state == self.actor_state
+        assert res._partner_tag == self.partner_tag
+        assert res._partner_length == self.partner_length
+        assert res.partner_system_priority == self.partner_system_priority
+        assert res.partner_system == self.partner_system
+        assert res.partner_key == self.partner_key
+        assert res.partner_port_priority == self.partner_port_priority
+        assert res.partner_port == self.partner_port
+        assert res.partner_state_activity == self.partner_state_activity
+        assert res.partner_state_timeout == self.partner_state_timeout
+        assert res.partner_state_aggregation == self.partner_state_aggregation
+        assert res.partner_state_synchronization == self.partner_state_synchronization
+        assert res.partner_state_collecting == self.partner_state_collecting
+        assert res.partner_state_distributing == self.partner_state_distributing
+        assert res.partner_state_defaulted == self.partner_state_defaulted
+        assert res.partner_state_expired == self.partner_state_expired
+        assert res._partner_state == self.partner_state
+        assert res._collector_tag == self.collector_tag
+        assert res._collector_length == self.collector_length
+        assert res.collector_max_delay == self.collector_max_delay
+        assert res._terminator_tag == self.terminator_tag
+        assert res._terminator_length == self.terminator_length
     def test_serialize(self):
         data = bytearray()
         prev = None
@@ -420,34 +404,29 @@ class Test_lacp(unittest.TestCase):
         offset += self.col_len
         trm_res = unpack_from(self.trm_fmt, buf, offset)
 
-        eq_(head_res[0], self.subtype)
-        eq_(head_res[1], self.version)
-
-        eq_(act_res[0], self.actor_tag)
-        eq_(act_res[1], self.actor_length)
-        eq_(act_res[2], self.actor_system_priority)
-        eq_(act_res[3], addrconv.mac.text_to_bin(self.actor_system))
-        eq_(act_res[4], self.actor_key)
-        eq_(act_res[5], self.actor_port_priority)
-        eq_(act_res[6], self.actor_port)
-        eq_(act_res[7], self.actor_state)
-
-        eq_(prt_res[0], self.partner_tag)
-        eq_(prt_res[1], self.partner_length)
-        eq_(prt_res[2], self.partner_system_priority)
-        eq_(prt_res[3], addrconv.mac.text_to_bin(self.partner_system))
-        eq_(prt_res[4], self.partner_key)
-        eq_(prt_res[5], self.partner_port_priority)
-        eq_(prt_res[6], self.partner_port)
-        eq_(prt_res[7], self.partner_state)
-
-        eq_(col_res[0], self.collector_tag)
-        eq_(col_res[1], self.collector_length)
-        eq_(col_res[2], self.collector_max_delay)
-
-        eq_(trm_res[0], self.terminator_tag)
-        eq_(trm_res[1], self.terminator_length)
-
+        assert head_res[0] == self.subtype
+        assert head_res[1] == self.version
+        assert act_res[0] == self.actor_tag
+        assert act_res[1] == self.actor_length
+        assert act_res[2] == self.actor_system_priority
+        assert act_res[3] == addrconv.mac.text_to_bin(self.actor_system)
+        assert act_res[4] == self.actor_key
+        assert act_res[5] == self.actor_port_priority
+        assert act_res[6] == self.actor_port
+        assert act_res[7] == self.actor_state
+        assert prt_res[0] == self.partner_tag
+        assert prt_res[1] == self.partner_length
+        assert prt_res[2] == self.partner_system_priority
+        assert prt_res[3] == addrconv.mac.text_to_bin(self.partner_system)
+        assert prt_res[4] == self.partner_key
+        assert prt_res[5] == self.partner_port_priority
+        assert prt_res[6] == self.partner_port
+        assert prt_res[7] == self.partner_state
+        assert col_res[0] == self.collector_tag
+        assert col_res[1] == self.collector_length
+        assert col_res[2] == self.collector_max_delay
+        assert trm_res[0] == self.terminator_tag
+        assert trm_res[1] == self.terminator_length
     def _build_lacp(self):
         ethertype = ether.ETH_TYPE_SLOW
         dst = SLOW_PROTOCOL_MULTICAST
@@ -463,55 +442,49 @@ class Test_lacp(unittest.TestCase):
         p = self._build_lacp()
 
         e = self.find_protocol(p, "ethernet")
-        ok_(e)
-        eq_(e.ethertype, ether.ETH_TYPE_SLOW)
-
+        assert e
+        assert e.ethertype == ether.ETH_TYPE_SLOW
         l = self.find_protocol(p, "lacp")
-        ok_(l)
-
-        eq_(l._subtype, self.subtype)
-        eq_(l.version, self.version)
-        eq_(l._actor_tag, self.actor_tag)
-        eq_(l._actor_length, self.actor_length)
-        eq_(l.actor_system_priority, self.actor_system_priority)
-        eq_(l.actor_system, self.actor_system)
-        eq_(l.actor_key, self.actor_key)
-        eq_(l.actor_port_priority, self.actor_port_priority)
-        eq_(l.actor_port, self.actor_port)
-        eq_(l.actor_state_activity, self.actor_state_activity)
-        eq_(l.actor_state_timeout, self.actor_state_timeout)
-        eq_(l.actor_state_aggregation, self.actor_state_aggregation)
-        eq_(l.actor_state_synchronization,
-            self.actor_state_synchronization)
-        eq_(l.actor_state_collecting, self.actor_state_collecting)
-        eq_(l.actor_state_distributing, self.actor_state_distributing)
-        eq_(l.actor_state_defaulted, self.actor_state_defaulted)
-        eq_(l.actor_state_expired, self.actor_state_expired)
-        eq_(l._actor_state, self.actor_state)
-        eq_(l._partner_tag, self.partner_tag)
-        eq_(l._partner_length, self.partner_length)
-        eq_(l.partner_system_priority, self.partner_system_priority)
-        eq_(l.partner_system, self.partner_system)
-        eq_(l.partner_key, self.partner_key)
-        eq_(l.partner_port_priority, self.partner_port_priority)
-        eq_(l.partner_port, self.partner_port)
-        eq_(l.partner_state_activity, self.partner_state_activity)
-        eq_(l.partner_state_timeout, self.partner_state_timeout)
-        eq_(l.partner_state_aggregation, self.partner_state_aggregation)
-        eq_(l.partner_state_synchronization,
-            self.partner_state_synchronization)
-        eq_(l.partner_state_collecting, self.partner_state_collecting)
-        eq_(l.partner_state_distributing,
-            self.partner_state_distributing)
-        eq_(l.partner_state_defaulted, self.partner_state_defaulted)
-        eq_(l.partner_state_expired, self.partner_state_expired)
-        eq_(l._partner_state, self.partner_state)
-        eq_(l._collector_tag, self.collector_tag)
-        eq_(l._collector_length, self.collector_length)
-        eq_(l.collector_max_delay, self.collector_max_delay)
-        eq_(l._terminator_tag, self.terminator_tag)
-        eq_(l._terminator_length, self.terminator_length)
-
+        assert l
+        assert l._subtype == self.subtype
+        assert l.version == self.version
+        assert l._actor_tag == self.actor_tag
+        assert l._actor_length == self.actor_length
+        assert l.actor_system_priority == self.actor_system_priority
+        assert l.actor_system == self.actor_system
+        assert l.actor_key == self.actor_key
+        assert l.actor_port_priority == self.actor_port_priority
+        assert l.actor_port == self.actor_port
+        assert l.actor_state_activity == self.actor_state_activity
+        assert l.actor_state_timeout == self.actor_state_timeout
+        assert l.actor_state_aggregation == self.actor_state_aggregation
+        assert l.actor_state_synchronization == self.actor_state_synchronization
+        assert l.actor_state_collecting == self.actor_state_collecting
+        assert l.actor_state_distributing == self.actor_state_distributing
+        assert l.actor_state_defaulted == self.actor_state_defaulted
+        assert l.actor_state_expired == self.actor_state_expired
+        assert l._actor_state == self.actor_state
+        assert l._partner_tag == self.partner_tag
+        assert l._partner_length == self.partner_length
+        assert l.partner_system_priority == self.partner_system_priority
+        assert l.partner_system == self.partner_system
+        assert l.partner_key == self.partner_key
+        assert l.partner_port_priority == self.partner_port_priority
+        assert l.partner_port == self.partner_port
+        assert l.partner_state_activity == self.partner_state_activity
+        assert l.partner_state_timeout == self.partner_state_timeout
+        assert l.partner_state_aggregation == self.partner_state_aggregation
+        assert l.partner_state_synchronization == self.partner_state_synchronization
+        assert l.partner_state_collecting == self.partner_state_collecting
+        assert l.partner_state_distributing == self.partner_state_distributing
+        assert l.partner_state_defaulted == self.partner_state_defaulted
+        assert l.partner_state_expired == self.partner_state_expired
+        assert l._partner_state == self.partner_state
+        assert l._collector_tag == self.collector_tag
+        assert l._collector_length == self.collector_length
+        assert l.collector_max_delay == self.collector_max_delay
+        assert l._terminator_tag == self.terminator_tag
+        assert l._terminator_length == self.terminator_length
     @raises(Exception)
     def test_malformed_lacp(self):
         m_short_buf = self.buf[1:self.length]
@@ -1102,4 +1075,4 @@ class Test_lacp(unittest.TestCase):
     def test_json(self):
         jsondict = self.l.to_jsondict()
         l = lacp.from_jsondict(jsondict['lacp'])
-        eq_(str(self.l), str(l))
+        assert str(self.l) == str(l)

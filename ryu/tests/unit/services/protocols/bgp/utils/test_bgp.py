@@ -17,7 +17,7 @@
 import logging
 import unittest
 
-from nose.tools import eq_, raises
+import pytest
 
 from ryu.lib.packet.bgp import (
     BGPFlowSpecTrafficRateCommunity,
@@ -46,8 +46,7 @@ class Test_Utils_BGP(unittest.TestCase):
         communities = create_v4flowspec_actions(actions)
         expected_communities.sort(key=lambda x: x.subtype)
         communities.sort(key=lambda x: x.subtype)
-        eq_(str(expected_communities), str(communities))
-
+        assert str(expected_communities) == str(communities)
     def test_create_v4flowspec_actions_all_actions(self):
         actions = {
             'traffic_rate': {
@@ -92,8 +91,7 @@ class Test_Utils_BGP(unittest.TestCase):
         communities = create_v6flowspec_actions(actions)
         expected_communities.sort(key=lambda x: x.subtype)
         communities.sort(key=lambda x: x.subtype)
-        eq_(str(expected_communities), str(communities))
-
+        assert str(expected_communities) == str(communities)
     def test_create_v6flowspec_actions_all_actions(self):
         actions = {
             'traffic_rate': {
@@ -138,8 +136,7 @@ class Test_Utils_BGP(unittest.TestCase):
         communities = create_l2vpnflowspec_actions(actions)
         expected_communities.sort(key=lambda x: x.subtype)
         communities.sort(key=lambda x: x.subtype)
-        eq_(str(expected_communities), str(communities))
-
+        assert str(expected_communities) == str(communities)
     def test_create_l2vpnflowspec_actions_all_actions(self):
         actions = {
             'traffic_rate': {

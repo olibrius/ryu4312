@@ -20,7 +20,7 @@ try:
 except ImportError:
     from unittest import mock  # Python 3
 
-from nose.tools import raises
+import pytest
 
 from ryu.services.protocols.bgp import bgpspeaker
 from ryu.services.protocols.bgp.bgpspeaker import EVPN_MAX_ET

@@ -20,7 +20,7 @@ import logging
 import six
 import struct
 from struct import *
-from nose.tools import *
+import pytest
 from ryu.ofproto import ether, inet
 from ryu.lib.packet import packet_utils
 from ryu.lib.packet.ethernet import ethernet
@@ -74,58 +74,54 @@ class Test_ipv4(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.version, self.ip.version)
-        eq_(self.header_length, self.ip.header_length)
-        eq_(self.tos, self.ip.tos)
-        eq_(self.total_length, self.ip.total_length)
-        eq_(self.identification, self.ip.identification)
-        eq_(self.flags, self.ip.flags)
-        eq_(self.offset, self.ip.offset)
-        eq_(self.ttl, self.ip.ttl)
-        eq_(self.proto, self.ip.proto)
-        eq_(self.csum, self.ip.csum)
-        eq_(self.src, self.ip.src)
-        eq_(self.dst, self.ip.dst)
-        eq_(self.length, len(self.ip))
-        eq_(self.option, self.ip.option)
-
+        assert self.version == self.ip.version
+        assert self.header_length == self.ip.header_length
+        assert self.tos == self.ip.tos
+        assert self.total_length == self.ip.total_length
+        assert self.identification == self.ip.identification
+        assert self.flags == self.ip.flags
+        assert self.offset == self.ip.offset
+        assert self.ttl == self.ip.ttl
+        assert self.proto == self.ip.proto
+        assert self.csum == self.ip.csum
+        assert self.src == self.ip.src
+        assert self.dst == self.ip.dst
+        assert self.length == len(self.ip)
+        assert self.option == self.ip.option
     def test_parser(self):
         res, ptype, _ = self.ip.parser(self.buf)
 
-        eq_(res.version, self.version)
-        eq_(res.header_length, self.header_length)
-        eq_(res.tos, self.tos)
-        eq_(res.total_length, self.total_length)
-        eq_(res.identification, self.identification)
-        eq_(res.flags, self.flags)
-        eq_(res.offset, self.offset)
-        eq_(res.ttl, self.ttl)
-        eq_(res.proto, self.proto)
-        eq_(res.csum, self.csum)
-        eq_(res.src, self.src)
-        eq_(res.dst, self.dst)
-        eq_(ptype, tcp)
-
+        assert res.version == self.version
+        assert res.header_length == self.header_length
+        assert res.tos == self.tos
+        assert res.total_length == self.total_length
+        assert res.identification == self.identification
+        assert res.flags == self.flags
+        assert res.offset == self.offset
+        assert res.ttl == self.ttl
+        assert res.proto == self.proto
+        assert res.csum == self.csum
+        assert res.src == self.src
+        assert res.dst == self.dst
+        assert ptype == tcp
     def test_serialize(self):
         buf = self.ip.serialize(bytearray(), None)
         res = struct.unpack_from(ipv4._PACK_STR, six.binary_type(buf))
         option = buf[ipv4._MIN_LEN:ipv4._MIN_LEN + len(self.option)]
 
-        eq_(res[0], self.ver_hlen)
-        eq_(res[1], self.tos)
-        eq_(res[2], self.total_length)
-        eq_(res[3], self.identification)
-        eq_(res[4], self.flg_off)
-        eq_(res[5], self.ttl)
-        eq_(res[6], self.proto)
-        eq_(res[8], addrconv.ipv4.text_to_bin(self.src))
-        eq_(res[9], addrconv.ipv4.text_to_bin(self.dst))
-        eq_(option, self.option)
-
+        assert res[0] == self.ver_hlen
+        assert res[1] == self.tos
+        assert res[2] == self.total_length
+        assert res[3] == self.identification
+        assert res[4] == self.flg_off
+        assert res[5] == self.ttl
+        assert res[6] == self.proto
+        assert res[8] == addrconv.ipv4.text_to_bin(self.src)
+        assert res[9] == addrconv.ipv4.text_to_bin(self.dst)
+        assert option == self.option
         # checksum
         csum = packet_utils.checksum(buf)
-        eq_(csum, 0)
-
+        assert csum == 0
     @raises(Exception)
     def test_malformed_ipv4(self):
         m_short_buf = self.buf[1:ipv4._MIN_LEN]
@@ -134,4 +130,4 @@ class Test_ipv4(unittest.TestCase):
     def test_json(self):
         jsondict = self.ip.to_jsondict()
         ip = ipv4.from_jsondict(jsondict['ipv4'])
-        eq_(str(self.ip), str(ip))
+        assert str(self.ip) == str(ip)

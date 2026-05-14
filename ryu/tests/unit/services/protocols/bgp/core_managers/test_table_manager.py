@@ -21,7 +21,7 @@ try:
 except ImportError:
     from unittest import mock  # Python 3
 
-from nose.tools import ok_, eq_, raises
+import pytest
 
 from ryu.lib.packet.bgp import BGPPathAttributeOrigin
 from ryu.lib.packet.bgp import BGPPathAttributeAsPath
@@ -84,17 +84,17 @@ class Test_TableCoreManager(unittest.TestCase):
 
         # Check
         call_args_list = vrf_table_mock.insert_vrf_path.call_args_list
-        ok_(len(call_args_list) == 1)  # insert_vrf_path should be called once
+        assert len(call_args_list) == 1
         args, kwargs = call_args_list[0]
-        ok_(len(args) == 0)  # no positional argument
-        eq_(str(prefix_inst), str(kwargs['nlri']))
-        eq_(is_withdraw, kwargs['is_withdraw'])
+        assert len(args) == 0
+        assert str(prefix_inst) == str(kwargs['nlri'])
+        assert is_withdraw == kwargs['is_withdraw']
         if is_withdraw:
-            eq_(None, kwargs['next_hop'])
-            eq_(False, kwargs['gen_lbl'])
+            assert None == kwargs['next_hop']
+            assert False == kwargs['gen_lbl']
         else:
-            eq_(next_hop, kwargs['next_hop'])
-            eq_(True, kwargs['gen_lbl'])
+            assert next_hop == kwargs['next_hop']
+            assert True == kwargs['gen_lbl']
 
     def test_update_vrf_table_ipv4(self):
         # Prepare test data
@@ -236,13 +236,13 @@ class Test_TableCoreManager(unittest.TestCase):
 
         # Check
         call_args_list = vrf_table_mock.insert_vrf_path.call_args_list
-        ok_(len(call_args_list) == 1)  # insert_vrf_path should be called once
+        assert len(call_args_list) == 1
         args, kwargs = call_args_list[0]
-        ok_(len(args) == 0)  # no positional argument
-        eq_(str(prefix_inst), str(kwargs['nlri']))
-        eq_(next_hop, kwargs['next_hop'])
-        eq_(False, kwargs['gen_lbl'])  # should not generate MPLS labels
-        eq_(tunnel_type, kwargs['tunnel_type'])
+        assert len(args) == 0
+        assert str(prefix_inst) == str(kwargs['nlri'])
+        assert next_hop == kwargs['next_hop']
+        assert False == kwargs['gen_lbl']
+        assert tunnel_type == kwargs['tunnel_type']
 
     def test_update_vrf_table_ipv4_withdraw(self):
         # Prepare test data
@@ -383,15 +383,15 @@ class Test_TableCoreManager(unittest.TestCase):
 
         # Check
         call_args_list = learn_path_mock.call_args_list
-        ok_(len(call_args_list) == 1)  # learn_path should be called once
+        assert len(call_args_list) == 1
         args, kwargs = call_args_list[0]
-        ok_(len(kwargs) == 0)  # no keyword argument
+        assert len(kwargs) == 0
         output_path = args[0]
-        eq_(None, output_path.source)
-        eq_(prefix, output_path.nlri.prefix)
-        eq_(pathattrs, str(output_path.pathattr_map))
-        eq_(expected_next_hop, output_path.nexthop)
-        eq_(is_withdraw, output_path.is_withdraw)
+        assert None == output_path.source
+        assert prefix == output_path.nlri.prefix
+        assert pathattrs == str(output_path.pathattr_map)
+        assert expected_next_hop == output_path.nexthop
+        assert is_withdraw == output_path.is_withdraw
 
     def test_update_global_table_ipv4(self):
         self._test_update_global_table(
@@ -463,12 +463,12 @@ class Test_TableCoreManager(unittest.TestCase):
 
         # Check
         call_args_list = vrf_table_mock.insert_vrffs_path.call_args_list
-        ok_(len(
-            call_args_list) == 1)  # insert_vrffs_path should be called once
+        assert (len(
+            call_args_list) == 1)
         args, kwargs = call_args_list[0]
-        ok_(len(args) == 0)  # no positional argument
-        eq_(prefix, kwargs['nlri'].prefix)
-        eq_(is_withdraw, kwargs['is_withdraw'])
+        assert len(args) == 0
+        assert prefix == kwargs['nlri'].prefix
+        assert is_withdraw == kwargs['is_withdraw']
 
     def test_update_flowspec_vrf_table_vpnv4(self):
         flowspec_family = 'vpnv4fs'
@@ -597,14 +597,14 @@ class Test_TableCoreManager(unittest.TestCase):
 
         # Check
         call_args_list = learn_path_mock.call_args_list
-        ok_(len(call_args_list) == 1)  # learn_path should be called once
+        assert len(call_args_list) == 1
         args, kwargs = call_args_list[0]
-        ok_(len(kwargs) == 0)  # no keyword argument
+        assert len(kwargs) == 0
         output_path = args[0]
-        eq_(None, output_path.source)
-        eq_(prefix, output_path.nlri.prefix)
-        eq_(None, output_path.nexthop)
-        eq_(is_withdraw, output_path.is_withdraw)
+        assert None == output_path.source
+        assert prefix == output_path.nlri.prefix
+        assert None == output_path.nexthop
+        assert is_withdraw == output_path.is_withdraw
 
     def test_update_flowspec_global_table_ipv4(self):
         flowspec_family = 'ipv4fs'

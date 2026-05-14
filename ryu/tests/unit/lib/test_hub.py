@@ -16,7 +16,7 @@
 
 import time
 import unittest
-from nose.tools import raises
+import pytest
 
 from ryu.lib import hub
 hub.patch()

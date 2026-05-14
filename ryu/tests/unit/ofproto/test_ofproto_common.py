@@ -17,7 +17,6 @@
 
 import unittest
 import logging
-from nose.tools import eq_
 from ryu.ofproto.ofproto_common import *
 
 
@@ -29,9 +28,8 @@ class TestOfprotCommon(unittest.TestCase):
     """
 
     def test_struct_ofp_header(self):
-        eq_(OFP_HEADER_PACK_STR, '!BBHI')
-        eq_(OFP_HEADER_SIZE, 8)
-
+        assert OFP_HEADER_PACK_STR == '!BBHI'
+        assert OFP_HEADER_SIZE == 8
     def test_define_constants(self):
-        eq_(OFP_TCP_PORT, 6653)
-        eq_(OFP_SSL_PORT, 6653)
+        assert OFP_TCP_PORT == 6653
+        assert OFP_SSL_PORT == 6653

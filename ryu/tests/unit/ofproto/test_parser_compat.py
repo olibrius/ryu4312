@@ -19,8 +19,6 @@ from __future__ import print_function
 import six
 import sys
 import unittest
-from nose.tools import eq_
-from nose.tools import ok_
 
 from ryu.ofproto import ofproto_v1_2
 from ryu.ofproto import ofproto_v1_3
@@ -72,18 +70,16 @@ class Test_Parser_Compat(unittest.TestCase):
                         return f
             get_value = lambda m, t: get_field(m, t).value
 
-            eq_(get_value(o, ofpp.MTInPort), old_in_port)
-            eq_(get_value(o, ofpp.MTEthSrc), old_eth_src)
-            eq_(get_value(o, ofpp.MTIPV4Src), old_ipv4_src)
-            eq_(get_value(o, ofpp.MTIPv6Src), old_ipv6_src)
-
+            assert get_value(o, ofpp.MTInPort) == old_in_port
+            assert get_value(o, ofpp.MTEthSrc) == old_eth_src
+            assert get_value(o, ofpp.MTIPV4Src) == old_ipv4_src
+            assert get_value(o, ofpp.MTIPv6Src) == old_ipv6_src
         def check_new(o):
             # new api
-            eq_(o['in_port'], in_port)
-            eq_(o['eth_src'], eth_src)
-            eq_(o['ipv4_src'], ipv4_src)
-            eq_(o['ipv6_src'], ipv6_src)
-
+            assert o['in_port'] == in_port
+            assert o['eth_src'] == eth_src
+            assert o['ipv4_src'] == ipv4_src
+            assert o['ipv6_src'] == ipv6_src
         # ensure that old and new api produces the same thing
 
         # old api
@@ -119,18 +115,15 @@ class Test_Parser_Compat(unittest.TestCase):
 
         new_buf = bytearray()
         new.serialize(new_buf, 0)
-        eq_(new_buf, old_buf)
-        eq_(new_buf, old2_buf)
-
+        assert new_buf == old_buf
+        assert new_buf == old2_buf
         old_jsondict = old.to_jsondict()
         old2_jsondict = old2.to_jsondict()
         new_jsondict = new.to_jsondict()
-        eq_(new_jsondict, old_jsondict)
-        eq_(new_jsondict, old2_jsondict)
-
-        eq_(str(new), str(old))
-        eq_(str(new), str(old2))
-
+        assert new_jsondict == old_jsondict
+        assert new_jsondict == old2_jsondict
+        assert str(new) == str(old)
+        assert str(new) == str(old2)
         # a parsed object can be inspected by old and new api
 
         check(ofpp.OFPMatch.parser(six.binary_type(new_buf), 0))

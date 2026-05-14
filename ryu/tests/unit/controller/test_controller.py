@@ -29,7 +29,7 @@ import logging
 import random
 import unittest
 
-from nose.tools import eq_, raises
+import pytest
 
 from ryu.base import app_manager  # To suppress cyclic import
 from ryu.controller import controller
@@ -51,14 +51,12 @@ class TestUtils(unittest.TestCase):
 
     def test_split_addr_with_ipv4(self):
         addr, port = controller._split_addr('127.0.0.1:6653')
-        eq_('127.0.0.1', addr)
-        eq_(6653, port)
-
+        assert '127.0.0.1' == addr
+        assert 6653 == port
     def test_split_addr_with_ipv6(self):
         addr, port = controller._split_addr('[::1]:6653')
-        eq_('::1', addr)
-        eq_(6653, port)
-
+        assert '::1' == addr
+        assert 6653 == port
     @raises(ValueError)
     def test_split_addr_with_invalid_addr(self):
         controller._split_addr('127.0.0.1')

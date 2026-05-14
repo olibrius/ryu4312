@@ -26,8 +26,7 @@ try:
 except ImportError:
     from unittest import mock  # Python 3
 
-from nose.tools import eq_
-from nose.tools import raises
+import pytest
 
 from ryu.utils import binary_str
 from ryu.lib import pcaplib
@@ -82,28 +81,23 @@ class Test_PcapFileHdr(unittest.TestCase):
 
     def _assert(self, magic, ret):
         self.hdr.magic = magic
-        eq_(self.hdr.__dict__, ret.__dict__)
-
+        assert self.hdr.__dict__ == ret.__dict__
     def test_parser_with_big_endian(self):
         ret, byteorder = pcaplib.PcapFileHdr.parser(self.buf_big)
         self._assert(pcaplib.PcapFileHdr.MAGIC_NUMBER_IDENTICAL, ret)
-        eq_('big', byteorder)
-
+        assert 'big' == byteorder
     def test_parser_with_little_endian(self):
         ret, byteorder = pcaplib.PcapFileHdr.parser(self.buf_little)
         self._assert(pcaplib.PcapFileHdr.MAGIC_NUMBER_SWAPPED, ret)
-        eq_('little', byteorder)
-
+        assert 'little' == byteorder
     @mock.patch('sys.byteorder', 'big')
     def test_serialize_with_big_endian(self):
         buf = self.hdr.serialize()
-        eq_(binary_str(self.buf_big), binary_str(buf))
-
+        assert binary_str(self.buf_big) == binary_str(buf)
     @mock.patch('sys.byteorder', 'little')
     def test_serialize_with_little_endian(self):
         buf = self.hdr.serialize()
-        eq_(binary_str(self.buf_little), binary_str(buf))
-
+        assert binary_str(self.buf_little) == binary_str(buf)
     @raises(struct.error)
     def test_parser_with_invalid_magic_number(self):
         pcaplib.PcapFileHdr.parser(self.buf_invalid)
@@ -139,26 +133,21 @@ class Test_PcapPktHdr(unittest.TestCase):
     def test_parser_with_big_endian(self):
         ret, buf = pcaplib.PcapPktHdr.parser(
             self.buf_big + self.expected_buf, 'big')
-        eq_(self.hdr.__dict__, ret.__dict__)
-        eq_(self.expected_buf, buf)
-
+        assert self.hdr.__dict__ == ret.__dict__
+        assert self.expected_buf == buf
     def test_parser_with_little_endian(self):
         ret, buf = pcaplib.PcapPktHdr.parser(
             self.buf_little + self.expected_buf, 'little')
-        eq_(self.hdr.__dict__, ret.__dict__)
-        eq_(self.expected_buf, buf)
-
+        assert self.hdr.__dict__ == ret.__dict__
+        assert self.expected_buf == buf
     @mock.patch('sys.byteorder', 'big')
     def test_serialize_with_big_endian(self):
         buf = self.hdr.serialize()
-        eq_(binary_str(self.buf_big), binary_str(buf))
-
+        assert binary_str(self.buf_big) == binary_str(buf)
     @mock.patch('sys.byteorder', 'little')
     def test_serialize_with_little_endian(self):
         buf = self.hdr.serialize()
-        eq_(binary_str(self.buf_little), binary_str(buf))
-
-
+        assert binary_str(self.buf_little) == binary_str(buf)
 class Test_pcaplib_Reader(unittest.TestCase):
     """
     Test case for pcaplib.Reader class
@@ -174,8 +163,7 @@ class Test_pcaplib_Reader(unittest.TestCase):
         for ts, buf in pcaplib.Reader(open(file_name, 'rb')):
             outputs.append((ts, buf))
 
-        eq_(self.expected_outputs, outputs)
-
+        assert self.expected_outputs == outputs
     def test_with_big_endian(self):
         self._test(os.path.join(PCAP_PACKET_DATA_DIR, 'big_endian.pcap'))
 
@@ -207,8 +195,7 @@ class Test_pcaplib_Writer(unittest.TestCase):
         w = pcaplib.Writer(f)
         w.write_pkt(b'test_data_1', ts=(0x1234 + (0x5678 / 1e6)))
         w.write_pkt(b'test_data_2', ts=(0x2345 + (0x6789 / 1e6)))
-        eq_(expected_buf, f.buf)
-
+        assert expected_buf == f.buf
     @mock.patch('sys.byteorder', 'big')
     def test_with_big_endian(self):
         self._test(os.path.join(PCAP_PACKET_DATA_DIR, 'big_endian.pcap'))
@@ -226,5 +213,5 @@ class Test_pcaplib_Writer(unittest.TestCase):
         w = pcaplib.Writer(f, snaplen=snaplen)
         w.write_pkt(b'hogehoge', ts=0)
         expected_buf = b'hoge'  # b'hogehoge'[:snaplen]
-        eq_(expected_buf, f.buf)
-        eq_(snaplen, len(f.buf))
+        assert expected_buf == f.buf
+        assert snaplen == len(f.buf)

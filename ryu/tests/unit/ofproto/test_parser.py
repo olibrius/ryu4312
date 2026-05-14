@@ -19,7 +19,6 @@ from __future__ import print_function
 import six
 import sys
 import unittest
-from nose.tools import eq_
 
 from ryu.ofproto import ofproto_parser
 from ryu.ofproto import ofproto_protocol
@@ -209,7 +208,7 @@ class Test_Parser(unittest.TestCase):
                               self._msg_to_jsondict(e.ofpmsg)}
             # XXXdebug code
             open(('/tmp/%s.json' % name), 'w').write(json.dumps(json_dict2))
-            eq_(json_dict, json_dict2)
+            assert json_dict == json_dict2
             if 'OFPTruncatedMessage' in json_dict2:
                 return
 
@@ -219,7 +218,7 @@ class Test_Parser(unittest.TestCase):
         msg2.set_xid(xid)
         if has_serializer:
             msg2.serialize()
-            eq_(self._msg_to_jsondict(msg2), json_dict)
+            assert self._msg_to_jsondict(msg2) == json_dict
             bytes_eq(wire_msg, msg2.buf)
 
             # check if "len" "length" fields can be omitted

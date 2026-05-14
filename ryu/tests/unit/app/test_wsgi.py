@@ -19,7 +19,6 @@ import unittest
 import logging
 
 import nose
-from nose.tools import eq_
 
 from ryu.app.wsgi import ControllerBase
 from ryu.app.wsgi import WSGIApplication
@@ -34,8 +33,7 @@ class _TestController(ControllerBase):
 
     def __init__(self, req, link, data, **config):
         super(_TestController, self).__init__(req, link, data, **config)
-        eq_(data['test_param'], 'foo')
-
+        assert data['test_param'] == 'foo'
     @route('test', '/test/{dpid}',
            methods=['GET'], requirements={'dpid': dpidlib.DPID_PATTERN})
     def test_get_dpid(self, req, dpid, **_kwargs):
@@ -65,8 +63,7 @@ class Test_wsgi(unittest.TestCase):
         r = self.wsgi_app({'REQUEST_METHOD': 'GET',
                            'PATH_INFO': '/test/0123456789abcdef'},
                           lambda s, _: eq_(s, '200 OK'))
-        eq_(r[0], (b'0123456789abcdef'))
-
+        assert r[0] == (b'0123456789abcdef')
     def test_wsgi_decorator_ng_path(self):
         self.wsgi_app({'REQUEST_METHOD': 'GET',
                        'PATH_INFO': '/'},
@@ -97,8 +94,6 @@ class Test_wsgi(unittest.TestCase):
         r = self.wsgi_app({'REQUEST_METHOD': 'DELETE',
                            'PATH_INFO': '/test'},
                           lambda s, _: eq_(s, '200 OK'))
-        eq_(r[0], b'root')
-
-
+        assert r[0] == b'root'
 if __name__ == '__main__':
     nose.main(argv=['nosetests', '-s', '-v'], defaultTest=__file__)

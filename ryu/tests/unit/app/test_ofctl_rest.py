@@ -25,7 +25,6 @@ try:
     import mock  # Python 2
 except ImportError:
     from unittest import mock  # Python 3
-from nose.tools import eq_
 
 from ryu.app import ofctl_rest
 from ryu.app.wsgi import Request
@@ -89,9 +88,7 @@ class Test_ofctl_rest(unittest.TestCase):
         with mock.patch('ryu.lib.ofctl_utils.send_stats_request'),\
                 mock.patch('ryu.lib.ofctl_utils.send_msg'):
             res = req.get_response(wsgi)
-        eq_(res.status, '200 OK')
-
-
+        assert res.status == '200 OK'
 def _add_tests():
     _ofp_vers = {
         'of10': ofproto_v1_0.OFP_VERSION,

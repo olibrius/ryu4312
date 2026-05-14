@@ -17,7 +17,7 @@
 
 import unittest
 import logging
-from nose.tools import *
+import pytest
 
 from ryu.lib import ofctl_v1_3
 from ryu.ofproto import ofproto_v1_3, ofproto_v1_3_parser
@@ -50,5 +50,5 @@ class Test_ofctl_v1_3(unittest.TestCase):
         result = ofctl_v1_3.to_actions(dp, acts)
         insts = result[0]
         act = insts.actions[0]
-        ok_(isinstance(act, OFPActionPopMpls))
-        eq_(act.ethertype, 0x0800)
+        assert isinstance(act, OFPActionPopMpls)
+        assert act.ethertype == 0x0800

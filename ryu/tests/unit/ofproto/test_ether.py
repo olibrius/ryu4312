@@ -17,7 +17,6 @@
 
 import unittest
 import logging
-from nose.tools import eq_
 from ryu.ofproto.ether import *
 
 
@@ -29,9 +28,9 @@ class TestInet(unittest.TestCase):
     """
 
     def test_ether_type(self):
-        eq_(ETH_TYPE_IP, 0x0800)
-        eq_(ETH_TYPE_ARP, 0x0806)
-        eq_(ETH_TYPE_8021Q, 0x8100)
-        eq_(ETH_TYPE_IPV6, 0x86dd)
-        eq_(ETH_TYPE_MPLS, 0x8847)
-        eq_(ETH_TYPE_SLOW, 0x8809)
+        assert ETH_TYPE_IP == 0x0800
+        assert ETH_TYPE_ARP == 0x0806
+        assert ETH_TYPE_8021Q == 0x8100
+        assert ETH_TYPE_IPV6 == 0x86dd
+        assert ETH_TYPE_MPLS == 0x8847
+        assert ETH_TYPE_SLOW == 0x8809

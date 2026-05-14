@@ -24,8 +24,7 @@ import six
 import struct
 import inspect
 
-from nose.tools import eq_, ok_
-from nose.tools import raises
+import pytest
 
 from ryu.ofproto import inet
 from ryu.lib.packet import ipv4
@@ -68,31 +67,29 @@ class Test_vrrpv2(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.type_, self.vrrpv2.type)
-        eq_(self.vrid, self.vrrpv2.vrid)
-        eq_(self.priority, self.vrrpv2.priority)
-        eq_(self.count_ip, self.vrrpv2.count_ip)
-        eq_(self.auth_type, self.vrrpv2.auth_type)
-        eq_(1, len(self.vrrpv2.ip_addresses))
-        eq_(self.ip_address, self.vrrpv2.ip_addresses[0])
-        eq_(self.auth_data, self.vrrpv2.auth_data)
-
+        assert self.type_ == self.vrrpv2.type
+        assert self.vrid == self.vrrpv2.vrid
+        assert self.priority == self.vrrpv2.priority
+        assert self.count_ip == self.vrrpv2.count_ip
+        assert self.auth_type == self.vrrpv2.auth_type
+        assert 1 == len(self.vrrpv2.ip_addresses)
+        assert self.ip_address == self.vrrpv2.ip_addresses[0]
+        assert self.auth_data == self.vrrpv2.auth_data
     def test_parser(self):
         vrrpv2, _cls, _ = self.vrrpv2.parser(self.buf)
 
-        eq_(self.version, vrrpv2.version)
-        eq_(self.type_, vrrpv2.type)
-        eq_(self.vrid, vrrpv2.vrid)
-        eq_(self.priority, vrrpv2.priority)
-        eq_(self.count_ip, vrrpv2.count_ip)
-        eq_(self.auth_type, vrrpv2.auth_type)
-        eq_(self.max_adver_int, vrrpv2.max_adver_int)
-        eq_(self.checksum, vrrpv2.checksum)
-        eq_(1, len(vrrpv2.ip_addresses))
-        eq_(str, type(vrrpv2.ip_addresses[0]))
-        eq_(self.ip_address, vrrpv2.ip_addresses[0])
-        eq_(self.auth_data, vrrpv2.auth_data)
-
+        assert self.version == vrrpv2.version
+        assert self.type_ == vrrpv2.type
+        assert self.vrid == vrrpv2.vrid
+        assert self.priority == vrrpv2.priority
+        assert self.count_ip == vrrpv2.count_ip
+        assert self.auth_type == vrrpv2.auth_type
+        assert self.max_adver_int == vrrpv2.max_adver_int
+        assert self.checksum == vrrpv2.checksum
+        assert 1 == len(vrrpv2.ip_addresses)
+        assert str == type(vrrpv2.ip_addresses[0])
+        assert self.ip_address == vrrpv2.ip_addresses[0]
+        assert self.auth_data == vrrpv2.auth_data
     def test_serialize(self):
         src_ip = '192.168.0.1'
         dst_ip = vrrp.VRRP_IPV4_DST_ADDRESS
@@ -113,22 +110,20 @@ class Test_vrrpv2(unittest.TestCase):
         pack_str = vrrp.vrrpv2._PACK_STR + '4sII'
         pack_len = struct.calcsize(pack_str)
         res = struct.unpack(pack_str, six.binary_type(buf))
-        eq_(res[0], vrrp.vrrp_to_version_type(vrrp.VRRP_VERSION_V2, type_))
-        eq_(res[1], vrid)
-        eq_(res[2], priority)
-        eq_(res[3], len(ip_addresses))
-        eq_(res[4], vrrp.VRRP_AUTH_NO_AUTH)
-        eq_(res[5], max_adver_int)
+        assert res[0], vrrp.vrrp_to_version_type(vrrp.VRRP_VERSION_V2 == type_)
+        assert res[1] == vrid
+        assert res[2] == priority
+        assert res[3] == len(ip_addresses)
+        assert res[4] == vrrp.VRRP_AUTH_NO_AUTH
+        assert res[5] == max_adver_int
         # res[6] is checksum
-        eq_(res[7], addrconv.ipv4.text_to_bin(ip_address))
-        eq_(res[8], 0)
-        eq_(res[9], 0)
-        eq_(len(buf), pack_len)
-
+        assert res[7] == addrconv.ipv4.text_to_bin(ip_address)
+        assert res[8] == 0
+        assert res[9] == 0
+        assert len(buf) == pack_len
         # checksum
         s = packet_utils.checksum(buf)
-        eq_(0, s)
-
+        assert 0 == s
     @raises(Exception)
     def test_malformed_vrrpv2(self):
         m_short_buf = self.buf[1:vrrp.vrrpv2._MIN_LEN]
@@ -140,8 +135,7 @@ class Test_vrrpv2(unittest.TestCase):
         p0.serialize()
         p1 = packet.Packet(six.binary_type(p0.data))
         p1.serialize()
-        eq_(p0.data, p1.data)
-
+        assert p0.data == p1.data
     def _test_is_valid(self, type_=None, vrid=None, priority=None,
                        max_adver_int=None):
         if type_ is None:
@@ -158,35 +152,27 @@ class Test_vrrpv2(unittest.TestCase):
         return vrrp_.is_valid()
 
     def test_is_valid_ok(self):
-        ok_(self._test_is_valid())
-
+        assert self._test_is_valid()
     def test_is_valid_ng_type(self):
-        ok_(not self._test_is_valid(type_=15))
-
+        assert not self._test_is_valid(type_=15)
     def test_is_valid_ng_vrid_min(self):
         vrid = vrrp.VRRP_VRID_MIN - 1
-        ok_(not self._test_is_valid(vrid=vrid))
-
+        assert not self._test_is_valid(vrid=vrid)
     def test_is_valid_ng_vrid_max(self):
         vrid = vrrp.VRRP_VRID_MAX + 1
-        ok_(not self._test_is_valid(vrid=vrid))
-
+        assert not self._test_is_valid(vrid=vrid)
     def test_is_valid_ng_priority_min(self):
         priority = vrrp.VRRP_PRIORITY_MIN - 1
-        ok_(not self._test_is_valid(priority=priority))
-
+        assert not self._test_is_valid(priority=priority)
     def test_is_valid_ng_priority_max(self):
         priority = vrrp.VRRP_PRIORITY_MAX + 1
-        ok_(not self._test_is_valid(priority=priority))
-
+        assert not self._test_is_valid(priority=priority)
     def test_is_valid_ng_adver_min(self):
         max_adver_int = vrrp.VRRP_V2_MAX_ADVER_INT_MIN - 1
-        ok_(not self._test_is_valid(max_adver_int=max_adver_int))
-
+        assert not self._test_is_valid(max_adver_int=max_adver_int)
     def test_is_valid_ng_adver_max(self):
         max_adver_int = vrrp.VRRP_V2_MAX_ADVER_INT_MAX + 1
-        ok_(not self._test_is_valid(max_adver_int=max_adver_int))
-
+        assert not self._test_is_valid(max_adver_int=max_adver_int)
     def test_to_string(self):
         vrrpv2_values = {'version': self.version,
                          'type': self.type_,
@@ -204,10 +190,8 @@ class Test_vrrpv2(unittest.TestCase):
                                 if k in vrrpv2_values])
         vrrpv2_str = '%s(%s)' % (vrrp.vrrpv2.__name__, _vrrpv2_str)
 
-        eq_(str(self.vrrpv2), vrrpv2_str)
-        eq_(repr(self.vrrpv2), vrrpv2_str)
-
-
+        assert str(self.vrrpv2) == vrrpv2_str
+        assert repr(self.vrrpv2) == vrrpv2_str
 class Test_vrrpv3_ipv4(unittest.TestCase):
     """ Test case for vrrp v3 IPv4
     """
@@ -234,27 +218,25 @@ class Test_vrrpv3_ipv4(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.type_, self.vrrpv3.type)
-        eq_(self.vrid, self.vrrpv3.vrid)
-        eq_(self.priority, self.vrrpv3.priority)
-        eq_(self.count_ip, self.vrrpv3.count_ip)
-        eq_(1, len(self.vrrpv3.ip_addresses))
-        eq_(self.ip_address, self.vrrpv3.ip_addresses[0])
-
+        assert self.type_ == self.vrrpv3.type
+        assert self.vrid == self.vrrpv3.vrid
+        assert self.priority == self.vrrpv3.priority
+        assert self.count_ip == self.vrrpv3.count_ip
+        assert 1 == len(self.vrrpv3.ip_addresses)
+        assert self.ip_address == self.vrrpv3.ip_addresses[0]
     def test_parser(self):
         vrrpv3, _cls, _ = self.vrrpv3.parser(self.buf)
 
-        eq_(self.version, vrrpv3.version)
-        eq_(self.type_, vrrpv3.type)
-        eq_(self.vrid, vrrpv3.vrid)
-        eq_(self.priority, vrrpv3.priority)
-        eq_(self.count_ip, vrrpv3.count_ip)
-        eq_(self.max_adver_int, vrrpv3.max_adver_int)
-        eq_(self.checksum, vrrpv3.checksum)
-        eq_(1, len(vrrpv3.ip_addresses))
-        eq_(str, type(vrrpv3.ip_addresses[0]))
-        eq_(self.ip_address, vrrpv3.ip_addresses[0])
-
+        assert self.version == vrrpv3.version
+        assert self.type_ == vrrpv3.type
+        assert self.vrid == vrrpv3.vrid
+        assert self.priority == vrrpv3.priority
+        assert self.count_ip == vrrpv3.count_ip
+        assert self.max_adver_int == vrrpv3.max_adver_int
+        assert self.checksum == vrrpv3.checksum
+        assert 1 == len(vrrpv3.ip_addresses)
+        assert str == type(vrrpv3.ip_addresses[0])
+        assert self.ip_address == vrrpv3.ip_addresses[0]
     def test_serialize(self):
         src_ip = '192.168.0.1'
         dst_ip = vrrp.VRRP_IPV4_DST_ADDRESS
@@ -276,14 +258,14 @@ class Test_vrrpv3_ipv4(unittest.TestCase):
         pack_str = vrrp.vrrpv3._PACK_STR + '4s'
         pack_len = struct.calcsize(pack_str)
         res = struct.unpack(pack_str, six.binary_type(buf))
-        eq_(res[0], vrrp.vrrp_to_version_type(vrrp.VRRP_VERSION_V3, type_))
-        eq_(res[1], vrid)
-        eq_(res[2], priority)
-        eq_(res[3], len(ip_addresses))
-        eq_(res[4], max_adver_int)
+        assert res[0], vrrp.vrrp_to_version_type(vrrp.VRRP_VERSION_V3 == type_)
+        assert res[1] == vrid
+        assert res[2] == priority
+        assert res[3] == len(ip_addresses)
+        assert res[4] == max_adver_int
         # res[5] is checksum
-        eq_(res[6], addrconv.ipv4.text_to_bin(ip_address))
-        eq_(len(buf), pack_len)
+        assert res[6] == addrconv.ipv4.text_to_bin(ip_address)
+        assert len(buf) == pack_len
         print(res)
 
         # checksum
@@ -292,8 +274,7 @@ class Test_vrrpv3_ipv4(unittest.TestCase):
                          addrconv.ipv4.text_to_bin(dst_ip),
                          inet.IPPROTO_VRRP, pack_len)
         s = packet_utils.checksum(ph + buf)
-        eq_(0, s)
-
+        assert 0 == s
     @raises(Exception)
     def test_malformed_vrrpv3(self):
         m_short_buf = self.buf[1:vrrp.vrrpv3._MIN_LEN]
@@ -305,8 +286,7 @@ class Test_vrrpv3_ipv4(unittest.TestCase):
         p0.serialize()
         p1 = packet.Packet(six.binary_type(p0.data))
         p1.serialize()
-        eq_(p0.data, p1.data)
-
+        assert p0.data == p1.data
     def _test_is_valid(self, type_=None, vrid=None, priority=None,
                        max_adver_int=None):
         if type_ is None:
@@ -323,35 +303,27 @@ class Test_vrrpv3_ipv4(unittest.TestCase):
         return vrrp_.is_valid()
 
     def test_is_valid_ok(self):
-        ok_(self._test_is_valid())
-
+        assert self._test_is_valid()
     def test_is_valid_ng_type(self):
-        ok_(not self._test_is_valid(type_=15))
-
+        assert not self._test_is_valid(type_=15)
     def test_is_valid_ng_vrid_min(self):
         vrid = vrrp.VRRP_VRID_MIN - 1
-        ok_(not self._test_is_valid(vrid=vrid))
-
+        assert not self._test_is_valid(vrid=vrid)
     def test_is_valid_ng_vrid_max(self):
         vrid = vrrp.VRRP_VRID_MAX + 1
-        ok_(not self._test_is_valid(vrid=vrid))
-
+        assert not self._test_is_valid(vrid=vrid)
     def test_is_valid_ng_priority_min(self):
         priority = vrrp.VRRP_PRIORITY_MIN - 1
-        ok_(not self._test_is_valid(priority=priority))
-
+        assert not self._test_is_valid(priority=priority)
     def test_is_valid_ng_priority_max(self):
         priority = vrrp.VRRP_PRIORITY_MAX + 1
-        ok_(not self._test_is_valid(priority=priority))
-
+        assert not self._test_is_valid(priority=priority)
     def test_is_valid_ng_adver_min(self):
         max_adver_int = vrrp.VRRP_V3_MAX_ADVER_INT_MIN - 1
-        ok_(not self._test_is_valid(max_adver_int=max_adver_int))
-
+        assert not self._test_is_valid(max_adver_int=max_adver_int)
     def test_is_valid_ng_adver_max(self):
         max_adver_int = vrrp.VRRP_V3_MAX_ADVER_INT_MAX + 1
-        ok_(not self._test_is_valid(max_adver_int=max_adver_int))
-
+        assert not self._test_is_valid(max_adver_int=max_adver_int)
     def test_to_string(self):
         vrrpv3_values = {'version': self.version,
                          'type': self.type_,
@@ -369,10 +341,8 @@ class Test_vrrpv3_ipv4(unittest.TestCase):
                                 if k in vrrpv3_values])
         vrrpv3_str = '%s(%s)' % (vrrp.vrrpv3.__name__, _vrrpv3_str)
 
-        eq_(str(self.vrrpv3), vrrpv3_str)
-        eq_(repr(self.vrrpv3), vrrpv3_str)
-
-
+        assert str(self.vrrpv3) == vrrpv3_str
+        assert repr(self.vrrpv3) == vrrpv3_str
 class Test_vrrpv3_ipv6(unittest.TestCase):
     """ Test case for vrrp v3 IPv6
     """
@@ -399,27 +369,25 @@ class Test_vrrpv3_ipv6(unittest.TestCase):
         pass
 
     def test_init(self):
-        eq_(self.type_, self.vrrpv3.type)
-        eq_(self.vrid, self.vrrpv3.vrid)
-        eq_(self.priority, self.vrrpv3.priority)
-        eq_(self.count_ip, self.vrrpv3.count_ip)
-        eq_(1, len(self.vrrpv3.ip_addresses))
-        eq_(self.ip_address, self.vrrpv3.ip_addresses[0])
-
+        assert self.type_ == self.vrrpv3.type
+        assert self.vrid == self.vrrpv3.vrid
+        assert self.priority == self.vrrpv3.priority
+        assert self.count_ip == self.vrrpv3.count_ip
+        assert 1 == len(self.vrrpv3.ip_addresses)
+        assert self.ip_address == self.vrrpv3.ip_addresses[0]
     def test_parser(self):
         vrrpv3, _cls, _ = self.vrrpv3.parser(self.buf)
 
-        eq_(self.version, vrrpv3.version)
-        eq_(self.type_, vrrpv3.type)
-        eq_(self.vrid, vrrpv3.vrid)
-        eq_(self.priority, vrrpv3.priority)
-        eq_(self.count_ip, vrrpv3.count_ip)
-        eq_(self.max_adver_int, vrrpv3.max_adver_int)
-        eq_(self.checksum, vrrpv3.checksum)
-        eq_(1, len(vrrpv3.ip_addresses))
-        eq_(str, type(vrrpv3.ip_addresses[0]))
-        eq_(self.ip_address, vrrpv3.ip_addresses[0])
-
+        assert self.version == vrrpv3.version
+        assert self.type_ == vrrpv3.type
+        assert self.vrid == vrrpv3.vrid
+        assert self.priority == vrrpv3.priority
+        assert self.count_ip == vrrpv3.count_ip
+        assert self.max_adver_int == vrrpv3.max_adver_int
+        assert self.checksum == vrrpv3.checksum
+        assert 1 == len(vrrpv3.ip_addresses)
+        assert str == type(vrrpv3.ip_addresses[0])
+        assert self.ip_address == vrrpv3.ip_addresses[0]
     def test_serialize(self):
         src_ip = '2001:db8:2000::1'
         dst_ip = vrrp.VRRP_IPV6_DST_ADDRESS
@@ -441,14 +409,14 @@ class Test_vrrpv3_ipv6(unittest.TestCase):
         pack_str = vrrp.vrrpv3._PACK_STR + '16s'
         pack_len = struct.calcsize(pack_str)
         res = struct.unpack(pack_str, six.binary_type(buf))
-        eq_(res[0], vrrp.vrrp_to_version_type(vrrp.VRRP_VERSION_V3, type_))
-        eq_(res[1], vrid)
-        eq_(res[2], priority)
-        eq_(res[3], len(ip_addresses))
-        eq_(res[4], max_adver_int)
+        assert res[0], vrrp.vrrp_to_version_type(vrrp.VRRP_VERSION_V3 == type_)
+        assert res[1] == vrid
+        assert res[2] == priority
+        assert res[3] == len(ip_addresses)
+        assert res[4] == max_adver_int
         # res[5] is checksum
-        eq_(res[6], addrconv.ipv6.text_to_bin(ip_address))
-        eq_(len(buf), pack_len)
+        assert res[6] == addrconv.ipv6.text_to_bin(ip_address)
+        assert len(buf) == pack_len
         print(res)
 
         # checksum
@@ -457,8 +425,7 @@ class Test_vrrpv3_ipv6(unittest.TestCase):
                          addrconv.ipv6.text_to_bin(dst_ip),
                          pack_len, inet.IPPROTO_VRRP)
         s = packet_utils.checksum(ph + buf)
-        eq_(0, s)
-
+        assert 0 == s
     @raises(Exception)
     def test_malformed_vrrpv3(self):
         m_short_buf = self.buf[1:vrrp.vrrpv3._MIN_LEN]
@@ -473,8 +440,7 @@ class Test_vrrpv3_ipv6(unittest.TestCase):
         p1.serialize()
         print(len(p0.data), p0.data)
         print(len(p1.data), p1.data)
-        eq_(p0.data, p1.data)
-
+        assert p0.data == p1.data
     def test_to_string(self):
         vrrpv3_values = {'version': self.version,
                          'type': self.type_,
@@ -492,5 +458,5 @@ class Test_vrrpv3_ipv6(unittest.TestCase):
                                 if k in vrrpv3_values])
         vrrpv3_str = '%s(%s)' % (vrrp.vrrpv3.__name__, _vrrpv3_str)
 
-        eq_(str(self.vrrpv3), vrrpv3_str)
-        eq_(repr(self.vrrpv3), vrrpv3_str)
+        assert str(self.vrrpv3) == vrrpv3_str
+        assert repr(self.vrrpv3) == vrrpv3_str
