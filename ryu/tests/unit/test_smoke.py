@@ -7,7 +7,6 @@ import pytest
 CORE_MODULES = [
     'ryu',
     'ryu.base.app_manager',
-    'ryu.controller.controller',
     'ryu.lib.hub',
     'ryu.lib.packet.packet',
     'ryu.lib.packet.ethernet',
