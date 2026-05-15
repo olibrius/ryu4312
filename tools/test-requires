@@ -4,3 +4,4 @@ coverage
 pycodestyle
 autopep8
 formencode
+lxml

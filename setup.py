@@ -15,10 +15,8 @@
 # limitations under the License.
 
 import setuptools
-import ryu.hooks
 
 
-ryu.hooks.save_orig()
-setuptools.setup(name='ryu',
+setuptools.setup(name='ryu4312',
                  setup_requires=['pbr'],
                  pbr=True)
